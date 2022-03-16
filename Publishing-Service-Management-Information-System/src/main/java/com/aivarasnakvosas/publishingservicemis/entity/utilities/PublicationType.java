@@ -1,4 +1,4 @@
-package com.aivarasnakvosas.publishingservicemis.Entity;
+package com.aivarasnakvosas.publishingservicemis.entity.utilities;
 
 /**
  * @author Aivaras Nakvosas

@@ -1,6 +1,6 @@
-package com.aivarasnakvosas.publishingservicemis.Repository;
+package com.aivarasnakvosas.publishingservicemis.repositories;
 
-import com.aivarasnakvosas.publishingservicemis.Entity.Publication;
+import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

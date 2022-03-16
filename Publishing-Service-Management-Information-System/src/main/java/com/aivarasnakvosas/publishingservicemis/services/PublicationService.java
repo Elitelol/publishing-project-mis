@@ -1,7 +1,7 @@
-package com.aivarasnakvosas.publishingservicemis.Service;
+package com.aivarasnakvosas.publishingservicemis.services;
 
-import com.aivarasnakvosas.publishingservicemis.Entity.Publication;
-import com.aivarasnakvosas.publishingservicemis.Repository.PublicationRepository;
+import com.aivarasnakvosas.publishingservicemis.entity.Publication;
+import com.aivarasnakvosas.publishingservicemis.repositories.PublicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
