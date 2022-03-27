@@ -6,6 +6,7 @@ package com.aivarasnakvosas.publishingservicemis.entity.utilities;
 public enum PublicationType {
 
     BOOK,
-    MAGAZINE;
+    MAGAZINE,
+    CARD;
 
 }

@@ -1,31 +1,57 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
 import com.aivarasnakvosas.publishingservicemis.entity.utilities.PublicationType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Aivaras Nakvosas
  */
-//@Entity
+@Entity
+@AttributeOverride(name = AbstractBasicEntity.ID_FIELD, column = @Column(name = "Publication_Id", unique = true, nullable = false))
+@NoArgsConstructor
+@Getter
+@Setter
 public class Publication extends AbstractBasicEntity {
 
-    @Column(name = "PublicationType")
+    private String name;
+
+    private String isbn;
+
+    private Long pageNumber;
+
     @Enumerated(EnumType.STRING)
     private PublicationType publicationType;
 
-    @ManyToOne
-    private Author author;
-
+    @JsonIgnore
     @ManyToMany
-    private Employee employee;
+    @JoinTable(name = "publication_authors",
+            joinColumns = @JoinColumn(name ="User_Id"),
+            inverseJoinColumns = @JoinColumn(name = "Publication_Id"))
+    private Set<User> authors = new HashSet<>();
 
-    private
+    @JsonIgnore
+    @JoinColumn(name = "Manager_Id", referencedColumnName = "User_Id")
+    @ManyToOne
+    private User manager;
 
+    public void addAuthor(User author) {
+        authors.add(author);
+    }
 }

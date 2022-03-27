@@ -9,6 +9,7 @@ public enum WorkStatus {
     IN_REVIEW,
     ACCEPTED,
     IN_PROGRESS,
-    COMPLETED;
+    COMPLETED,
+    PUBLISHED;
 
 }

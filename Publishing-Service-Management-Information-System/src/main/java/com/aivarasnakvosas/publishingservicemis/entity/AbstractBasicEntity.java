@@ -1,5 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -16,7 +18,11 @@ import java.util.Date;
  * @author Aivaras Nakvosas
  */
 @MappedSuperclass
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class AbstractBasicEntity {
+
+    public static final String ID_FIELD = "id";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,12 +30,11 @@ public abstract class AbstractBasicEntity {
     protected Long id;
 
     @CreatedDate
-    @Column(name = "DateCreated", updatable = false)
+    @Column(updatable = false)
     @Temporal(TemporalType.TIME)
     protected Date dateCreated;
 
     @LastModifiedDate
-    @Column(name = "DateModified")
     @Temporal(TemporalType.TIME)
     protected Date dateModified;
 
