@@ -6,7 +6,8 @@ package com.aivarasnakvosas.publishingservicemis.entity.utilities;
 public enum Role {
 
     AUTHOR,
-    MANAGER,
+    PUBLICATION_MANAGER,
     EDITOR,
+    TRANSLATOR,
     DESIGNER
 }
