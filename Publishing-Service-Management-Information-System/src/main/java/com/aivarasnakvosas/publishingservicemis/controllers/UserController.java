@@ -21,11 +21,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> registerNewUser(@RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(userService.createNewUser(userDTO));
-    }
-
     @GetMapping(value = "/test")
     public String testingMethod() {
         return "hello";

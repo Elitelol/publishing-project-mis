@@ -27,17 +27,20 @@ import java.util.Set;
 @Setter
 public class User extends AbstractBasicEntity {
 
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
     @Column(nullable = false)
     private String firstName;
 
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
-
-    @Column(nullable = false)
-    private String password;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -55,7 +58,4 @@ public class User extends AbstractBasicEntity {
     @OneToMany(mappedBy = "commentator")
     private List<Comment> comments = new ArrayList<>();
 
-    public void addManagedWork(Publication publication) {
-        managedWorks.add(publication);
-    }
 }
