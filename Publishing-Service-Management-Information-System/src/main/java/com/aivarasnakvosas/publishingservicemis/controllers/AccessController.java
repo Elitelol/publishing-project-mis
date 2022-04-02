@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
  * @author Aivaras Nakvosas
  */
 @RestController
+@RequestMapping(value = "api/access")
 public class AccessController {
 
     @Autowired
@@ -39,9 +41,8 @@ public class AccessController {
         return ResponseEntity.ok(new JWTResponse(jwtToken));
     }
 
-    @RequestMapping(value = "/signIn", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/signIn", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> registerNewUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.createNewUser(userDTO));
     }
-
 }
