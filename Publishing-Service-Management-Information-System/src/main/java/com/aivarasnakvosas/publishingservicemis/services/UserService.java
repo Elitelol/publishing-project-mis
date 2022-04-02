@@ -7,6 +7,7 @@ import com.aivarasnakvosas.publishingservicemis.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,8 +22,7 @@ public class UserService {
     private UserDTOMapper userDTOMapper;
 
     public User createNewUser(UserDTO userDTO) {
-        User user = new User();
-        user = userDTOMapper.mapToUser(user, userDTO);
+        User user = userDTOMapper.mapToUser(userDTO);
         return userRepository.save(user);
     }
 
@@ -32,6 +32,10 @@ public class UserService {
             throw new RuntimeException();
         }
         return user.get();
+    }
+
+    public List<User> getResponsiblePeople(List<Long> ids) {
+        return userRepository.findUsersById(ids);
     }
 
 }

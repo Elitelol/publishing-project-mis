@@ -17,7 +17,8 @@ public class UserDTOMapper {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User mapToUser(User user, UserDTO userDTO) {
+    public User mapToUser(UserDTO userDTO) {
+        User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));;
         user.setFirstName(userDTO.getFirstName());

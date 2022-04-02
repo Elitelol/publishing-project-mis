@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 
@@ -35,8 +37,10 @@ public class Task extends AbstractBasicEntity {
 
     private String description;
 
+    @Temporal(TemporalType.TIME)
     private Date startDate;
 
+    @Temporal(TemporalType.TIME)
     private Date dueDate;
 
     @ManyToMany

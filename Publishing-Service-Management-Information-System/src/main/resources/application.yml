@@ -11,3 +11,12 @@ spring:
       ddl-auto: update
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  servlet:
+    context-path: /publishing-app
+
+application:
+  security:
+    jwt-token-secret: suchsecretmuchwow
+    jwt-expiration-time: 720000

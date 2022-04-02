@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Aivaras Nakvosas
  */
 @RestController
-@RequestMapping(value = "api/access")
+@RequestMapping(value = "/access")
 public class AccessController {
 
     @Autowired
