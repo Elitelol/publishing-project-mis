@@ -1,8 +1,9 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.Language;
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.ProgressStatus;
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.PublicationType;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.Genre;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.Language;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.PublicationType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,8 +51,15 @@ public class Publication extends AbstractBasicEntity {
     @Enumerated(EnumType.STRING)
     private Language language;
 
+    @Enumerated(EnumType.STRING)
+    private Genre genre;
+
     private Long price;
 
+    private Date publishDate;
+
+    private boolean contractSigned;
+    
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "publication_authors",

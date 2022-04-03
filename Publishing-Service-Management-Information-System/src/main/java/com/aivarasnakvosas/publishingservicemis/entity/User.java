@@ -1,6 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.Role;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,17 +1,14 @@
 package com.aivarasnakvosas.publishingservicemis.mappers;
 
-import com.aivarasnakvosas.publishingservicemis.entity.Attachment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.entity.dtos.PublicationDTO;
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.ProgressStatus;
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.PublicationType;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.PublicationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Aivaras Nakvosas

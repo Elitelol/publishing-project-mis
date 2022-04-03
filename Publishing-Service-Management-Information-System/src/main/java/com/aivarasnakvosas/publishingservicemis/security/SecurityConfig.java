@@ -1,6 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.security;
 
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.Role;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

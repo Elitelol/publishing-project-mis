@@ -1,7 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.ProgressStatus;
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.TaskType;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.TaskType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Aivaras Nakvosas

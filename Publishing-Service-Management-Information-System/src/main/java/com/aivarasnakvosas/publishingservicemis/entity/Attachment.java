@@ -1,6 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.AttachmentType;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.AttachmentType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
