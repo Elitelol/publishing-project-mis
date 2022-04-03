@@ -76,6 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/access/**").permitAll()
                 .antMatchers("/publication").hasRole(Role.AUTHOR.name())
+                .antMatchers("/publication/changeStatus").hasRole(Role.PUBLICATION_MANAGER.name())
                 .antMatchers(HttpMethod.POST ,"/task").hasRole(Role.PUBLICATION_MANAGER.name())
                 .anyRequest().authenticated();
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);

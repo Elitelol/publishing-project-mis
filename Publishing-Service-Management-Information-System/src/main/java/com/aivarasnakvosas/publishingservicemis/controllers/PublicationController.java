@@ -1,11 +1,13 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
+import com.aivarasnakvosas.publishingservicemis.entity.dtos.PublicationAcceptanceDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.dtos.PublicationDTO;
 import com.aivarasnakvosas.publishingservicemis.services.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +24,18 @@ public class PublicationController {
     @Autowired
     private PublicationService publicationService;
 
-    @RequestMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Publication> savePublication(@RequestBody PublicationDTO publication) {
+        return ResponseEntity.ok(publicationService.savePublication(publication));
+    }
+
+    @PostMapping(value = "/changeStatus")
+    ResponseEntity<Publication> changePublicationStatus(@RequestBody PublicationAcceptanceDTO publicationAcceptanceDTO) {
+        return ResponseEntity.ok(publicationService.changePublicationStatus(publicationAcceptanceDTO));
+    }
+
+
+    @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Publication> getPublication(@PathVariable Long id) {
         return ResponseEntity.ok(publicationService.getPublication(id));
     }
@@ -30,10 +43,5 @@ public class PublicationController {
     @RequestMapping(value = "/{id}/{managerId}")
     ResponseEntity<Publication> addManager(@PathVariable("id") Long publicationId, @PathVariable("managerId") Long managerId) {
         return ResponseEntity.ok(publicationService.addManager(publicationId, managerId));
-    }
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Publication> savePublication(@RequestBody PublicationDTO publication) {
-        return ResponseEntity.ok(publicationService.savePublication(publication));
     }
 }

@@ -10,12 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
+public class PublicationAcceptanceDTO {
 
-    private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String role;
+    private Long managerId;
+    private Long publicationId;
+    private String status;
 }

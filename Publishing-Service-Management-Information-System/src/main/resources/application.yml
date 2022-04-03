@@ -11,6 +11,9 @@ spring:
       ddl-auto: update
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
 server:
   servlet:

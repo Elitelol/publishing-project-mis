@@ -1,5 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
+import com.aivarasnakvosas.publishingservicemis.entity.utilities.ProgressStatus;
 import com.aivarasnakvosas.publishingservicemis.entity.utilities.PublicationType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -28,7 +29,11 @@ import java.util.Set;
 @Setter
 public class Publication extends AbstractBasicEntity {
 
+    @Column(unique = true)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    private ProgressStatus progressStatus;
 
     private String isbn;
 
@@ -48,6 +53,8 @@ public class Publication extends AbstractBasicEntity {
     @JoinColumn(name = "Manager_Id", referencedColumnName = "User_Id")
     @ManyToOne
     private User manager;
+
+    private Manuscript manuscript;
 
     public void addAuthor(User author) {
         authors.add(author);

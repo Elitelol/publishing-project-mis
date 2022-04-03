@@ -1,7 +1,9 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -20,6 +22,8 @@ import java.util.Date;
 @MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public abstract class AbstractBasicEntity {
 
     public static final String ID_FIELD = "id";

@@ -1,6 +1,5 @@
 package com.aivarasnakvosas.publishingservicemis.entity.dtos;
 
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.PublicationType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class PublicationDTO {
 
+    private Long publicationId;
     private Long userId;
     private String name;
     private String publicationType;
