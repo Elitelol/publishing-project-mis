@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -57,7 +58,7 @@ public class Task extends AbstractBasicEntity {
     @JoinTable(name = "task_users",
             joinColumns = @JoinColumn(name ="User_Id"),
             inverseJoinColumns = @JoinColumn(name = "Task_Id"))
-    private Set<User> responsiblePeople;
+    private List<User> responsiblePeople;
 
     // TODO Think this through
     //private List<String> relatedFiles;

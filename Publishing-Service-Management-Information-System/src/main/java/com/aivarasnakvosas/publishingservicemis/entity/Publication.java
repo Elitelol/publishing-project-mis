@@ -1,5 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
+import com.aivarasnakvosas.publishingservicemis.entity.utilities.Language;
 import com.aivarasnakvosas.publishingservicemis.entity.utilities.ProgressStatus;
 import com.aivarasnakvosas.publishingservicemis.entity.utilities.PublicationType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,7 +17,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -42,6 +46,11 @@ public class Publication extends AbstractBasicEntity {
     @Enumerated(EnumType.STRING)
     private PublicationType publicationType;
 
+    @Enumerated(EnumType.STRING)
+    private Language language;
+
+    private Long price;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "publication_authors",
@@ -54,9 +63,14 @@ public class Publication extends AbstractBasicEntity {
     @ManyToOne
     private User manager;
 
-    private Manuscript manuscript;
+    @OneToMany(mappedBy = "publication")
+    List<Attachment> attachments = new ArrayList<>();
 
     public void addAuthor(User author) {
         authors.add(author);
+    }
+
+    public void addAttachment(Attachment attachment) {
+        attachments.add(attachment);
     }
 }

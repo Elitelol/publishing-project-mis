@@ -1,6 +1,5 @@
 package com.aivarasnakvosas.publishingservicemis.entity.dtos;
 
-import com.aivarasnakvosas.publishingservicemis.entity.utilities.TaskType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

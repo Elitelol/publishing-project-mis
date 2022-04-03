@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * @author Aivaras Nakvosas
  */
@@ -16,4 +18,5 @@ public class PublicationDTO {
     private Long userId;
     private String name;
     private String publicationType;
+    private List<AttachmentDTO> attachments;
 }

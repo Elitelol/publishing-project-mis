@@ -2,13 +2,16 @@ package com.aivarasnakvosas.publishingservicemis.services;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
+import com.aivarasnakvosas.publishingservicemis.entity.dtos.AttachmentDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.dtos.PublicationAcceptanceDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.dtos.PublicationDTO;
+import com.aivarasnakvosas.publishingservicemis.entity.utilities.AttachmentType;
 import com.aivarasnakvosas.publishingservicemis.entity.utilities.ProgressStatus;
 import com.aivarasnakvosas.publishingservicemis.mappers.PublicationDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.PublicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.Optional;
  * @author Aivaras Nakvosas
  */
 @Service
+@Transactional
 public class PublicationService {
 
     @Autowired
@@ -26,9 +30,12 @@ public class PublicationService {
     private UserService userService;
     @Autowired
     private PublicationDTOMapper publicationDTOMapper;
+    @Autowired
+    private AttachmentService attachmentService;
 
     public Publication getPublication(Long id) {
-        return publicationRepository.getById(id);
+        Optional<Publication> publication = publicationRepository.findPublicationById(id);
+        return publication.orElse(null);
     }
 
     public Publication savePublication(PublicationDTO publicationDTO) {
@@ -36,7 +43,19 @@ public class PublicationService {
         Optional<Publication> existingPublication = publicationRepository.findPublicationById(publicationDTO.getPublicationId());
         Publication publication = existingPublication.orElseGet(Publication::new);
         publication = publicationDTOMapper.mapToPublication(publication, publicationDTO, author);
+        resolveManuscriptAttachments(publicationDTO.getAttachments(), publication);
         return publicationRepository.save(publication);
+    }
+
+    private void resolveManuscriptAttachments(List<AttachmentDTO> attachmentDTOS, Publication publication) {
+        boolean allManuscripts = attachmentDTOS
+                .stream()
+                .allMatch(attachmentDTO -> attachmentDTO.getAttachmentType().equals(AttachmentType.MANUSCRIPT.name()));
+        if (publication.getId() == null && allManuscripts) {
+            attachmentDTOS.forEach(attachmentDTO ->attachmentService.saveAttachment(attachmentDTO, publication));
+        } else {
+            throw new RuntimeException();
+        }
     }
 
     public Publication changePublicationStatus(PublicationAcceptanceDTO publicationAcceptanceDTO) {
