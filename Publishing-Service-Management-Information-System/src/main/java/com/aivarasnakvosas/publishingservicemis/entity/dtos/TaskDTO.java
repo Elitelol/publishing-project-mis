@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 public class TaskDTO {
 
+    private Long taskId;
     private Long publicationId;
     private List<Long> responsiblePeopleIds;
     private String taskType;

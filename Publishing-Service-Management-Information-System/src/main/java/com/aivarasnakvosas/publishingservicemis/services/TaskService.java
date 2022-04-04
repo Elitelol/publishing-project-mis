@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Aivaras Nakvosas
@@ -29,7 +30,17 @@ public class TaskService {
     public Task saveTask(TaskDTO taskDTO) {
         Publication publication = publicationService.getPublication(taskDTO.getPublicationId());
         List<User> responsiblePeople = userService.getResponsiblePeople(taskDTO.getResponsiblePeopleIds());
-        Task task = taskDTOMapper.mapToTask(taskDTO, publication, responsiblePeople);
+        Optional<Task> existingTask = taskRepository.findById(taskDTO.getTaskId());
+        Task task = existingTask.orElseGet(Task::new);
+        task = taskDTOMapper.mapToTask(task, taskDTO, publication, responsiblePeople);
         return taskRepository.save(task);
+    }
+
+    public Task getTask(Long taskId) {
+        Optional<Task> task = taskRepository.findById(taskId);
+        if (task.isEmpty()){
+            throw new RuntimeException();
+        }
+        return task.get();
     }
 }

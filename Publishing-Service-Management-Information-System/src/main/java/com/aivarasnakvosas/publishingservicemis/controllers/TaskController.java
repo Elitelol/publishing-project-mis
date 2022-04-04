@@ -1,13 +1,16 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
+import com.aivarasnakvosas.publishingservicemis.entity.dtos.AttachmentDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.dtos.TaskDTO;
 import com.aivarasnakvosas.publishingservicemis.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -23,6 +26,12 @@ public class TaskController {
     @PostMapping
     ResponseEntity<Task> saveTask(@RequestBody TaskDTO taskDTO){
         Task task = taskService.saveTask(taskDTO);
+        return ResponseEntity.ok(task);
+    }
+
+    @GetMapping
+    ResponseEntity<Task> getTask(@RequestParam Long taskId) {
+        Task task = taskService.getTask(taskId);
         return ResponseEntity.ok(task);
     }
 }

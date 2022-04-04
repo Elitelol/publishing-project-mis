@@ -59,7 +59,7 @@ public class Publication extends AbstractBasicEntity {
     private Date publishDate;
 
     private boolean contractSigned;
-    
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "publication_authors",
@@ -73,7 +73,7 @@ public class Publication extends AbstractBasicEntity {
     private User manager;
 
     @OneToMany(mappedBy = "publication")
-    List<Attachment> attachments = new ArrayList<>();
+    private List<Attachment> attachments = new ArrayList<>();
 
     public void addAuthor(User author) {
         authors.add(author);

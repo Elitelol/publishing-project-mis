@@ -16,8 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +60,6 @@ public class Task extends AbstractBasicEntity {
             inverseJoinColumns = @JoinColumn(name = "Task_Id"))
     private List<User> responsiblePeople;
 
-    // TODO Think this through
-    //private List<String> relatedFiles;
+    @OneToMany(mappedBy = "commentator")
+    private List<Comment> comments = new ArrayList<>();
 }

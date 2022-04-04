@@ -27,6 +27,10 @@ public class Comment extends AbstractBasicEntity {
     @ManyToOne
     private User commentator;
 
+    @JoinColumn(name = "Task_Id", referencedColumnName = "Task_Id")
+    @ManyToOne
+    private Task task;
+
     private String text;
 
     @JoinColumn(name = "ParentComment_Id", referencedColumnName = "Comment_Id")

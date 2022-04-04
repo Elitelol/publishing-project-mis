@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -34,9 +35,8 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.changePublicationStatus(publicationAcceptanceDTO));
     }
 
-
-    @GetMapping(value = "/{id}")
-    ResponseEntity<Publication> getPublication(@PathVariable Long id) {
+    @GetMapping
+    ResponseEntity<Publication> getPublication(@RequestParam Long id) {
         return ResponseEntity.ok(publicationService.getPublication(id));
     }
 

@@ -15,8 +15,7 @@ import java.util.List;
 @Component
 public class TaskDTOMapper {
 
-    public Task mapToTask(TaskDTO taskDTO, Publication publication, List<User> responsiblePeople) {
-        Task task = new Task();
+    public Task mapToTask(Task task, TaskDTO taskDTO, Publication publication, List<User> responsiblePeople) {
         task.setPublication(publication);
         task.setTaskName(taskDTO.getTaskName());
         task.setTaskType(TaskType.valueOf(taskDTO.getTaskType()));
