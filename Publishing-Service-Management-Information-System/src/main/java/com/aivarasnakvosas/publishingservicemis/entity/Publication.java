@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
@@ -19,6 +21,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -56,9 +61,8 @@ public class Publication extends AbstractBasicEntity {
 
     private Long price;
 
+    @Temporal(TemporalType.DATE)
     private Date publishDate;
-
-    private boolean contractSigned;
 
     @JsonIgnore
     @ManyToMany
@@ -72,14 +76,26 @@ public class Publication extends AbstractBasicEntity {
     @ManyToOne
     private User manager;
 
-    @OneToMany(mappedBy = "publication")
+    @JsonIgnore
+    @OneToMany(mappedBy = "publication", orphanRemoval = true)
     private List<Attachment> attachments = new ArrayList<>();
+
+    @JsonIgnore
+    @JoinColumn(name = "Contract_Id", referencedColumnName = "Contract_Id")
+    @OneToOne(orphanRemoval = true)
+    @Cascade(CascadeType.ALL)
+    private Contract contract;
+
+    @JsonIgnore
+    @JoinColumn(name = "Budget_Id", referencedColumnName = "Budget_Id")
+    @OneToOne(orphanRemoval = true)
+    @Cascade(CascadeType.ALL)
+    private PublishingBudget publishingBudget;
+
+    @OneToMany(mappedBy = "publication", orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
 
     public void addAuthor(User author) {
         authors.add(author);
-    }
-
-    public void addAttachment(Attachment attachment) {
-        attachments.add(attachment);
     }
 }

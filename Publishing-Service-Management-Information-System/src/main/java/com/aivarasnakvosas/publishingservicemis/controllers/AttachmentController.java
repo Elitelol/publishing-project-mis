@@ -1,7 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Attachment;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.AttachmentDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.AttachmentDTO;
 import com.aivarasnakvosas.publishingservicemis.services.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

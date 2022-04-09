@@ -1,8 +1,8 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
 import com.aivarasnakvosas.publishingservicemis.entity.User;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.LoginFormDTO;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.UserDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.LoginFormDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
 import com.aivarasnakvosas.publishingservicemis.security.JWT.JWTResponse;
 import com.aivarasnakvosas.publishingservicemis.security.JWT.JWTUtils;
 import com.aivarasnakvosas.publishingservicemis.services.UserService;

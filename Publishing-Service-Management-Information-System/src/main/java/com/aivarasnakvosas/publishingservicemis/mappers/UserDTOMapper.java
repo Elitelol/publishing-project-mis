@@ -2,7 +2,7 @@ package com.aivarasnakvosas.publishingservicemis.mappers;
 
 
 import com.aivarasnakvosas.publishingservicemis.entity.User;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.UserDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

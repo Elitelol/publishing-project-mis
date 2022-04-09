@@ -1,9 +1,10 @@
-package com.aivarasnakvosas.publishingservicemis.entity.dtos;
+package com.aivarasnakvosas.publishingservicemis.dtos;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,8 +16,15 @@ import java.util.List;
 public class PublicationDTO {
 
     private Long publicationId;
-    private Long userId;
+    private List<Long> userId;
+
     private String name;
+    private String isbn;
+    private Long pageNumber;
+    private String language;
+    private String genre;
+    private Long price;
+    private Date publishDate;
     private String publicationType;
     private List<AttachmentDTO> attachments;
 }

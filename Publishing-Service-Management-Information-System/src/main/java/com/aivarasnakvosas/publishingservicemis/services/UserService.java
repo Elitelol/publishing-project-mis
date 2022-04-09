@@ -1,7 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.services;
 
 import com.aivarasnakvosas.publishingservicemis.entity.User;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.UserDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
 import com.aivarasnakvosas.publishingservicemis.mappers.UserDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class UserService {
         return user.get();
     }
 
-    public List<User> getResponsiblePeople(List<Long> ids) {
+    public List<User> getUsers(List<Long> ids) {
         return userRepository.findUsersById(ids);
     }
 

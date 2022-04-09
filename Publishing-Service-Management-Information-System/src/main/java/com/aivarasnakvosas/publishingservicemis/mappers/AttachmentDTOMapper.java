@@ -2,7 +2,7 @@ package com.aivarasnakvosas.publishingservicemis.mappers;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Attachment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.AttachmentDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.AttachmentDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.AttachmentType;
 import org.springframework.stereotype.Component;
 

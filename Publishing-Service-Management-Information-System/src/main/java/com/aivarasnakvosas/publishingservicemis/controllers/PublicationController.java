@@ -1,8 +1,10 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.PublicationAcceptanceDTO;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.PublicationDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.BudgetDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.ContractDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.PublicationAcceptanceDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.PublicationDTO;
 import com.aivarasnakvosas.publishingservicemis.services.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -40,8 +42,18 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.getPublication(id));
     }
 
-    @RequestMapping(value = "/{id}/{managerId}")
+    @PostMapping(value = "/{id}/{managerId}")
     ResponseEntity<Publication> addManager(@PathVariable("id") Long publicationId, @PathVariable("managerId") Long managerId) {
         return ResponseEntity.ok(publicationService.addManager(publicationId, managerId));
+    }
+
+    @PostMapping(value = "/contract")
+    ResponseEntity<Publication> saveContract(@RequestBody ContractDTO contractDTO) {
+        return ResponseEntity.ok(publicationService.saveContract(contractDTO));
+    }
+
+    @PostMapping(value = "/budget")
+    ResponseEntity<Publication> saveBudget(@RequestBody BudgetDTO budgetDTO) {
+        return ResponseEntity.ok(publicationService.saveBudget(budgetDTO));
     }
 }

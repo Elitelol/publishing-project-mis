@@ -33,6 +33,7 @@ import java.util.List;
 @Setter
 public class Task extends AbstractBasicEntity {
 
+    @JsonIgnore
     @JoinColumn(name = "Publication_Id", referencedColumnName = "Publication_Id")
     @ManyToOne
     private Publication publication;
@@ -47,11 +48,13 @@ public class Task extends AbstractBasicEntity {
     @Enumerated(EnumType.STRING)
     private ProgressStatus progressStatus;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.DATE)
     private Date startDate;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.DATE)
     private Date dueDate;
+
+    private boolean done;
 
     @JsonIgnore
     @ManyToMany
@@ -60,6 +63,7 @@ public class Task extends AbstractBasicEntity {
             inverseJoinColumns = @JoinColumn(name = "Task_Id"))
     private List<User> responsiblePeople;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "commentator")
     private List<Comment> comments = new ArrayList<>();
 }

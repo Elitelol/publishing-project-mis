@@ -3,7 +3,7 @@ package com.aivarasnakvosas.publishingservicemis.mappers;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.TaskDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.TaskDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.TaskType;
 import org.springframework.stereotype.Component;
 

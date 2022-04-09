@@ -2,7 +2,7 @@ package com.aivarasnakvosas.publishingservicemis.services;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Attachment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.AttachmentDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.AttachmentDTO;
 import com.aivarasnakvosas.publishingservicemis.mappers.AttachmentDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.AttachmentRepository;
 import com.aivarasnakvosas.publishingservicemis.repositories.PublicationRepository;
@@ -28,8 +28,8 @@ public class AttachmentService {
         return attachmentRepository.save(attachment);
     }
 
-    public Attachment saveAttachment(AttachmentDTO attachmentDTO, Publication publication) {
+    public void saveAttachment(AttachmentDTO attachmentDTO, Publication publication) {
         Attachment attachment = attachmentDTOMapper.mapToAttachment(attachmentDTO, publication);
-        return attachmentRepository.save(attachment);
+        attachmentRepository.save(attachment);
     }
 }

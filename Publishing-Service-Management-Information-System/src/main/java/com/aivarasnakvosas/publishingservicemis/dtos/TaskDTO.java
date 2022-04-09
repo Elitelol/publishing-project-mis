@@ -1,4 +1,4 @@
-package com.aivarasnakvosas.publishingservicemis.entity.dtos;
+package com.aivarasnakvosas.publishingservicemis.dtos;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -78,7 +78,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/publication").hasRole(Role.AUTHOR.name())
                 .antMatchers("/publication/{id}").hasRole(Role.AUTHOR.name())
                 .antMatchers("/publication/changeStatus").hasRole(Role.PUBLICATION_MANAGER.name())
+                .antMatchers("/publication/contract").hasRole(Role.AUTHOR.name())
+                .antMatchers("/publication/budget").hasRole(Role.AUTHOR.name())
                 .antMatchers(HttpMethod.POST ,"/task").hasRole(Role.PUBLICATION_MANAGER.name())
+                .antMatchers(HttpMethod.GET ,"/task").hasRole(Role.PUBLICATION_MANAGER.name())
+                .antMatchers(HttpMethod.POST ,"/task/comment").hasRole(Role.PUBLICATION_MANAGER.name())
                 .anyRequest().authenticated();
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }

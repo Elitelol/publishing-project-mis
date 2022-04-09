@@ -1,8 +1,8 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
+import com.aivarasnakvosas.publishingservicemis.dtos.CommentDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.AttachmentDTO;
-import com.aivarasnakvosas.publishingservicemis.entity.dtos.TaskDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.TaskDTO;
 import com.aivarasnakvosas.publishingservicemis.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +32,12 @@ public class TaskController {
     @GetMapping
     ResponseEntity<Task> getTask(@RequestParam Long taskId) {
         Task task = taskService.getTask(taskId);
+        return ResponseEntity.ok(task);
+    }
+
+    @PostMapping(value = "/comment")
+    ResponseEntity<Task> addComment(@RequestBody CommentDTO commentDTO) {
+        Task task = taskService.addComment(commentDTO);
         return ResponseEntity.ok(task);
     }
 }
