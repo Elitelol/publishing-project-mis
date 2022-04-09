@@ -35,13 +35,19 @@ public class TaskService {
     @Autowired
     private UserService userService;
 
-    public Task saveTask(TaskDTO taskDTO) {
+    public TaskDTO saveTask(TaskDTO taskDTO) {
         Publication publication = publicationService.getPublication(taskDTO.getPublicationId());
         List<User> responsiblePeople = userService.getUsers(taskDTO.getResponsiblePeopleIds());
         Optional<Task> existingTask = taskRepository.findById(taskDTO.getTaskId());
         Task task = existingTask.orElseGet(Task::new);
         task = taskDTOMapper.mapToTask(task, taskDTO, publication, responsiblePeople);
-        return taskRepository.save(task);
+        task = taskRepository.save(task);
+        return taskDTOMapper.mapToDTO(task);
+    }
+
+    public TaskDTO getTaskDTO(Long taskId) {
+        Task task = getTask(taskId);
+        return taskDTOMapper.mapToDTO(task);
     }
 
     public Task getTask(Long taskId) {
@@ -52,7 +58,7 @@ public class TaskService {
         return task.get();
     }
 
-    public Task addComment(CommentDTO commentDTO) {
+    public TaskDTO addComment(CommentDTO commentDTO) {
         Task task = getTask(commentDTO.getTaskId());
         User user = userService.getUser(commentDTO.getUserId());
         Comment rootComment = null;
@@ -60,7 +66,8 @@ public class TaskService {
             rootComment = commentRepository.getById(commentDTO.getRootCommentId());
         }
         Comment comment = commentDTOMapper.mapToComment(commentDTO, task, user, rootComment);
-        commentRepository.save(comment);
-        return task;
+        task.addComment(comment);
+        task = taskRepository.save(task);
+        return taskDTOMapper.mapToDTO(task);
     }
 }

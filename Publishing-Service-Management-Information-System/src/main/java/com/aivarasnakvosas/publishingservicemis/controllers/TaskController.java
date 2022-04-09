@@ -24,20 +24,20 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping
-    ResponseEntity<Task> saveTask(@RequestBody TaskDTO taskDTO){
-        Task task = taskService.saveTask(taskDTO);
+    ResponseEntity<TaskDTO> saveTask(@RequestBody TaskDTO taskDTO){
+        TaskDTO task = taskService.saveTask(taskDTO);
         return ResponseEntity.ok(task);
     }
 
     @GetMapping
-    ResponseEntity<Task> getTask(@RequestParam Long taskId) {
-        Task task = taskService.getTask(taskId);
+    ResponseEntity<TaskDTO> getTask(@RequestParam Long taskId) {
+        TaskDTO task = taskService.getTaskDTO(taskId);
         return ResponseEntity.ok(task);
     }
 
     @PostMapping(value = "/comment")
-    ResponseEntity<Task> addComment(@RequestBody CommentDTO commentDTO) {
-        Task task = taskService.addComment(commentDTO);
+    ResponseEntity<TaskDTO> addComment(@RequestBody CommentDTO commentDTO) {
+        TaskDTO task = taskService.addComment(commentDTO);
         return ResponseEntity.ok(task);
     }
 }

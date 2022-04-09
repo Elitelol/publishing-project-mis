@@ -69,7 +69,7 @@ public class PublicationService {
     }
 
     public Publication savePublication(PublicationDTO publicationDTO) {
-        List<User> author = userService.getUsers(publicationDTO.getUserId());
+        List<User> author = userService.getUsers(publicationDTO.getAuthorId());
         Optional<Publication> existingPublication = publicationRepository.findPublicationById(publicationDTO.getPublicationId());
         Publication publication = existingPublication.orElseGet(Publication::new);
         publication = publicationDTOMapper.mapToPublication(publication, publicationDTO, author);

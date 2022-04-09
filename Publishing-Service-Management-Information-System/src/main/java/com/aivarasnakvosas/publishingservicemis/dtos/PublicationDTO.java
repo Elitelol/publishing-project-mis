@@ -16,7 +16,7 @@ import java.util.List;
 public class PublicationDTO {
 
     private Long publicationId;
-    private List<Long> userId;
+    private List<Long> authorId;
 
     private String name;
     private String isbn;

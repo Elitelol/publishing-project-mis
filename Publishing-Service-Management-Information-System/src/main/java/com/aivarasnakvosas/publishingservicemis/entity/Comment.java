@@ -27,12 +27,10 @@ public class Comment extends AbstractBasicEntity {
 
     @JoinColumn(name = "User_Id", referencedColumnName = "User_Id")
     @ManyToOne
-    @Cascade(CascadeType.ALL)
     private User commentator;
 
     @JoinColumn(name = "Task_Id", referencedColumnName = "Task_Id")
     @ManyToOne
-    @Cascade(CascadeType.ALL)
     private Task task;
 
     private String text;

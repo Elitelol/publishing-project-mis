@@ -23,5 +23,6 @@ public class TaskDTO {
     private String description;
     private Date startDate;
     private Date dueDate;
-
+    private String progress;
+    private List<CommentDTO> comments;
 }
