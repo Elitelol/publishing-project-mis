@@ -1,6 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
 import com.aivarasnakvosas.publishingservicemis.entity.enums.AttachmentType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +31,7 @@ public class Attachment extends AbstractBasicEntity {
 
     private String contentType;
 
+    @JsonIgnore
     @JoinColumn(name = "Publication_Id", referencedColumnName = "Publication_Id")
     @ManyToOne
     private Publication publication;

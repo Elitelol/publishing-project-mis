@@ -29,17 +29,17 @@ public abstract class AbstractBasicEntity {
     public static final String ID_FIELD = "id";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false)
     protected Long id;
 
     @CreatedDate
     @Column(updatable = false)
-    @Temporal(TemporalType.TIME)
-    protected Date dateCreated;
+    @Temporal(TemporalType.DATE)
+    protected Date dateCreated = new Date();
 
     @LastModifiedDate
-    @Temporal(TemporalType.TIME)
-    protected Date dateModified;
+    @Temporal(TemporalType.DATE)
+    protected Date dateModified = new Date();
 
 }

@@ -1,5 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import javax.persistence.OneToOne;
 @Setter
 public class PublishingBudget extends AbstractBasicEntity {
 
+    @JsonIgnore
     @OneToOne(mappedBy = "publishingBudget")
     private Publication publication;
 

@@ -46,6 +46,8 @@ public class Publication extends AbstractBasicEntity {
     @Enumerated(EnumType.STRING)
     private ProgressStatus progressStatus;
 
+    private String rejectionReason;
+
     private String isbn;
 
     private Long pageNumber;
@@ -76,17 +78,15 @@ public class Publication extends AbstractBasicEntity {
     @ManyToOne
     private User manager;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "publication", orphanRemoval = true)
     private List<Attachment> attachments = new ArrayList<>();
 
-    @JsonIgnore
     @JoinColumn(name = "Contract_Id", referencedColumnName = "Contract_Id")
     @OneToOne(orphanRemoval = true)
     @Cascade(CascadeType.ALL)
     private Contract contract;
 
-    @JsonIgnore
     @JoinColumn(name = "Budget_Id", referencedColumnName = "Budget_Id")
     @OneToOne(orphanRemoval = true)
     @Cascade(CascadeType.ALL)

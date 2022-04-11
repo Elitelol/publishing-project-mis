@@ -38,4 +38,8 @@ public class UserService {
         return userRepository.findUsersById(ids);
     }
 
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
 }

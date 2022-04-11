@@ -75,14 +75,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ).and();
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/access/**").permitAll()
+                .antMatchers("/user/all").hasAnyRole()
+                .antMatchers("user").hasAnyRole()
                 .antMatchers("/publication").hasRole(Role.AUTHOR.name())
                 .antMatchers("/publication/{id}").hasRole(Role.AUTHOR.name())
                 .antMatchers("/publication/changeStatus").hasRole(Role.PUBLICATION_MANAGER.name())
                 .antMatchers("/publication/contract").hasRole(Role.AUTHOR.name())
-                .antMatchers("/publication/budget").hasRole(Role.AUTHOR.name())
+                .antMatchers("/publication/budget").hasAnyRole()
+                .antMatchers("/publication/all").hasAnyRole()
+                .antMatchers("/publication/author").hasAnyRole()
+                .antMatchers("publication/manager").hasAnyRole()
+                .antMatchers("/publication/byProgress").hasAnyRole()
                 .antMatchers(HttpMethod.POST ,"/task").hasRole(Role.PUBLICATION_MANAGER.name())
-                .antMatchers(HttpMethod.GET ,"/task").hasRole(Role.PUBLICATION_MANAGER.name())
-                .antMatchers(HttpMethod.POST ,"/task/comment").hasRole(Role.PUBLICATION_MANAGER.name())
+                .antMatchers(HttpMethod.GET ,"/task").hasAnyRole()
+                .antMatchers(HttpMethod.POST ,"/task/comment").hasAnyRole()
                 .anyRequest().authenticated();
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }

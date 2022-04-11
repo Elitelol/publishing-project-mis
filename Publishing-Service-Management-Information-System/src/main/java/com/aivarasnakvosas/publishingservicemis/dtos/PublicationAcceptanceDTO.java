@@ -15,4 +15,5 @@ public class PublicationAcceptanceDTO {
     private Long managerId;
     private Long publicationId;
     private String status;
+    private String rejectionReason;
 }

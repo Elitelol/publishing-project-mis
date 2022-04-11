@@ -97,6 +97,10 @@ public class PublicationService {
         if (!publication.getManager().getId().equals(publicationAcceptanceDTO.getManagerId())) {
             throw new RuntimeException();
         }
+        if (publicationAcceptanceDTO.getStatus().equals("REJECTED") && publicationAcceptanceDTO.getRejectionReason() == null) {
+            throw new RuntimeException();
+        }
+        publication.setRejectionReason(publicationAcceptanceDTO.getRejectionReason());
         publication.setProgressStatus(ProgressStatus.valueOf(publicationAcceptanceDTO.getStatus()));
         publication.setDateModified(new Date());
         return publicationRepository.save(publication);
@@ -127,7 +131,24 @@ public class PublicationService {
         return publicationRepository.save(publication);
     }
 
+    public List<Publication> getPublications() {
+        return publicationRepository.findAll();
+    }
+
+    public List<Publication> getAuthorPublications(Long authorId) {
+        return publicationRepository.findPublicationsByAuthorsId(authorId);
+    }
+
+    public List<Publication> getManagerPublications(Long managerId) {
+        return publicationRepository.findPublicationsByManagerId(managerId);
+    }
+
     public List<Publication> getUnmanagedPublications() {
         return publicationRepository.findPublicationsByManagerIdIsNull();
+    }
+
+    public List<Publication> getPublicationByStatus(String status) {
+        ProgressStatus progressStatus = ProgressStatus.valueOf(status);
+        return publicationRepository.findPublicationsByProgressStatus(progressStatus);
     }
 }

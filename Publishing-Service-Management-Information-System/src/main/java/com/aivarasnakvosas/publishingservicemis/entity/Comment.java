@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,8 +40,8 @@ public class Comment extends AbstractBasicEntity {
     @ManyToOne
     private Comment rootComment;
 
-    @OneToMany(mappedBy = "rootComment")
-    private List<Comment> reply;
+    @OneToMany(mappedBy = "rootComment", orphanRemoval = true)
+    private List<Comment> reply = new ArrayList<>();
 
 }
 

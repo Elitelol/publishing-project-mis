@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author Aivaras Nakvosas
  */
@@ -55,5 +57,25 @@ public class PublicationController {
     @PostMapping(value = "/budget")
     ResponseEntity<Publication> saveBudget(@RequestBody BudgetDTO budgetDTO) {
         return ResponseEntity.ok(publicationService.saveBudget(budgetDTO));
+    }
+
+    @GetMapping(value = "/all")
+    ResponseEntity<List<Publication>> getPublications() {
+        return ResponseEntity.ok(publicationService.getPublications());
+    }
+
+    @GetMapping(value = "/author")
+    ResponseEntity<List<Publication>> getAuthorPublications(@RequestParam Long id) {
+        return ResponseEntity.ok(publicationService.getAuthorPublications(id));
+    }
+
+    @GetMapping(value = "/manager")
+    ResponseEntity<List<Publication>> getManagerPublications(@RequestParam Long id) {
+        return ResponseEntity.ok(publicationService.getManagerPublications(id));
+    }
+
+    @GetMapping(value = "/byProgress")
+    ResponseEntity<List<Publication>> getPublicationsByStatus(@RequestParam String status) {
+        return ResponseEntity.ok(publicationService.getPublicationByStatus(status));
     }
 }
