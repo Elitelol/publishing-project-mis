@@ -66,11 +66,13 @@ public class Publication extends AbstractBasicEntity {
     @Temporal(TemporalType.DATE)
     private Date publishDate;
 
+    private boolean ContractSigned;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "publication_authors",
-            joinColumns = @JoinColumn(name ="User_Id"),
-            inverseJoinColumns = @JoinColumn(name = "Publication_Id"))
+            joinColumns = @JoinColumn(name ="Publication_Id"),
+            inverseJoinColumns = @JoinColumn(name = "User_Id"))
     private Set<User> authors = new HashSet<>();
 
     @JsonIgnore

@@ -72,7 +72,7 @@ public class PublicationService {
         List<User> author = userService.getUsers(publicationDTO.getAuthorId());
         Optional<Publication> existingPublication = publicationRepository.findPublicationById(publicationDTO.getPublicationId());
         Publication publication = existingPublication.orElseGet(Publication::new);
-        publication = publicationDTOMapper.mapToPublication(publication, publicationDTO, author);
+        publicationDTOMapper.mapToPublication(publication, publicationDTO, author);
         resolveManuscriptAttachments(publicationDTO.getAttachments(), publication);
         return publicationRepository.save(publication);
     }
@@ -81,10 +81,10 @@ public class PublicationService {
         boolean allManuscripts = attachmentDTOS
                 .stream()
                 .allMatch(attachmentDTO -> attachmentDTO.getAttachmentType().equals(AttachmentType.MANUSCRIPT.name()));
-        if (publication.getId() == null && allManuscripts) {
-            attachmentDTOS.forEach(attachmentDTO -> attachmentService.saveAttachment(attachmentDTO, publication));
-        } else {
+        if (publication.getId() == null && (attachmentDTOS.isEmpty() || !allManuscripts)) {
             throw new RuntimeException();
+        } else if (publication.getId() == null){
+            attachmentDTOS.forEach(attachmentDTO -> attachmentService.saveAttachment(attachmentDTO, publication));
         }
     }
 
@@ -109,7 +109,12 @@ public class PublicationService {
     public Publication addManager(Long publicationId, Long managerId) {
         User manager = userService.getUser(managerId);
         Publication publication = getPublication(publicationId);
+        if (publication.getManager() != null) {
+            throw new RuntimeException();
+        }
         publication.setManager(manager);
+        publication.setProgressStatus(ProgressStatus.IN_REVIEW);
+        publication.setDateModified(new Date());
         return publicationRepository.save(publication);
     }
 
@@ -119,6 +124,7 @@ public class PublicationService {
         Contract contract = existingContract.orElseGet(Contract::new);
         contract = contractDTOMapper.mapToContract(contract, contractDTO);
         publication.setContract(contract);
+        publication.setDateModified(new Date());
         return publicationRepository.save(publication);
     }
 
@@ -128,6 +134,34 @@ public class PublicationService {
         PublishingBudget publishingBudget = existingBudget.orElseGet(PublishingBudget::new);
         publishingBudget = budgetDTOMapper.mapToPublishingBudget(publishingBudget, budgetDTO);
         publication.setPublishingBudget(publishingBudget);
+        publication.setDateModified(new Date());
+        return publicationRepository.save(publication);
+    }
+
+    public Publication setContract(Long publicationId) {
+        Publication publication = getExistingPublication(publicationId);
+        boolean writtenContractUploaded = publication.getAttachments().stream()
+                .anyMatch(attachment -> attachment.getAttachmentType().equals(AttachmentType.CONTRACT));
+        boolean contractSet = publication.getContract() != null && writtenContractUploaded;
+        if (contractSet) {
+            publication.setContractSigned(true);
+        } else {
+            throw new RuntimeException();
+        }
+        return publicationRepository.save(publication);
+    }
+
+    public Publication setReadyForPublish(Long publicationId) {
+        Publication publication = getExistingPublication(publicationId);
+        boolean allTaskAreDone = publication.getTasks().stream()
+                .allMatch(task -> task.getProgressStatus().equals(ProgressStatus.COMPLETED));
+        boolean budgetAndContractsAreSet = publication.isContractSigned() && publication.getPublishingBudget() != null;
+        if (allTaskAreDone && budgetAndContractsAreSet) {
+            publication.setProgressStatus(ProgressStatus.COMPLETED);
+        } else {
+            throw new RuntimeException();
+        }
+        publication.setDateModified(new Date());
         return publicationRepository.save(publication);
     }
 

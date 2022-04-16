@@ -11,6 +11,7 @@ import com.aivarasnakvosas.publishingservicemis.entity.enums.TaskType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,11 @@ public class TaskDTOMapper {
         task.setTaskName(taskDTO.getTaskName());
         task.setTaskType(TaskType.valueOf(taskDTO.getTaskType()));
         task.setDescription(taskDTO.getDescription());
+        Date startDate = taskDTO.getStartDate();
+        Date dueDate = taskDTO.getDueDate();
+        if (dueDate.before(startDate)) {
+            throw new RuntimeException();
+        }
         task.setStartDate(taskDTO.getStartDate());
         task.setDueDate(taskDTO.getDueDate());
         task.setProgressStatus(ProgressStatus.valueOf(taskDTO.getProgress()));

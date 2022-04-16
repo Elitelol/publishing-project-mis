@@ -6,6 +6,7 @@ import com.aivarasnakvosas.publishingservicemis.mappers.UserDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import java.util.Optional;
  * @author Aivaras Nakvosas
  */
 @Service
+@Transactional
 public class UserService {
 
     @Autowired

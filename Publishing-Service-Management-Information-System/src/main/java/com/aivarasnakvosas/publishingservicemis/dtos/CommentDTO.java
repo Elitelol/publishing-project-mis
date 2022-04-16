@@ -15,7 +15,7 @@ import java.util.List;
 public class CommentDTO {
 
     private Long userId;
-    private Long taskId;
+    private Long entityId;
     private String text;
     private Long rootCommentId;
     private List<CommentDTO> replies;

@@ -66,9 +66,9 @@ public class Task extends AbstractBasicEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+    private List<TaskComment> comments = new ArrayList<>();
 
-    public void addComment(Comment comment) {
+    public void addComment(TaskComment comment) {
         comments.add(comment);
     }
 }

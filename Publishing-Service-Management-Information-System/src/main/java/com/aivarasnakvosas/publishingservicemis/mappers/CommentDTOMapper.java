@@ -1,8 +1,13 @@
 package com.aivarasnakvosas.publishingservicemis.mappers;
 
 import com.aivarasnakvosas.publishingservicemis.dtos.CommentDTO;
+import com.aivarasnakvosas.publishingservicemis.entity.BudgetComment;
 import com.aivarasnakvosas.publishingservicemis.entity.Comment;
+import com.aivarasnakvosas.publishingservicemis.entity.Contract;
+import com.aivarasnakvosas.publishingservicemis.entity.ContractComment;
+import com.aivarasnakvosas.publishingservicemis.entity.PublishingBudget;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
+import com.aivarasnakvosas.publishingservicemis.entity.TaskComment;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +20,31 @@ import java.util.stream.Collectors;
 @Component
 public class CommentDTOMapper {
 
-    public Comment mapToComment(CommentDTO commentDTO, Task task, User user, Comment rootComment) {
-        Comment comment = new Comment();
+    private void mapToComment(CommentDTO commentDTO, User user, Comment comment, Comment rootComment) {
         comment.setRootComment(rootComment);
-        comment.setTask(task);
         comment.setCommentator(user);
         comment.setText(commentDTO.getText());
-        return comment;
+    }
+
+    public TaskComment mapToTaskComment(CommentDTO commentDTO, Task task, User user, TaskComment rootComment) {
+        TaskComment taskComment = new TaskComment();
+        mapToComment(commentDTO, user, taskComment, rootComment);
+        taskComment.setTask(task);
+        return taskComment;
+    }
+
+    public BudgetComment mapToBudgetComment(CommentDTO commentDTO, PublishingBudget task, User user, BudgetComment rootComment) {
+        BudgetComment budgetComment = new BudgetComment();
+        mapToComment(commentDTO, user, budgetComment, rootComment);
+        budgetComment.setPublishingBudget(task);
+        return budgetComment;
+    }
+
+    public ContractComment mapToContractComment(CommentDTO commentDTO, Contract contract, User user, BudgetComment rootComment) {
+        ContractComment contractComment = new ContractComment();
+        mapToComment(commentDTO, user, contractComment, rootComment);
+        contractComment.setContract(contract);
+        return contractComment;
     }
 
     public CommentDTO mapToDTO(Comment comment) {

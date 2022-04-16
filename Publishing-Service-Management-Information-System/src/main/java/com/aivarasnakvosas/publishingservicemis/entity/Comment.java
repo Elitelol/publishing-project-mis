@@ -24,15 +24,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Comment extends AbstractBasicEntity {
+public abstract class Comment extends AbstractBasicEntity {
 
     @JoinColumn(name = "User_Id", referencedColumnName = "User_Id")
     @ManyToOne
     private User commentator;
-
-    @JoinColumn(name = "Task_Id", referencedColumnName = "Task_Id")
-    @ManyToOne
-    private Task task;
 
     private String text;
 

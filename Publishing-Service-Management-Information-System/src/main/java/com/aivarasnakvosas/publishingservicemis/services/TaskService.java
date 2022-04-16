@@ -1,17 +1,18 @@
 package com.aivarasnakvosas.publishingservicemis.services;
 
 import com.aivarasnakvosas.publishingservicemis.dtos.CommentDTO;
-import com.aivarasnakvosas.publishingservicemis.entity.Comment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
+import com.aivarasnakvosas.publishingservicemis.entity.TaskComment;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.TaskDTO;
 import com.aivarasnakvosas.publishingservicemis.mappers.CommentDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.mappers.TaskDTOMapper;
-import com.aivarasnakvosas.publishingservicemis.repositories.CommentRepository;
+import com.aivarasnakvosas.publishingservicemis.repositories.TaskCommentRepository;
 import com.aivarasnakvosas.publishingservicemis.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +21,13 @@ import java.util.Optional;
  * @author Aivaras Nakvosas
  */
 @Service
+@Transactional
 public class TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
-    private CommentRepository commentRepository;
+    private TaskCommentRepository taskCommentRepository;
     @Autowired
     private TaskDTOMapper taskDTOMapper;
     @Autowired
@@ -40,17 +42,17 @@ public class TaskService {
         List<User> responsiblePeople = userService.getUsers(taskDTO.getResponsiblePeopleIds());
         Optional<Task> existingTask = taskRepository.findById(taskDTO.getTaskId());
         Task task = existingTask.orElseGet(Task::new);
-        task = taskDTOMapper.mapToTask(task, taskDTO, publication, responsiblePeople);
-        task = taskRepository.save(task);
+        taskDTOMapper.mapToTask(task, taskDTO, publication, responsiblePeople);
+        taskRepository.save(task);
         return taskDTOMapper.mapToDTO(task);
     }
 
-    public TaskDTO getTaskDTO(Long taskId) {
-        Task task = getTask(taskId);
+    public TaskDTO getTask(Long taskId) {
+        Task task = findTask(taskId);
         return taskDTOMapper.mapToDTO(task);
     }
 
-    public Task getTask(Long taskId) {
+    private Task findTask(Long taskId) {
         Optional<Task> task = taskRepository.findById(taskId);
         if (task.isEmpty()){
             throw new RuntimeException();
@@ -59,15 +61,15 @@ public class TaskService {
     }
 
     public TaskDTO addComment(CommentDTO commentDTO) {
-        Task task = getTask(commentDTO.getTaskId());
+        Task task = findTask(commentDTO.getEntityId());
         User user = userService.getUser(commentDTO.getUserId());
-        Comment rootComment = null;
+        TaskComment rootComment = null;
         if (commentDTO.getRootCommentId() != null) {
-            rootComment = commentRepository.getById(commentDTO.getRootCommentId());
+            rootComment = taskCommentRepository.getById(commentDTO.getRootCommentId());
         }
-        Comment comment = commentDTOMapper.mapToComment(commentDTO, task, user, rootComment);
+        TaskComment comment = commentDTOMapper.mapToTaskComment(commentDTO, task, user, rootComment);
         task.addComment(comment);
-        task = taskRepository.save(task);
+        taskRepository.save(task);
         return taskDTOMapper.mapToDTO(task);
     }
 }

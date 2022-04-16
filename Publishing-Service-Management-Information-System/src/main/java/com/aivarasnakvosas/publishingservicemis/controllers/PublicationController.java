@@ -44,8 +44,8 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.getPublication(id));
     }
 
-    @PostMapping(value = "/{id}/{managerId}")
-    ResponseEntity<Publication> addManager(@PathVariable("id") Long publicationId, @PathVariable("managerId") Long managerId) {
+    @PostMapping(value = "/assign")
+    ResponseEntity<Publication> addManager(@RequestParam("publicationId") Long publicationId, @RequestParam("managerId") Long managerId) {
         return ResponseEntity.ok(publicationService.addManager(publicationId, managerId));
     }
 
@@ -77,5 +77,20 @@ public class PublicationController {
     @GetMapping(value = "/byProgress")
     ResponseEntity<List<Publication>> getPublicationsByStatus(@RequestParam String status) {
         return ResponseEntity.ok(publicationService.getPublicationByStatus(status));
+    }
+
+    @GetMapping(value = "/unmanaged")
+    ResponseEntity<List<Publication>> getUnmanagedPublications() {
+        return ResponseEntity.ok(publicationService.getUnmanagedPublications());
+    }
+
+    @PostMapping(value = "/{id}/setComplete")
+    ResponseEntity<Publication> setPublicationComplete(@PathVariable Long id) {
+        return ResponseEntity.ok(publicationService.setReadyForPublish(id));
+    }
+
+    @PostMapping(value = "/{id}/setContract")
+    ResponseEntity<Publication> setContractSigned(@PathVariable Long id) {
+        return ResponseEntity.ok(publicationService.setContract(id));
     }
 }

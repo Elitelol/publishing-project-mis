@@ -6,9 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Aivaras Nakvosas
@@ -23,6 +27,9 @@ public class PublishingBudget extends AbstractBasicEntity {
     @JsonIgnore
     @OneToOne(mappedBy = "publishingBudget")
     private Publication publication;
+
+    @OneToMany(mappedBy = "publishingBudget", cascade = CascadeType.ALL)
+    private List<BudgetComment> comments = new ArrayList<>();
 
     private Long pagePrice;
     private Long printingCost;

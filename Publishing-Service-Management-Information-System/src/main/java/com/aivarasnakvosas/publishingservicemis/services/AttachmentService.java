@@ -8,11 +8,13 @@ import com.aivarasnakvosas.publishingservicemis.repositories.AttachmentRepositor
 import com.aivarasnakvosas.publishingservicemis.repositories.PublicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Aivaras Nakvosas
  */
 @Service
+@Transactional
 public class AttachmentService {
 
     @Autowired

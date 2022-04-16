@@ -1,7 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
 import com.aivarasnakvosas.publishingservicemis.dtos.CommentDTO;
-import com.aivarasnakvosas.publishingservicemis.entity.Task;
 import com.aivarasnakvosas.publishingservicemis.dtos.TaskDTO;
 import com.aivarasnakvosas.publishingservicemis.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ public class TaskController {
 
     @GetMapping
     ResponseEntity<TaskDTO> getTask(@RequestParam Long taskId) {
-        TaskDTO task = taskService.getTaskDTO(taskId);
+        TaskDTO task = taskService.getTask(taskId);
         return ResponseEntity.ok(task);
     }
 

@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Aivaras Nakvosas
  */
@@ -19,4 +22,5 @@ public class ContractDTO {
     private boolean appliesAfterPublishing;
     private boolean ownedByPublisher;
     private String agreements;
+    private List<CommentDTO> comments = new ArrayList<>();
 }
