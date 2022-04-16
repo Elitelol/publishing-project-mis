@@ -1,5 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +21,10 @@ import java.util.List;
 /**
  * @author Aivaras Nakvosas
  */
-@Entity
+@MappedSuperclass
 @AttributeOverride(name = AbstractBasicEntity.ID_FIELD, column = @Column(name = "Comment_Id", unique = true, nullable = false))
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public abstract class Comment extends AbstractBasicEntity {
@@ -31,13 +34,5 @@ public abstract class Comment extends AbstractBasicEntity {
     private User commentator;
 
     private String text;
-
-    @JoinColumn(name = "ParentComment_Id", referencedColumnName = "Comment_Id")
-    @ManyToOne
-    private Comment rootComment;
-
-    @OneToMany(mappedBy = "rootComment", orphanRemoval = true)
-    private List<Comment> reply = new ArrayList<>();
-
 }
 

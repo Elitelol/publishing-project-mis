@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,15 +17,21 @@ import java.util.List;
 public class PublicationDTO {
 
     private Long publicationId;
-    private List<Long> authorId;
+    private List<Long> authorId = new ArrayList<>();
 
     private String name;
+    private String publicationType;
+    private String progressStatus;
+    private String rejectionReason;
     private String isbn;
     private Long pageNumber;
     private String language;
     private String genre;
     private Long price;
     private Date publishDate;
-    private String publicationType;
-    private List<AttachmentDTO> attachments;
+    private Long managerId;
+    private List<AttachmentDTO> attachments = new ArrayList<>();
+    private ContractDTO contract;
+    private BudgetDTO budget;
+    private List<TaskDTO> tasks = new ArrayList<>();
 }

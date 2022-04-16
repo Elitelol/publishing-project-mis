@@ -38,7 +38,7 @@ public class TaskService {
     private UserService userService;
 
     public TaskDTO saveTask(TaskDTO taskDTO) {
-        Publication publication = publicationService.getPublication(taskDTO.getPublicationId());
+        Publication publication = publicationService.findPublication(taskDTO.getPublicationId());
         List<User> responsiblePeople = userService.getUsers(taskDTO.getResponsiblePeopleIds());
         Optional<Task> existingTask = taskRepository.findById(taskDTO.getTaskId());
         Task task = existingTask.orElseGet(Task::new);

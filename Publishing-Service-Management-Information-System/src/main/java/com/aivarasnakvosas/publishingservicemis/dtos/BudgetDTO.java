@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Aivaras Nakvosas
  */
@@ -15,8 +18,9 @@ public class BudgetDTO {
     private Long publicationId;
     private Long budgetId;
     private Long pagePrice;
-    private Long printingPCost;
+    private Long printingCost;
     private Long royaltyPerCopy;
     private Long layoutCost;
     private Long designCost;
+    private List<CommentDTO> comments = new ArrayList<>();
 }

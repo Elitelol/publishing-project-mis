@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Aivaras Nakvosas
@@ -49,18 +50,12 @@ public class PublicationService {
     @Autowired
     private AttachmentService attachmentService;
 
-    public PublicationDTO getPublicationDTO(Long id) {
-        Publication publication = getPublication(id);
-        PublicationDTO publicationDTO = publicationDTOMapper.mapToDTO(publication);
-        return publicationDTO;
+    public PublicationDTO getPublication(Long id) {
+        Publication publication = findPublication(id);
+        return publicationDTOMapper.mapToDTO(publication);
     }
 
-    public Publication getPublication(Long id) {
-        Optional<Publication> publication = publicationRepository.findPublicationById(id);
-        return publication.orElse(null);
-    }
-
-    public Publication getExistingPublication(Long id) {
+    public Publication findPublication(Long id) {
         Optional<Publication> publication = publicationRepository.findPublicationById(id);
         if (publication.isEmpty()) {
             throw new RuntimeException();
@@ -68,13 +63,14 @@ public class PublicationService {
         return publication.get();
     }
 
-    public Publication savePublication(PublicationDTO publicationDTO) {
+    public PublicationDTO savePublication(PublicationDTO publicationDTO) {
         List<User> author = userService.getUsers(publicationDTO.getAuthorId());
         Optional<Publication> existingPublication = publicationRepository.findPublicationById(publicationDTO.getPublicationId());
         Publication publication = existingPublication.orElseGet(Publication::new);
         publicationDTOMapper.mapToPublication(publication, publicationDTO, author);
         resolveManuscriptAttachments(publicationDTO.getAttachments(), publication);
-        return publicationRepository.save(publication);
+        publicationRepository.save(publication);
+        return publicationDTOMapper.mapToDTO(publication);
     }
 
     private void resolveManuscriptAttachments(List<AttachmentDTO> attachmentDTOS, Publication publication) {
@@ -88,12 +84,13 @@ public class PublicationService {
         }
     }
 
-    public Publication changePublicationStatus(PublicationAcceptanceDTO publicationAcceptanceDTO) {
-        Publication publication = getExistingPublication(publicationAcceptanceDTO.getPublicationId());
-        return setPublicationStatus(publication, publicationAcceptanceDTO);
+    public PublicationDTO changePublicationStatus(PublicationAcceptanceDTO publicationAcceptanceDTO) {
+        Publication publication = findPublication(publicationAcceptanceDTO.getPublicationId());
+        setPublicationStatus(publication, publicationAcceptanceDTO);
+        return publicationDTOMapper.mapToDTO(publication);
     }
 
-    private Publication setPublicationStatus(Publication publication, PublicationAcceptanceDTO publicationAcceptanceDTO) {
+    private void setPublicationStatus(Publication publication, PublicationAcceptanceDTO publicationAcceptanceDTO) {
         if (!publication.getManager().getId().equals(publicationAcceptanceDTO.getManagerId())) {
             throw new RuntimeException();
         }
@@ -103,43 +100,46 @@ public class PublicationService {
         publication.setRejectionReason(publicationAcceptanceDTO.getRejectionReason());
         publication.setProgressStatus(ProgressStatus.valueOf(publicationAcceptanceDTO.getStatus()));
         publication.setDateModified(new Date());
-        return publicationRepository.save(publication);
+        publicationRepository.save(publication);
     }
 
-    public Publication addManager(Long publicationId, Long managerId) {
+    public PublicationDTO addManager(Long publicationId, Long managerId) {
         User manager = userService.getUser(managerId);
-        Publication publication = getPublication(publicationId);
+        Publication publication = findPublication(publicationId);
         if (publication.getManager() != null) {
             throw new RuntimeException();
         }
         publication.setManager(manager);
         publication.setProgressStatus(ProgressStatus.IN_REVIEW);
         publication.setDateModified(new Date());
-        return publicationRepository.save(publication);
+        publicationRepository.save(publication);
+        return publicationDTOMapper.mapToDTO(publication);
     }
 
-    public Publication saveContract(ContractDTO contractDTO) {
-        Publication publication = getExistingPublication(contractDTO.getPublicationId());
+    public PublicationDTO saveContract(ContractDTO contractDTO) {
+        Publication publication = findPublication(contractDTO.getPublicationId());
         Optional<Contract> existingContract = contractRepository.findById(contractDTO.getContractId());
         Contract contract = existingContract.orElseGet(Contract::new);
         contract = contractDTOMapper.mapToContract(contract, contractDTO);
         publication.setContract(contract);
         publication.setDateModified(new Date());
-        return publicationRepository.save(publication);
+        publicationRepository.save(publication);
+        return publicationDTOMapper.mapToDTO(publication);
     }
 
-    public Publication saveBudget(BudgetDTO budgetDTO) {
-        Publication publication = getExistingPublication(budgetDTO.getPublicationId());
+    public PublicationDTO saveBudget(BudgetDTO budgetDTO) {
+        Publication publication = findPublication(budgetDTO.getPublicationId());
         Optional<PublishingBudget> existingBudget = budgetRepository.findById(budgetDTO.getBudgetId());
         PublishingBudget publishingBudget = existingBudget.orElseGet(PublishingBudget::new);
         publishingBudget = budgetDTOMapper.mapToPublishingBudget(publishingBudget, budgetDTO);
         publication.setPublishingBudget(publishingBudget);
         publication.setDateModified(new Date());
-        return publicationRepository.save(publication);
+        publicationRepository.save(publication);
+        return publicationDTOMapper.mapToDTO(publication);
     }
 
-    public Publication setContract(Long publicationId) {
-        Publication publication = getExistingPublication(publicationId);
+    public PublicationDTO setContract(Long publicationId) {
+        Publication publication = findPublication(publicationId);
         boolean writtenContractUploaded = publication.getAttachments().stream()
                 .anyMatch(attachment -> attachment.getAttachmentType().equals(AttachmentType.CONTRACT));
         boolean contractSet = publication.getContract() != null && writtenContractUploaded;
@@ -148,11 +148,12 @@ public class PublicationService {
         } else {
             throw new RuntimeException();
         }
-        return publicationRepository.save(publication);
+        publicationRepository.save(publication);
+        return publicationDTOMapper.mapToDTO(publication);
     }
 
-    public Publication setReadyForPublish(Long publicationId) {
-        Publication publication = getExistingPublication(publicationId);
+    public PublicationDTO setReadyForPublish(Long publicationId) {
+        Publication publication = findPublication(publicationId);
         boolean allTaskAreDone = publication.getTasks().stream()
                 .allMatch(task -> task.getProgressStatus().equals(ProgressStatus.COMPLETED));
         boolean budgetAndContractsAreSet = publication.isContractSigned() && publication.getPublishingBudget() != null;
@@ -162,27 +163,39 @@ public class PublicationService {
             throw new RuntimeException();
         }
         publication.setDateModified(new Date());
-        return publicationRepository.save(publication);
+        publicationRepository.save(publication);
+        return publicationDTOMapper.mapToDTO(publication);
     }
 
-    public List<Publication> getPublications() {
-        return publicationRepository.findAll();
+    public List<PublicationDTO> getPublications() {
+        List<Publication> publications = publicationRepository.findAll();
+        return getPublicationDTOS(publications);
     }
 
-    public List<Publication> getAuthorPublications(Long authorId) {
-        return publicationRepository.findPublicationsByAuthorsId(authorId);
+    public List<PublicationDTO> getAuthorPublications(Long authorId) {
+        List<Publication> publications = publicationRepository.findPublicationsByAuthorsId(authorId);
+        return getPublicationDTOS(publications);
     }
 
-    public List<Publication> getManagerPublications(Long managerId) {
-        return publicationRepository.findPublicationsByManagerId(managerId);
+    public List<PublicationDTO> getManagerPublications(Long managerId) {
+        List<Publication> publications = publicationRepository.findPublicationsByManagerId(managerId);
+        return getPublicationDTOS(publications);
     }
 
-    public List<Publication> getUnmanagedPublications() {
-        return publicationRepository.findPublicationsByManagerIdIsNull();
+    public List<PublicationDTO> getUnmanagedPublications() {
+        List<Publication> publications = publicationRepository.findPublicationsByManagerIdIsNull();
+        return getPublicationDTOS(publications);
     }
 
-    public List<Publication> getPublicationByStatus(String status) {
+    public List<PublicationDTO> getPublicationByStatus(String status) {
         ProgressStatus progressStatus = ProgressStatus.valueOf(status);
-        return publicationRepository.findPublicationsByProgressStatus(progressStatus);
+        List<Publication> publications = publicationRepository.findPublicationsByProgressStatus(progressStatus);
+        return getPublicationDTOS(publications);
+    }
+
+    private List<PublicationDTO> getPublicationDTOS(List<Publication> publications) {
+        return publications.stream()
+                .map(publication -> publicationDTOMapper.mapToDTO(publication))
+                .collect(Collectors.toList());
     }
 }

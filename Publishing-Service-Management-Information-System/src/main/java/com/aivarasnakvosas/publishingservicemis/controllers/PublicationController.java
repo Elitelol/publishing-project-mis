@@ -1,6 +1,5 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
-import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.dtos.BudgetDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.ContractDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.PublicationAcceptanceDTO;
@@ -30,67 +29,67 @@ public class PublicationController {
     private PublicationService publicationService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Publication> savePublication(@RequestBody PublicationDTO publication) {
+    ResponseEntity<PublicationDTO> savePublication(@RequestBody PublicationDTO publication) {
         return ResponseEntity.ok(publicationService.savePublication(publication));
     }
 
     @PostMapping(value = "/changeStatus")
-    ResponseEntity<Publication> changePublicationStatus(@RequestBody PublicationAcceptanceDTO publicationAcceptanceDTO) {
+    ResponseEntity<PublicationDTO> changePublicationStatus(@RequestBody PublicationAcceptanceDTO publicationAcceptanceDTO) {
         return ResponseEntity.ok(publicationService.changePublicationStatus(publicationAcceptanceDTO));
     }
 
     @GetMapping
-    ResponseEntity<Publication> getPublication(@RequestParam Long id) {
+    ResponseEntity<PublicationDTO> getPublication(@RequestParam Long id) {
         return ResponseEntity.ok(publicationService.getPublication(id));
     }
 
     @PostMapping(value = "/assign")
-    ResponseEntity<Publication> addManager(@RequestParam("publicationId") Long publicationId, @RequestParam("managerId") Long managerId) {
+    ResponseEntity<PublicationDTO> addManager(@RequestParam("publicationId") Long publicationId, @RequestParam("managerId") Long managerId) {
         return ResponseEntity.ok(publicationService.addManager(publicationId, managerId));
     }
 
     @PostMapping(value = "/contract")
-    ResponseEntity<Publication> saveContract(@RequestBody ContractDTO contractDTO) {
+    ResponseEntity<PublicationDTO> saveContract(@RequestBody ContractDTO contractDTO) {
         return ResponseEntity.ok(publicationService.saveContract(contractDTO));
     }
 
     @PostMapping(value = "/budget")
-    ResponseEntity<Publication> saveBudget(@RequestBody BudgetDTO budgetDTO) {
+    ResponseEntity<PublicationDTO> saveBudget(@RequestBody BudgetDTO budgetDTO) {
         return ResponseEntity.ok(publicationService.saveBudget(budgetDTO));
     }
 
     @GetMapping(value = "/all")
-    ResponseEntity<List<Publication>> getPublications() {
+    ResponseEntity<List<PublicationDTO>> getPublications() {
         return ResponseEntity.ok(publicationService.getPublications());
     }
 
     @GetMapping(value = "/author")
-    ResponseEntity<List<Publication>> getAuthorPublications(@RequestParam Long id) {
+    ResponseEntity<List<PublicationDTO>> getAuthorPublications(@RequestParam Long id) {
         return ResponseEntity.ok(publicationService.getAuthorPublications(id));
     }
 
     @GetMapping(value = "/manager")
-    ResponseEntity<List<Publication>> getManagerPublications(@RequestParam Long id) {
+    ResponseEntity<List<PublicationDTO>> getManagerPublications(@RequestParam Long id) {
         return ResponseEntity.ok(publicationService.getManagerPublications(id));
     }
 
     @GetMapping(value = "/byProgress")
-    ResponseEntity<List<Publication>> getPublicationsByStatus(@RequestParam String status) {
+    ResponseEntity<List<PublicationDTO>> getPublicationsByStatus(@RequestParam String status) {
         return ResponseEntity.ok(publicationService.getPublicationByStatus(status));
     }
 
     @GetMapping(value = "/unmanaged")
-    ResponseEntity<List<Publication>> getUnmanagedPublications() {
+    ResponseEntity<List<PublicationDTO>> getUnmanagedPublications() {
         return ResponseEntity.ok(publicationService.getUnmanagedPublications());
     }
 
     @PostMapping(value = "/{id}/setComplete")
-    ResponseEntity<Publication> setPublicationComplete(@PathVariable Long id) {
+    ResponseEntity<PublicationDTO> setPublicationComplete(@PathVariable Long id) {
         return ResponseEntity.ok(publicationService.setReadyForPublish(id));
     }
 
     @PostMapping(value = "/{id}/setContract")
-    ResponseEntity<Publication> setContractSigned(@PathVariable Long id) {
+    ResponseEntity<PublicationDTO> setContractSigned(@PathVariable Long id) {
         return ResponseEntity.ok(publicationService.setContract(id));
     }
 }

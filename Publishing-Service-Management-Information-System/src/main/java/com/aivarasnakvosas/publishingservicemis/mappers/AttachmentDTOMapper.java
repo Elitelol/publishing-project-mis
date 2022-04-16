@@ -20,4 +20,13 @@ public class AttachmentDTOMapper {
         attachment.setPublication(publication);
         return attachment;
     }
+
+    public AttachmentDTO mapToDTO(Attachment attachment) {
+        AttachmentDTO attachmentDTO = new AttachmentDTO();
+        attachmentDTO.setPublicationId(attachment.getPublication().getId());
+        attachmentDTO.setFileName(attachment.getFileName());
+        attachmentDTO.setAttachmentType(attachment.getAttachmentType().toString());
+        attachmentDTO.setContentType(attachment.getContentType());
+        return attachmentDTO;
+    }
 }

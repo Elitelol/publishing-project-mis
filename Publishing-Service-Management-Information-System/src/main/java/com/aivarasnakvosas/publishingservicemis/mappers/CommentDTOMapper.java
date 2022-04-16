@@ -20,40 +20,55 @@ import java.util.stream.Collectors;
 @Component
 public class CommentDTOMapper {
 
-    private void mapToComment(CommentDTO commentDTO, User user, Comment comment, Comment rootComment) {
-        comment.setRootComment(rootComment);
+    private void mapToComment(CommentDTO commentDTO, User user, Comment comment) {
         comment.setCommentator(user);
         comment.setText(commentDTO.getText());
     }
 
     public TaskComment mapToTaskComment(CommentDTO commentDTO, Task task, User user, TaskComment rootComment) {
         TaskComment taskComment = new TaskComment();
-        mapToComment(commentDTO, user, taskComment, rootComment);
+        mapToComment(commentDTO, user, taskComment);
+        taskComment.setRootComment(rootComment);
         taskComment.setTask(task);
         return taskComment;
     }
 
     public BudgetComment mapToBudgetComment(CommentDTO commentDTO, PublishingBudget task, User user, BudgetComment rootComment) {
         BudgetComment budgetComment = new BudgetComment();
-        mapToComment(commentDTO, user, budgetComment, rootComment);
+        mapToComment(commentDTO, user, budgetComment);
+        budgetComment.setRootComment(rootComment);
         budgetComment.setPublishingBudget(task);
         return budgetComment;
     }
 
-    public ContractComment mapToContractComment(CommentDTO commentDTO, Contract contract, User user, BudgetComment rootComment) {
+    public ContractComment mapToContractComment(CommentDTO commentDTO, Contract contract, User user, ContractComment rootComment) {
         ContractComment contractComment = new ContractComment();
-        mapToComment(commentDTO, user, contractComment, rootComment);
+        mapToComment(commentDTO, user, contractComment);
+        contractComment.setRootComment(rootComment);
         contractComment.setContract(contract);
         return contractComment;
     }
 
     public CommentDTO mapToDTO(Comment comment) {
         CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setText(comment.getText());
+        commentDTO.setUserId(comment.getCommentator().getId());
+        if (comment instanceof TaskComment) {
+            mapRootComments((TaskComment) comment, commentDTO);
+        } else if (comment instanceof BudgetComment) {
+            mapRootComments((BudgetComment) comment, commentDTO);
+        } else {
+            mapRootComments((ContractComment) comment, commentDTO);
+        }
+        return commentDTO;
+    }
+
+    //awful
+
+    private void mapRootComments(TaskComment comment, CommentDTO commentDTO) {
         if (comment.getRootComment() != null) {
             commentDTO.setRootCommentId(comment.getRootComment().getId());
         }
-        commentDTO.setText(comment.getText());
-        commentDTO.setUserId(comment.getCommentator().getId());
         if (comment.getReply() != null && !comment.getReply().isEmpty()) { //wtf is this
             List<CommentDTO> replies = comment.getReply()
                     .stream()
@@ -61,6 +76,31 @@ public class CommentDTOMapper {
                     .collect(Collectors.toList());
             commentDTO.setReplies(replies);
         }
-        return commentDTO;
+    }
+
+    private void mapRootComments(BudgetComment comment, CommentDTO commentDTO) {
+        if (comment.getRootComment() != null) {
+            commentDTO.setRootCommentId(comment.getRootComment().getId());
+        }
+        if (comment.getReply() != null && !comment.getReply().isEmpty()) { //wtf is this
+            List<CommentDTO> replies = comment.getReply()
+                    .stream()
+                    .map(this::mapToDTO)
+                    .collect(Collectors.toList());
+            commentDTO.setReplies(replies);
+        }
+    }
+
+    private void mapRootComments(ContractComment comment, CommentDTO commentDTO) {
+        if (comment.getRootComment() != null) {
+            commentDTO.setRootCommentId(comment.getRootComment().getId());
+        }
+        if (comment.getReply() != null && !comment.getReply().isEmpty()) { //wtf is this
+            List<CommentDTO> replies = comment.getReply()
+                    .stream()
+                    .map(this::mapToDTO)
+                    .collect(Collectors.toList());
+            commentDTO.setReplies(replies);
+        }
     }
 }

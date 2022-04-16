@@ -2,13 +2,20 @@ package com.aivarasnakvosas.publishingservicemis.mappers;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Contract;
 import com.aivarasnakvosas.publishingservicemis.dtos.ContractDTO;
+import com.aivarasnakvosas.publishingservicemis.entity.Publication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 /**
  * @author Aivaras Nakvosas
  */
 @Component
 public class ContractDTOMapper {
+
+    @Autowired
+    private CommentDTOMapper commentDTOMapper;
 
     public Contract mapToContract(Contract contract, ContractDTO contractDTO){
         contract.setPayment(contractDTO.getPayment());
@@ -17,5 +24,20 @@ public class ContractDTOMapper {
         contract.setOwnedByPublisher(contractDTO.isOwnedByPublisher());
         contract.setAgreements(contractDTO.getAgreements());
         return contract;
+    }
+
+    public ContractDTO mapToDTO(Contract contract, Publication publication) {
+        ContractDTO contractDTO = new ContractDTO();
+        contractDTO.setPublicationId(publication.getId());
+        contractDTO.setContractId(contract.getId());
+        contractDTO.setPayment(contract.getPayment());
+        contractDTO.setAdvancedPayment(contract.getAdvancedPayment());
+        contractDTO.setAppliesAfterPublishing(contract.isAppliesAfterPublishing());
+        contractDTO.setOwnedByPublisher(contract.isOwnedByPublisher());
+        contractDTO.setAgreements(contract.getAgreements());
+        contractDTO.setComments(contract.getComments().stream()
+                .map(contractComment -> commentDTOMapper.mapToDTO(contractComment))
+                .collect(Collectors.toList()));
+        return contractDTO;
     }
 }
