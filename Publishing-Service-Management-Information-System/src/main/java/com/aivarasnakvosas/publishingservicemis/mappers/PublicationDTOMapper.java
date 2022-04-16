@@ -31,7 +31,7 @@ public class PublicationDTOMapper {
 
     public void mapToPublication(Publication publication, PublicationDTO publicationDTO, List<User> authors) {
         if (publication.getId() == null){
-            publication.setProgressStatus(ProgressStatus.NOT_STARTED);
+            publication.setProgressStatus(ProgressStatus.NOT_SUBMITED);
         }
         publication.setName(publicationDTO.getName());
         publication.setIsbn(publicationDTO.getIsbn());

@@ -17,7 +17,8 @@ public interface PublicationRepository extends JpaRepository<Publication, Long> 
 
     Optional<Publication> findPublicationById(Long Id);
 
-    List<Publication> findPublicationsByManagerIdIsNull();
+    @Query(value = "SELECT  p from Publication p where p.manager IS NULL and p.progressStatus <> 'NOT_SUBMITED'")
+    List<Publication> findUnmanagedPublications();
 
     @Query(value = "SELECT p from Publication p where p.id = :authorId")
     List<Publication> findPublicationsByAuthorsId(Long authorId);

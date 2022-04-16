@@ -24,7 +24,6 @@ import java.util.List;
 @Setter
 public class PublishingBudget extends AbstractBasicEntity {
 
-    @JsonIgnore
     @OneToOne(mappedBy = "publishingBudget")
     private Publication publication;
 

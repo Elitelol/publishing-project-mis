@@ -24,7 +24,6 @@ import java.util.List;
 @Setter
 public class Contract extends AbstractBasicEntity {
 
-    @JsonIgnore
     @OneToOne(mappedBy = "contract")
     private Publication publication;
 

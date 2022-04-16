@@ -4,7 +4,6 @@ import com.aivarasnakvosas.publishingservicemis.entity.Contract;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.PublishingBudget;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
-import com.aivarasnakvosas.publishingservicemis.dtos.AttachmentDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.BudgetDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.ContractDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.PublicationAcceptanceDTO;
@@ -47,8 +46,6 @@ public class PublicationService {
     private ContractDTOMapper contractDTOMapper;
     @Autowired
     private BudgetDTOMapper budgetDTOMapper;
-    @Autowired
-    private AttachmentService attachmentService;
 
     public PublicationDTO getPublication(Long id) {
         Publication publication = findPublication(id);
@@ -68,20 +65,21 @@ public class PublicationService {
         Optional<Publication> existingPublication = publicationRepository.findPublicationById(publicationDTO.getPublicationId());
         Publication publication = existingPublication.orElseGet(Publication::new);
         publicationDTOMapper.mapToPublication(publication, publicationDTO, author);
-        resolveManuscriptAttachments(publicationDTO.getAttachments(), publication);
         publicationRepository.save(publication);
         return publicationDTOMapper.mapToDTO(publication);
     }
 
-    private void resolveManuscriptAttachments(List<AttachmentDTO> attachmentDTOS, Publication publication) {
-        boolean allManuscripts = attachmentDTOS
-                .stream()
-                .allMatch(attachmentDTO -> attachmentDTO.getAttachmentType().equals(AttachmentType.MANUSCRIPT.name()));
-        if (publication.getId() == null && (attachmentDTOS.isEmpty() || !allManuscripts)) {
+    public PublicationDTO submitPublication(Long id) {
+        Publication publication = findPublication(id);
+        boolean manuscriptUploaded = publication.getAttachments().stream()
+                .anyMatch(attachment -> attachment.getAttachmentType().equals(AttachmentType.MANUSCRIPT));
+        if (manuscriptUploaded) {
+            publication.setProgressStatus(ProgressStatus.NOT_STARTED);
+        } else {
             throw new RuntimeException();
-        } else if (publication.getId() == null){
-            attachmentDTOS.forEach(attachmentDTO -> attachmentService.saveAttachment(attachmentDTO, publication));
         }
+        publicationRepository.save(publication);
+        return publicationDTOMapper.mapToDTO(publication);
     }
 
     public PublicationDTO changePublicationStatus(PublicationAcceptanceDTO publicationAcceptanceDTO) {
@@ -183,7 +181,7 @@ public class PublicationService {
     }
 
     public List<PublicationDTO> getUnmanagedPublications() {
-        List<Publication> publications = publicationRepository.findPublicationsByManagerIdIsNull();
+        List<Publication> publications = publicationRepository.findUnmanagedPublications();
         return getPublicationDTOS(publications);
     }
 

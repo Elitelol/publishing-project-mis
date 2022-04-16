@@ -14,4 +14,5 @@ public class AttachmentDTO {
     private String fileName;
     private String attachmentType;
     private String contentType;
+    private String url;
 }

@@ -33,6 +33,11 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.savePublication(publication));
     }
 
+    @PostMapping(value = "/{id}/submit")
+    ResponseEntity<PublicationDTO> submitPublication(@PathVariable Long id) {
+        return ResponseEntity.ok(publicationService.submitPublication(id));
+    }
+
     @PostMapping(value = "/changeStatus")
     ResponseEntity<PublicationDTO> changePublicationStatus(@RequestBody PublicationAcceptanceDTO publicationAcceptanceDTO) {
         return ResponseEntity.ok(publicationService.changePublicationStatus(publicationAcceptanceDTO));

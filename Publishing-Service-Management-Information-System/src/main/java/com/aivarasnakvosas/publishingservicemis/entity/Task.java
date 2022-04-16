@@ -34,7 +34,6 @@ import java.util.List;
 @Setter
 public class Task extends AbstractBasicEntity {
 
-    @JsonIgnore
     @JoinColumn(name = "Publication_Id", referencedColumnName = "Publication_Id")
     @ManyToOne
     private Publication publication;
@@ -57,14 +56,12 @@ public class Task extends AbstractBasicEntity {
 
     private boolean done;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "task_users",
             joinColumns = @JoinColumn(name ="User_Id"),
             inverseJoinColumns = @JoinColumn(name = "Task_Id"))
     private List<User> responsiblePeople;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<TaskComment> comments = new ArrayList<>();
 

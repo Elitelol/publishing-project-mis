@@ -5,6 +5,7 @@ package com.aivarasnakvosas.publishingservicemis.entity.enums;
  */
 public enum ProgressStatus {
 
+    NOT_SUBMITED,
     NOT_STARTED,
     IN_REVIEW,
     ACCEPTED,

@@ -6,9 +6,15 @@ import com.aivarasnakvosas.publishingservicemis.dtos.AttachmentDTO;
 import com.aivarasnakvosas.publishingservicemis.mappers.AttachmentDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.AttachmentRepository;
 import com.aivarasnakvosas.publishingservicemis.repositories.PublicationRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Aivaras Nakvosas
@@ -24,14 +30,22 @@ public class AttachmentService {
     @Autowired
     private AttachmentDTOMapper attachmentDTOMapper;
 
-    public Attachment saveAttachment(AttachmentDTO attachmentDTO) {
-        Publication publication = publicationRepository.findById(attachmentDTO.getPublicationId()).get();
-        Attachment attachment = attachmentDTOMapper.mapToAttachment(attachmentDTO, publication);
-        return attachmentRepository.save(attachment);
+    public void saveAttachment(MultipartFile multipartFile, String attachmentDTO) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        AttachmentDTO attachDTO = objectMapper.readValue(attachmentDTO, AttachmentDTO.class);
+        Publication publication = publicationRepository.findById(attachDTO.getPublicationId()).get();
+        Attachment attachment = attachmentDTOMapper.mapToAttachment(multipartFile, attachDTO, publication);
+        attachmentRepository.save(attachment);
     }
 
-    public void saveAttachment(AttachmentDTO attachmentDTO, Publication publication) {
-        Attachment attachment = attachmentDTOMapper.mapToAttachment(attachmentDTO, publication);
-        attachmentRepository.save(attachment);
+    public List<AttachmentDTO> getPublicationAttachments(Long publicationId) {
+        List<Attachment> attachments = attachmentRepository.findAttachmentByPublicationId(publicationId);
+        return attachments.stream()
+                .map(attachment -> attachmentDTOMapper.mapToDTO(attachment))
+                .collect(Collectors.toList());
+    }
+
+    public Attachment getAttachment(String id) {
+        return attachmentRepository.findAttachmentByAttachmentId(id);
     }
 }
