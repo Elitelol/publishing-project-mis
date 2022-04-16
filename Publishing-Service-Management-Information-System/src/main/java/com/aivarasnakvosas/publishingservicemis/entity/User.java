@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -46,7 +47,7 @@ public class User extends AbstractBasicEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany(mappedBy = "authors", cascade = CascadeType.ALL)
     private Set<Publication> publications = new HashSet<>();
 
     @OneToMany(mappedBy = "manager")
@@ -56,6 +57,12 @@ public class User extends AbstractBasicEntity {
     private Set<Task> tasks = new HashSet<>();
 
     @OneToMany(mappedBy = "commentator")
-    private List<Comment> comments = new ArrayList<>();
+    private List<TaskComment> taskComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "commentator")
+    private List<BudgetComment> budgetComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "commentator")
+    private List<ContractComment> contractComments = new ArrayList<>();
 
 }

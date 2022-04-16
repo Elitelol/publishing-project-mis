@@ -11,7 +11,6 @@ import com.aivarasnakvosas.publishingservicemis.entity.enums.PublicationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,8 +65,12 @@ public class PublicationDTOMapper {
         publicationDTO.setAttachments(publication.getAttachments().stream()
                 .map(attachment -> attachmentDTOMapper.mapToDTO(attachment))
                 .collect(Collectors.toList()));
-        publicationDTO.setContract(contractDTOMapper.mapToDTO(publication.getContract(), publication));
-        publicationDTO.setBudget(budgetDTOMapper.mapToDTO(publication.getPublishingBudget(), publication));
+        if (publication.getContract() != null) {
+            publicationDTO.setContract(contractDTOMapper.mapToDTO(publication.getContract(), publication));
+        }
+        if (publication.getPublishingBudget() != null) {
+            publicationDTO.setBudget(budgetDTOMapper.mapToDTO(publication.getPublishingBudget(), publication));
+        }
         publicationDTO.setTasks(publication.getTasks().stream()
                 .map(task -> taskDTOMapper.mapToDTO(task))
                 .collect(Collectors.toList()));

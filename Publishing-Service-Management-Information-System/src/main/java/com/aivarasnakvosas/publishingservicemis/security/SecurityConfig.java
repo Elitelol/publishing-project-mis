@@ -75,23 +75,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ).and();
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/access/**").permitAll()
+                .antMatchers("/publication/**").permitAll()
+                .antMatchers("/task/**").permitAll()
+                /*
                 .antMatchers("/user/all").hasAnyRole()
                 .antMatchers("/user").hasAnyRole()
-                .antMatchers("/publication").hasRole(Role.AUTHOR.name())
-                .antMatchers("/publication/assign").hasRole(Role.PUBLICATION_MANAGER.name())
-                .antMatchers("/publication/changeStatus").hasRole(Role.PUBLICATION_MANAGER.name())
-                .antMatchers("/publication/contract").hasRole(Role.AUTHOR.name())
+                .antMatchers("/publication").hasAnyRole()
+                .antMatchers("/publication/assign").hasAnyRole()
+                .antMatchers("/publication/changeStatus").hasAnyRole()
+                .antMatchers("/publication/contract").hasAnyRole()
                 .antMatchers("/publication/budget").hasAnyRole()
                 .antMatchers("/publication/all").hasAnyRole()
                 .antMatchers("/publication/author").hasAnyRole()
                 .antMatchers("/publication/manager").hasAnyRole()
                 .antMatchers("/publication/byProgress").hasAnyRole()
-                .antMatchers("/publication/unmanaged").hasRole(Role.PUBLICATION_MANAGER.name())
-                .antMatchers("/publication/{id}/setComplete").hasRole(Role.PUBLICATION_MANAGER.name())
-                .antMatchers("/publication/{id}/setContract").hasRole(Role.PUBLICATION_MANAGER.name())
-                .antMatchers(HttpMethod.POST ,"/task").hasRole(Role.PUBLICATION_MANAGER.name())
+                .antMatchers("/publication/unmanaged").hasAnyRole()
+                .antMatchers(HttpMethod.POST ,"/task").hasAnyRole()
                 .antMatchers(HttpMethod.GET ,"/task").hasAnyRole()
                 .antMatchers(HttpMethod.POST ,"/task/comment").hasAnyRole()
+
+                 */
                 .anyRequest().authenticated();
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }

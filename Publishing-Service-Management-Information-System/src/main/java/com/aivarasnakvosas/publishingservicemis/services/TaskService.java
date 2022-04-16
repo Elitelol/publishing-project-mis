@@ -40,8 +40,7 @@ public class TaskService {
     public TaskDTO saveTask(TaskDTO taskDTO) {
         Publication publication = publicationService.findPublication(taskDTO.getPublicationId());
         List<User> responsiblePeople = userService.getUsers(taskDTO.getResponsiblePeopleIds());
-        Optional<Task> existingTask = taskRepository.findById(taskDTO.getTaskId());
-        Task task = existingTask.orElseGet(Task::new);
+        Task task = taskDTO.getTaskId() != null ? findTask(taskDTO.getTaskId()) : new Task();
         taskDTOMapper.mapToTask(task, taskDTO, publication, responsiblePeople);
         taskRepository.save(task);
         return taskDTOMapper.mapToDTO(task);
