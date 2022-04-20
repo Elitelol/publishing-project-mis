@@ -2,6 +2,7 @@ package com.aivarasnakvosas.publishingservicemis.services;
 
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
+import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.UserDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class UserService {
     public User getUser(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new RuntimeException();
+            throw new EntityNotFoundException("User not found.");
         }
         return user.get();
     }

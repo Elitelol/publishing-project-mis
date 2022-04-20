@@ -6,6 +6,7 @@ import com.aivarasnakvosas.publishingservicemis.entity.Contract;
 import com.aivarasnakvosas.publishingservicemis.entity.ContractComment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
+import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.CommentDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.mappers.ContractDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.ContractCommentRepository;
@@ -65,7 +66,7 @@ public class ContractService {
     private Contract findContract(Long id) {
         Optional<Contract> contract = contractRepository.findById(id);
         if (contract.isEmpty()) {
-            throw new RuntimeException();
+            throw new EntityNotFoundException("Contract not found.");
         }
         return contract.get();
     }

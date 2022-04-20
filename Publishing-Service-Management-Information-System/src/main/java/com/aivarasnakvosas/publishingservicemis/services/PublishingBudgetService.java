@@ -6,6 +6,7 @@ import com.aivarasnakvosas.publishingservicemis.entity.BudgetComment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.PublishingBudget;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
+import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.BudgetDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.mappers.CommentDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.BudgetCommentRepository;
@@ -65,7 +66,7 @@ public class PublishingBudgetService {
     private PublishingBudget findBudget(Long id) {
         Optional<PublishingBudget> budget = budgetRepository.findById(id);
         if (budget.isEmpty()) {
-            throw new RuntimeException();
+            throw new EntityNotFoundException("Publishing budget not found.");
         }
         return budget.get();
     }

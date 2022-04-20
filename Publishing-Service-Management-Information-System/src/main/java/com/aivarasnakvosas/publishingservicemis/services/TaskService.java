@@ -6,6 +6,7 @@ import com.aivarasnakvosas.publishingservicemis.entity.Task;
 import com.aivarasnakvosas.publishingservicemis.entity.TaskComment;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.TaskDTO;
+import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.CommentDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.mappers.TaskDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.TaskCommentRepository;
@@ -54,7 +55,7 @@ public class TaskService {
     private Task findTask(Long taskId) {
         Optional<Task> task = taskRepository.findById(taskId);
         if (task.isEmpty()){
-            throw new RuntimeException();
+            throw new EntityNotFoundException("Task not found.");
         }
         return task.get();
     }

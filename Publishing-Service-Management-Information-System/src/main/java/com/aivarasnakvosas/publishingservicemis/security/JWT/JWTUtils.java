@@ -1,6 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.security.JWT;
 
-import com.aivarasnakvosas.publishingservicemis.config.SecurityProperties;
+import com.aivarasnakvosas.publishingservicemis.config.properties.SecurityProperties;
 import com.aivarasnakvosas.publishingservicemis.security.UserContext;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

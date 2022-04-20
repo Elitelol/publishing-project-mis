@@ -8,6 +8,7 @@ import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.TaskDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.TaskType;
+import com.aivarasnakvosas.publishingservicemis.exceptions.BusinessErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +33,7 @@ public class TaskDTOMapper {
         Date startDate = taskDTO.getStartDate();
         Date dueDate = taskDTO.getDueDate();
         if (dueDate.before(startDate)) {
-            throw new RuntimeException();
+            throw new BusinessErrorException(String.format("Task due date %s can't be before start date %s", dueDate, startDate));
         }
         task.setStartDate(taskDTO.getStartDate());
         task.setDueDate(taskDTO.getDueDate());

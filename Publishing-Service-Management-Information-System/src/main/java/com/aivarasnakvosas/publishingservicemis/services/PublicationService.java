@@ -1,21 +1,14 @@
 package com.aivarasnakvosas.publishingservicemis.services;
 
-import com.aivarasnakvosas.publishingservicemis.entity.Contract;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
-import com.aivarasnakvosas.publishingservicemis.entity.PublishingBudget;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
-import com.aivarasnakvosas.publishingservicemis.dtos.BudgetDTO;
-import com.aivarasnakvosas.publishingservicemis.dtos.ContractDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.PublicationAcceptanceDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.PublicationDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.AttachmentType;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
-import com.aivarasnakvosas.publishingservicemis.exceptions.InvalidDataException;
-import com.aivarasnakvosas.publishingservicemis.mappers.BudgetDTOMapper;
-import com.aivarasnakvosas.publishingservicemis.mappers.ContractDTOMapper;
+import com.aivarasnakvosas.publishingservicemis.exceptions.BusinessErrorException;
+import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.PublicationDTOMapper;
-import com.aivarasnakvosas.publishingservicemis.repositories.BudgetRepository;
-import com.aivarasnakvosas.publishingservicemis.repositories.ContractRepository;
 import com.aivarasnakvosas.publishingservicemis.repositories.PublicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +41,7 @@ public class PublicationService {
     public Publication findPublication(Long id) {
         Optional<Publication> publication = publicationRepository.findPublicationById(id);
         if (publication.isEmpty()) {
-            throw new RuntimeException();
+            throw new EntityNotFoundException("Publication not found.");
         }
         return publication.get();
     }
@@ -69,7 +62,7 @@ public class PublicationService {
         if (manuscriptUploaded) {
             publication.setProgressStatus(ProgressStatus.NOT_STARTED);
         } else {
-            throw new InvalidDataException("Publication doesn't have manuscript.");
+            throw new BusinessErrorException(String.format("Publication %d doesn't have manuscript.", publication.getId()));
         }
         publicationRepository.save(publication);
         return publicationDTOMapper.mapToDTO(publication);
@@ -83,27 +76,27 @@ public class PublicationService {
 
     private void setPublicationStatus(Publication publication, PublicationAcceptanceDTO publicationAcceptanceDTO) {
         if (!publication.getManager().getId().equals(publicationAcceptanceDTO.getManagerId())) {
-            throw new RuntimeException();
+            throw new BusinessErrorException(String.format("Publication %d assigned manager isn't valid.", publication.getId()));
         }
         if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.REJECTED.name())) {
             if (!publication.getProgressStatus().equals(ProgressStatus.IN_REVIEW) || publicationAcceptanceDTO.getRejectionReason() == null) {
-                throw new RuntimeException();
+                throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
             }
             publication.setRejectionReason(publicationAcceptanceDTO.getRejectionReason());
         }
         if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.ACCEPTED.name())) {
             if (!publication.getProgressStatus().equals(ProgressStatus.IN_REVIEW)) {
-                throw new RuntimeException();
+                throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
             }
         }
         if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.IN_PROGRESS.name())) {
             if (!publication.getProgressStatus().equals(ProgressStatus.ACCEPTED)) {
-                throw new RuntimeException();
+                throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
             }
         }
         if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.PUBLISHED.name())) {
             if (!publication.getProgressStatus().equals(ProgressStatus.COMPLETED)) {
-                throw new RuntimeException();
+                throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
             }
         }
         publication.setProgressStatus(ProgressStatus.valueOf(publicationAcceptanceDTO.getStatus()));
@@ -114,9 +107,6 @@ public class PublicationService {
     public PublicationDTO addManager(Long publicationId, Long managerId) {
         User manager = userService.getUser(managerId);
         Publication publication = findPublication(publicationId);
-        if (publication.getManager() != null) {
-            throw new RuntimeException();
-        }
         publication.setManager(manager);
         publication.setProgressStatus(ProgressStatus.IN_REVIEW);
         publication.setDateModified(new Date());
@@ -132,7 +122,7 @@ public class PublicationService {
         if (contractSet) {
             publication.setContractSigned(true);
         } else {
-            throw new RuntimeException();
+            throw new BusinessErrorException(String.format("Publication %d doesn't have contract/contract attachment", publication.getId()));
         }
         publicationRepository.save(publication);
         return publicationDTOMapper.mapToDTO(publication);
@@ -146,7 +136,7 @@ public class PublicationService {
         if (allTaskAreDone && budgetAndContractsAreSet) {
             publication.setProgressStatus(ProgressStatus.COMPLETED);
         } else {
-            throw new RuntimeException();
+            throw new BusinessErrorException(String.format("Publication %d has unfinished tasks or contract and budget are not set.", publication.getId()));
         }
         publication.setDateModified(new Date());
         publicationRepository.save(publication);
