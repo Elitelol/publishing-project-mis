@@ -55,7 +55,7 @@ public class TaskService {
     private Task findTask(Long taskId) {
         Optional<Task> task = taskRepository.findById(taskId);
         if (task.isEmpty()){
-            throw new EntityNotFoundException("Task not found.");
+            throw new EntityNotFoundException(Task.class);
         }
         return task.get();
     }

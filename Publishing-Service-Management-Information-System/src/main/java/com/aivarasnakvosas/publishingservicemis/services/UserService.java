@@ -32,7 +32,7 @@ public class UserService {
     public User getUser(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new EntityNotFoundException("User not found.");
+            throw new EntityNotFoundException(User.class);
         }
         return user.get();
     }

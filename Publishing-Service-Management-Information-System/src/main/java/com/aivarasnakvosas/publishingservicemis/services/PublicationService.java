@@ -41,7 +41,7 @@ public class PublicationService {
     public Publication findPublication(Long id) {
         Optional<Publication> publication = publicationRepository.findPublicationById(id);
         if (publication.isEmpty()) {
-            throw new EntityNotFoundException("Publication not found.");
+            throw new EntityNotFoundException(Publication.class);
         }
         return publication.get();
     }

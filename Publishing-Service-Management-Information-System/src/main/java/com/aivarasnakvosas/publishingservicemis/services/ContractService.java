@@ -66,7 +66,7 @@ public class ContractService {
     private Contract findContract(Long id) {
         Optional<Contract> contract = contractRepository.findById(id);
         if (contract.isEmpty()) {
-            throw new EntityNotFoundException("Contract not found.");
+            throw new EntityNotFoundException(Contract.class);
         }
         return contract.get();
     }

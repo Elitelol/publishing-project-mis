@@ -66,7 +66,7 @@ public class PublishingBudgetService {
     private PublishingBudget findBudget(Long id) {
         Optional<PublishingBudget> budget = budgetRepository.findById(id);
         if (budget.isEmpty()) {
-            throw new EntityNotFoundException("Publishing budget not found.");
+            throw new EntityNotFoundException(PublishingBudget.class);
         }
         return budget.get();
     }
