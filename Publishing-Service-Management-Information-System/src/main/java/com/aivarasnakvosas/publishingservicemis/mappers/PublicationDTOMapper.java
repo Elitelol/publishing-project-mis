@@ -31,7 +31,7 @@ public class PublicationDTOMapper {
 
     public void mapToPublication(Publication publication, PublicationDTO publicationDTO, List<User> authors) {
         if (publication.getId() == null){
-            publication.setProgressStatus(ProgressStatus.NOT_SUBMITED);
+            publication.setProgressStatus(ProgressStatus.NOT_SUBMITTED);
         }
         publication.setName(publicationDTO.getName());
         publication.setIsbn(publicationDTO.getIsbn());
@@ -66,10 +66,10 @@ public class PublicationDTOMapper {
                 .map(attachment -> attachmentDTOMapper.mapToDTO(attachment))
                 .collect(Collectors.toList()));
         if (publication.getContract() != null) {
-            publicationDTO.setContract(contractDTOMapper.mapToDTO(publication.getContract(), publication));
+            publicationDTO.setContract(contractDTOMapper.mapToDTO(publication.getContract()));
         }
         if (publication.getPublishingBudget() != null) {
-            publicationDTO.setBudget(budgetDTOMapper.mapToDTO(publication.getPublishingBudget(), publication));
+            publicationDTO.setBudget(budgetDTOMapper.mapToDTO(publication.getPublishingBudget()));
         }
         publicationDTO.setTasks(publication.getTasks().stream()
                 .map(task -> taskDTOMapper.mapToDTO(task))

@@ -53,16 +53,6 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.addManager(publicationId, managerId));
     }
 
-    @PostMapping(value = "/contract")
-    ResponseEntity<PublicationDTO> saveContract(@RequestBody ContractDTO contractDTO) {
-        return ResponseEntity.ok(publicationService.saveContract(contractDTO));
-    }
-
-    @PostMapping(value = "/budget")
-    ResponseEntity<PublicationDTO> saveBudget(@RequestBody BudgetDTO budgetDTO) {
-        return ResponseEntity.ok(publicationService.saveBudget(budgetDTO));
-    }
-
     @GetMapping(value = "/all")
     ResponseEntity<List<PublicationDTO>> getPublications() {
         return ResponseEntity.ok(publicationService.getPublications());
@@ -95,6 +85,6 @@ public class PublicationController {
 
     @PostMapping(value = "/{id}/setContract")
     ResponseEntity<PublicationDTO> setContractSigned(@PathVariable Long id) {
-        return ResponseEntity.ok(publicationService.setContract(id));
+        return ResponseEntity.ok(publicationService.setContractSigned(id));
     }
 }

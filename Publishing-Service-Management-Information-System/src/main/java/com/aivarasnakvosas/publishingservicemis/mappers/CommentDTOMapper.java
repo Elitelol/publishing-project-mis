@@ -51,6 +51,7 @@ public class CommentDTOMapper {
 
     public CommentDTO mapToDTO(Comment comment) {
         CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setCommentId(comment.getId());
         commentDTO.setText(comment.getText());
         commentDTO.setUserId(comment.getCommentator().getId());
         if (comment instanceof TaskComment) {

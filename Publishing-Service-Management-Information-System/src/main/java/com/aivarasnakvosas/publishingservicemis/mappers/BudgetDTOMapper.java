@@ -17,18 +17,18 @@ public class BudgetDTOMapper {
     @Autowired
     private CommentDTOMapper commentDTOMapper;
 
-    public PublishingBudget mapToPublishingBudget(PublishingBudget publishingBudget, BudgetDTO budgetDTO){
+    public void mapToPublishingBudget(PublishingBudget publishingBudget, BudgetDTO budgetDTO, Publication publication){
         publishingBudget.setPagePrice(budgetDTO.getPagePrice());
         publishingBudget.setPrintingCost(budgetDTO.getPrintingCost());
         publishingBudget.setRoyaltyPerCopy(budgetDTO.getRoyaltyPerCopy());
         publishingBudget.setLayoutCost(budgetDTO.getLayoutCost());
         publishingBudget.setDesignCost(budgetDTO.getDesignCost());
-        return publishingBudget;
+        publishingBudget.setPublication(publication);
     }
 
-    public BudgetDTO mapToDTO(PublishingBudget publishingBudget, Publication publication) {
+    public BudgetDTO mapToDTO(PublishingBudget publishingBudget) {
         BudgetDTO budgetDTO = new BudgetDTO();
-        budgetDTO.setPublicationId(publication.getId());
+        budgetDTO.setPublicationId(publishingBudget.getPublication().getId());
         budgetDTO.setBudgetId(publishingBudget.getId());
         budgetDTO.setPagePrice(publishingBudget.getPagePrice());
         budgetDTO.setPrintingCost(publishingBudget.getPrintingCost());
@@ -36,6 +36,7 @@ public class BudgetDTOMapper {
         budgetDTO.setLayoutCost(publishingBudget.getLayoutCost());
         budgetDTO.setDesignCost(publishingBudget.getDesignCost());
         budgetDTO.setComments(publishingBudget.getComments().stream()
+                .filter(comment -> comment.getRootComment() == null)
                 .map(budgetComment -> commentDTOMapper.mapToDTO(budgetComment))
                 .collect(Collectors.toList()));
         return budgetDTO;

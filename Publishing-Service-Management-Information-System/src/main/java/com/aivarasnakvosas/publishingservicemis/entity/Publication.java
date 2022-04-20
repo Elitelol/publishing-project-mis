@@ -4,7 +4,6 @@ import com.aivarasnakvosas.publishingservicemis.entity.enums.Genre;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.Language;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.PublicationType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -81,14 +80,10 @@ public class Publication extends AbstractBasicEntity {
     @OneToMany(mappedBy = "publication", orphanRemoval = true)
     private List<Attachment> attachments = new ArrayList<>();
 
-    @JoinColumn(name = "Contract_Id", referencedColumnName = "Contract_Id")
-    @OneToOne(orphanRemoval = true)
-    @Cascade(CascadeType.ALL)
+    @OneToOne(mappedBy = "publication", orphanRemoval = true)
     private Contract contract;
 
-    @JoinColumn(name = "Budget_Id", referencedColumnName = "Budget_Id")
-    @OneToOne(orphanRemoval = true)
-    @Cascade(CascadeType.ALL)
+    @OneToOne(mappedBy = "publication", orphanRemoval = true)
     private PublishingBudget publishingBudget;
 
     @OneToMany(mappedBy = "publication", orphanRemoval = true)

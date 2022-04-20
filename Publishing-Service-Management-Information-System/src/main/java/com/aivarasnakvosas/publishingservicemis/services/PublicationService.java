@@ -10,6 +10,7 @@ import com.aivarasnakvosas.publishingservicemis.dtos.PublicationAcceptanceDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.PublicationDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.AttachmentType;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
+import com.aivarasnakvosas.publishingservicemis.exceptions.InvalidDataException;
 import com.aivarasnakvosas.publishingservicemis.mappers.BudgetDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.mappers.ContractDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.mappers.PublicationDTOMapper;
@@ -35,17 +36,9 @@ public class PublicationService {
     @Autowired
     private PublicationRepository publicationRepository;
     @Autowired
-    private ContractRepository contractRepository;
-    @Autowired
-    private BudgetRepository budgetRepository;
-    @Autowired
     private UserService userService;
     @Autowired
     private PublicationDTOMapper publicationDTOMapper;
-    @Autowired
-    private ContractDTOMapper contractDTOMapper;
-    @Autowired
-    private BudgetDTOMapper budgetDTOMapper;
 
     public PublicationDTO getPublication(Long id) {
         Publication publication = findPublication(id);
@@ -76,7 +69,7 @@ public class PublicationService {
         if (manuscriptUploaded) {
             publication.setProgressStatus(ProgressStatus.NOT_STARTED);
         } else {
-            throw new RuntimeException();
+            throw new InvalidDataException("Publication doesn't have manuscript.");
         }
         publicationRepository.save(publication);
         return publicationDTOMapper.mapToDTO(publication);
@@ -92,10 +85,27 @@ public class PublicationService {
         if (!publication.getManager().getId().equals(publicationAcceptanceDTO.getManagerId())) {
             throw new RuntimeException();
         }
-        if (publicationAcceptanceDTO.getStatus().equals("REJECTED") && publicationAcceptanceDTO.getRejectionReason() == null) {
-            throw new RuntimeException();
+        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.REJECTED.name())) {
+            if (!publication.getProgressStatus().equals(ProgressStatus.IN_REVIEW) || publicationAcceptanceDTO.getRejectionReason() == null) {
+                throw new RuntimeException();
+            }
+            publication.setRejectionReason(publicationAcceptanceDTO.getRejectionReason());
         }
-        publication.setRejectionReason(publicationAcceptanceDTO.getRejectionReason());
+        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.ACCEPTED.name())) {
+            if (!publication.getProgressStatus().equals(ProgressStatus.IN_REVIEW)) {
+                throw new RuntimeException();
+            }
+        }
+        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.IN_PROGRESS.name())) {
+            if (!publication.getProgressStatus().equals(ProgressStatus.ACCEPTED)) {
+                throw new RuntimeException();
+            }
+        }
+        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.PUBLISHED.name())) {
+            if (!publication.getProgressStatus().equals(ProgressStatus.COMPLETED)) {
+                throw new RuntimeException();
+            }
+        }
         publication.setProgressStatus(ProgressStatus.valueOf(publicationAcceptanceDTO.getStatus()));
         publication.setDateModified(new Date());
         publicationRepository.save(publication);
@@ -114,29 +124,7 @@ public class PublicationService {
         return publicationDTOMapper.mapToDTO(publication);
     }
 
-    public PublicationDTO saveContract(ContractDTO contractDTO) {
-        Publication publication = findPublication(contractDTO.getPublicationId());
-        Optional<Contract> existingContract = contractRepository.findById(contractDTO.getContractId());
-        Contract contract = existingContract.orElseGet(Contract::new);
-        contract = contractDTOMapper.mapToContract(contract, contractDTO);
-        publication.setContract(contract);
-        publication.setDateModified(new Date());
-        publicationRepository.save(publication);
-        return publicationDTOMapper.mapToDTO(publication);
-    }
-
-    public PublicationDTO saveBudget(BudgetDTO budgetDTO) {
-        Publication publication = findPublication(budgetDTO.getPublicationId());
-        Optional<PublishingBudget> existingBudget = budgetRepository.findById(budgetDTO.getBudgetId());
-        PublishingBudget publishingBudget = existingBudget.orElseGet(PublishingBudget::new);
-        publishingBudget = budgetDTOMapper.mapToPublishingBudget(publishingBudget, budgetDTO);
-        publication.setPublishingBudget(publishingBudget);
-        publication.setDateModified(new Date());
-        publicationRepository.save(publication);
-        return publicationDTOMapper.mapToDTO(publication);
-    }
-
-    public PublicationDTO setContract(Long publicationId) {
+    public PublicationDTO setContractSigned(Long publicationId) {
         Publication publication = findPublication(publicationId);
         boolean writtenContractUploaded = publication.getAttachments().stream()
                 .anyMatch(attachment -> attachment.getAttachmentType().equals(AttachmentType.CONTRACT));

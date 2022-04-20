@@ -9,6 +9,7 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
@@ -24,7 +25,8 @@ import java.util.List;
 @Setter
 public class PublishingBudget extends AbstractBasicEntity {
 
-    @OneToOne(mappedBy = "publishingBudget")
+    @JoinColumn(name = "Publication_Id", referencedColumnName = "Publication_Id")
+    @OneToOne(cascade = CascadeType.ALL)
     private Publication publication;
 
     @OneToMany(mappedBy = "publishingBudget", cascade = CascadeType.ALL)
@@ -36,4 +38,7 @@ public class PublishingBudget extends AbstractBasicEntity {
     private Long layoutCost;
     private Long designCost;
 
+    public void addComment(BudgetComment budgetComment) {
+        comments.add(budgetComment);
+    }
 }

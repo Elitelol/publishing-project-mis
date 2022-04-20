@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 public class CommentDTO {
 
+    private Long commentId;
     private Long userId;
     private Long entityId;
     private String text;

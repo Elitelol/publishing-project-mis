@@ -17,18 +17,18 @@ public class ContractDTOMapper {
     @Autowired
     private CommentDTOMapper commentDTOMapper;
 
-    public Contract mapToContract(Contract contract, ContractDTO contractDTO){
+    public void mapToContract(Contract contract, ContractDTO contractDTO, Publication publication) {
         contract.setPayment(contractDTO.getPayment());
         contract.setAdvancedPayment(contractDTO.getAdvancedPayment());
         contract.setAppliesAfterPublishing(contractDTO.isAppliesAfterPublishing());
         contract.setOwnedByPublisher(contractDTO.isOwnedByPublisher());
         contract.setAgreements(contractDTO.getAgreements());
-        return contract;
+        contract.setPublication(publication);
     }
 
-    public ContractDTO mapToDTO(Contract contract, Publication publication) {
+    public ContractDTO mapToDTO(Contract contract) {
         ContractDTO contractDTO = new ContractDTO();
-        contractDTO.setPublicationId(publication.getId());
+        contractDTO.setPublicationId(contract.getPublication().getId());
         contractDTO.setContractId(contract.getId());
         contractDTO.setPayment(contract.getPayment());
         contractDTO.setAdvancedPayment(contract.getAdvancedPayment());
@@ -36,6 +36,7 @@ public class ContractDTOMapper {
         contractDTO.setOwnedByPublisher(contract.isOwnedByPublisher());
         contractDTO.setAgreements(contract.getAgreements());
         contractDTO.setComments(contract.getComments().stream()
+                .filter(comment -> comment.getRootComment() == null)
                 .map(contractComment -> commentDTOMapper.mapToDTO(contractComment))
                 .collect(Collectors.toList()));
         return contractDTO;

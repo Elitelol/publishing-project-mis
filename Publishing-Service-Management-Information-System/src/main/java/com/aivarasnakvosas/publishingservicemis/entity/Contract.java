@@ -9,6 +9,7 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
@@ -24,7 +25,8 @@ import java.util.List;
 @Setter
 public class Contract extends AbstractBasicEntity {
 
-    @OneToOne(mappedBy = "contract")
+    @JoinColumn(name = "Publication_Id", referencedColumnName = "Publication_Id")
+    @OneToOne(cascade = CascadeType.ALL)
     private Publication publication;
 
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
@@ -35,4 +37,8 @@ public class Contract extends AbstractBasicEntity {
     private boolean appliesAfterPublishing;
     private boolean ownedByPublisher;
     private String agreements;
+
+    public void addComment(ContractComment contractComment) {
+        comments.add(contractComment);
+    }
 }
