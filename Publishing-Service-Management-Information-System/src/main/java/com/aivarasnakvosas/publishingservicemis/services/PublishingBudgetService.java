@@ -12,6 +12,7 @@ import com.aivarasnakvosas.publishingservicemis.repositories.BudgetCommentReposi
 import com.aivarasnakvosas.publishingservicemis.repositories.BudgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
  * @author Aivaras Nakvosas
  */
 @Service
+@Transactional
 public class PublishingBudgetService {
 
     @Autowired

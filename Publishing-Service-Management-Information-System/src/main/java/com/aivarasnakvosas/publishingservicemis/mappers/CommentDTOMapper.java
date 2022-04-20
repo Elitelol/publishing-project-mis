@@ -54,6 +54,7 @@ public class CommentDTOMapper {
         commentDTO.setCommentId(comment.getId());
         commentDTO.setText(comment.getText());
         commentDTO.setUserId(comment.getCommentator().getId());
+        commentDTO.setPosted(comment.getDateCreated());
         if (comment instanceof TaskComment) {
             mapRootComments((TaskComment) comment, commentDTO);
         } else if (comment instanceof BudgetComment) {

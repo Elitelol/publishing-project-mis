@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ public class CommentDTO {
     private Long commentId;
     private Long userId;
     private Long entityId;
+    private Date posted;
     private String text;
     private Long rootCommentId;
     private List<CommentDTO> replies;

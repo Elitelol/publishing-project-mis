@@ -3,6 +3,7 @@ package com.aivarasnakvosas.publishingservicemis.controllers;
 import com.aivarasnakvosas.publishingservicemis.dtos.CommentDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.ContractDTO;
 import com.aivarasnakvosas.publishingservicemis.services.ContractService;
+import com.aivarasnakvosas.publishingservicemis.services.ExportPDFService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ public class ContractController {
 
     @Autowired
     private ContractService contractService;
+    @Autowired
+    private ExportPDFService exportPDFService;
 
     @PostMapping
     public ResponseEntity<ContractDTO> saveContract(@RequestBody ContractDTO contractDTO) {
