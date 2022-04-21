@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -61,6 +64,39 @@ public class PublishingBudgetService {
     public BudgetDTO getPublishingBudget(Long id) {
         PublishingBudget publishingBudget = findBudget(id);
         return budgetDTOMapper.mapToDTO(publishingBudget);
+    }
+
+    public Map<String, Object> getBudgetDataForPDF(Long id) {
+        Map<String, Object> publishingData = new HashMap<>();
+        PublishingBudget publishingBudget = findBudget(id);
+        Publication publication = publishingBudget.getPublication();
+        BigDecimal numberOfPages = BigDecimal.valueOf(publication.getPageNumber());
+        BigDecimal numberOfCopies = BigDecimal.valueOf(publishingBudget.getNumberOfCopies());
+        publishingBudget.setCopyEditingCost(publishingBudget.getCopyEditingRate().multiply(numberOfPages));
+        publishingBudget.setProofReadingCost(publishingBudget.getProofReadingRate().multiply(numberOfPages));
+        publishingBudget.setPurchaseOfPhotosCost(publishingBudget.getPurchaseOfPhotosRate().multiply(BigDecimal.valueOf(publishingBudget.getPurchaseOfPhotosQuantity())));
+        publishingBudget.setCoverDesignCost(publishingBudget.getCoverDesignRate().multiply(publishingBudget.getCoverDesignQuantity()));
+        publishingBudget.setInteriorDesignCost(publishingBudget.getInteriorLayoutRate().multiply(numberOfPages));
+        publishingBudget.setPrintingCost(publishingBudget.getPrintingRate().multiply(numberOfCopies));
+        publishingBudget.setColourPrintingCost(numberOfPages.multiply(publishingBudget.getColourPrintingRate()));
+        publishingBudget.setDeliveryToStorageCost(publishingBudget.getDeliveryToStorageRate().multiply(numberOfCopies));
+        BigDecimal totalEditorialCost = publishingBudget.getCopyEditingCost()
+                .add(publishingBudget.getPrintingCost())
+                .add(publishingBudget.getPurchaseOfPhotosCost())
+                .add(publishingBudget.getCoverDesignCost())
+                .add(publishingBudget.getInteriorDesignCost());
+        BigDecimal totalPrintingCost = publishingBudget.getPrintingCost()
+                .add(publishingBudget.getColourPrintingCost())
+                .add(publishingBudget.getDeliveryToStorageCost());
+        BigDecimal totalCommunicationsCost = publishingBudget.getAdvertisingCost().add(publishingBudget.getCopyMailingCost());
+        BigDecimal totalPublishingCost = totalEditorialCost.add(totalPrintingCost).add(totalCommunicationsCost);
+        publishingBudget.setTotalEditorialCost(totalEditorialCost);
+        publishingBudget.setTotalPrintingCost(totalPrintingCost);
+        publishingBudget.setTotalCommunicationCost(totalCommunicationsCost);
+        publishingBudget.setTotalPublishingCost(totalPublishingCost);
+        publishingData.put("publication", publication);
+        publishingData.put("budget", publishingBudget);
+        return publishingData;
     }
 
     private PublishingBudget findBudget(Long id) {

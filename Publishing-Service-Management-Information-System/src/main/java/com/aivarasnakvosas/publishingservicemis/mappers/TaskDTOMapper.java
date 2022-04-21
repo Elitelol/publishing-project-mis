@@ -25,7 +25,7 @@ public class TaskDTOMapper {
     @Autowired
     private CommentDTOMapper commentDTOMapper;
 
-    public Task mapToTask(Task task, TaskDTO taskDTO, Publication publication, List<User> responsiblePeople) {
+    public void mapToTask(Task task, TaskDTO taskDTO, Publication publication, List<User> responsiblePeople) {
         task.setPublication(publication);
         task.setTaskName(taskDTO.getTaskName());
         task.setTaskType(TaskType.valueOf(taskDTO.getTaskType()));
@@ -39,7 +39,6 @@ public class TaskDTOMapper {
         task.setDueDate(taskDTO.getDueDate());
         task.setProgressStatus(ProgressStatus.valueOf(taskDTO.getProgress()));
         task.setResponsiblePeople(responsiblePeople);
-        return task;
     }
 
     public TaskDTO mapToDTO(Task task) {

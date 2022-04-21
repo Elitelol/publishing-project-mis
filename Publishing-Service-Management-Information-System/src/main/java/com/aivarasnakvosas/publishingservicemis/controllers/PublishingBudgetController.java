@@ -50,12 +50,11 @@ public class PublishingBudgetController {
 
     @GetMapping(value = "/{id}/downloadBudget")
     public void downloadBudgetPDF(@PathVariable Long id, HttpServletResponse httpServletResponse) throws IOException {
-        BudgetDTO budget = publishingBudgetService.getPublishingBudget(id);
-        Map<String, Object> data = new HashMap<>();
-        data.put("budget", budget);
+        Map<String, Object> data = publishingBudgetService.getBudgetDataForPDF(id);
+        String header = "attachment; filename =" + id.toString() + "_" + "budget.pdf";
         ByteArrayInputStream byteArrayInputStream = exportPDFService.exportPDF("budget", data);
         httpServletResponse.setContentType("application/octet-stream");
-        httpServletResponse.setHeader("Content-Disposition", "attachment; filename=receipt.pdf");
+        httpServletResponse.setHeader("Content-Disposition", header);
         IOUtils.copy(byteArrayInputStream, httpServletResponse.getOutputStream());
     }
 }

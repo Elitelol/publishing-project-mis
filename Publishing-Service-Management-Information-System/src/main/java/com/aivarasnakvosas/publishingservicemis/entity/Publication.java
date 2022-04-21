@@ -23,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -88,6 +89,9 @@ public class Publication extends AbstractBasicEntity {
 
     @OneToMany(mappedBy = "publication", orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
+
+    @Transient
+    private String authorsName;
 
     public void addAuthor(User author) {
         authors.add(author);

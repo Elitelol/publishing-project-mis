@@ -2,7 +2,6 @@ package com.aivarasnakvosas.publishingservicemis.exceptions.handler;
 
 import com.aivarasnakvosas.publishingservicemis.exceptions.BusinessErrorException;
 import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
-import com.aivarasnakvosas.publishingservicemis.exceptions.handler.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

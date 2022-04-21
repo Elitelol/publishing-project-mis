@@ -18,11 +18,19 @@ public class BudgetDTOMapper {
     private CommentDTOMapper commentDTOMapper;
 
     public void mapToPublishingBudget(PublishingBudget publishingBudget, BudgetDTO budgetDTO, Publication publication){
-        publishingBudget.setPagePrice(budgetDTO.getPagePrice());
-        publishingBudget.setPrintingCost(budgetDTO.getPrintingCost());
-        publishingBudget.setRoyaltyPerCopy(budgetDTO.getRoyaltyPerCopy());
-        publishingBudget.setLayoutCost(budgetDTO.getLayoutCost());
-        publishingBudget.setDesignCost(budgetDTO.getDesignCost());
+        publishingBudget.setNumberOfCopies(budgetDTO.getNumberOfCopies());
+        publishingBudget.setCopyEditingRate(budgetDTO.getCopyEditingRate());
+        publishingBudget.setProofReadingRate(budgetDTO.getProofReadingRate());
+        publishingBudget.setPurchaseOfPhotosRate(budgetDTO.getPurchaseOfPhotosRate());
+        publishingBudget.setPurchaseOfPhotosQuantity(budgetDTO.getPurchaseOfPhotosQuantity());
+        publishingBudget.setCoverDesignRate(budgetDTO.getCoverDesignRate());
+        publishingBudget.setCoverDesignQuantity(budgetDTO.getCoverDesignQuantity());
+        publishingBudget.setInteriorLayoutRate(budgetDTO.getInteriorLayoutRate());
+        publishingBudget.setPrintingRate(budgetDTO.getPrintingRate());
+        publishingBudget.setColourPrintingRate(budgetDTO.getColourPrintingRate());
+        publishingBudget.setDeliveryToStorageRate(budgetDTO.getDeliveryToStorageRate());
+        publishingBudget.setAdvertisingCost(budgetDTO.getAdvertisingCost());
+        publishingBudget.setCopyMailingCost(budgetDTO.getCopyMailingCost());
         publishingBudget.setPublication(publication);
     }
 
@@ -30,11 +38,19 @@ public class BudgetDTOMapper {
         BudgetDTO budgetDTO = new BudgetDTO();
         budgetDTO.setPublicationId(publishingBudget.getPublication().getId());
         budgetDTO.setBudgetId(publishingBudget.getId());
-        budgetDTO.setPagePrice(publishingBudget.getPagePrice());
-        budgetDTO.setPrintingCost(publishingBudget.getPrintingCost());
-        budgetDTO.setRoyaltyPerCopy(publishingBudget.getRoyaltyPerCopy());
-        budgetDTO.setLayoutCost(publishingBudget.getLayoutCost());
-        budgetDTO.setDesignCost(publishingBudget.getDesignCost());
+        budgetDTO.setNumberOfCopies(publishingBudget.getNumberOfCopies());
+        budgetDTO.setCopyEditingRate(publishingBudget.getCopyEditingRate());
+        budgetDTO.setProofReadingRate(publishingBudget.getProofReadingRate());
+        budgetDTO.setPurchaseOfPhotosRate(publishingBudget.getPurchaseOfPhotosRate());
+        budgetDTO.setPurchaseOfPhotosQuantity(publishingBudget.getPurchaseOfPhotosQuantity());
+        budgetDTO.setCoverDesignRate(publishingBudget.getCoverDesignRate());
+        budgetDTO.setCoverDesignQuantity(publishingBudget.getCoverDesignQuantity());
+        budgetDTO.setInteriorLayoutRate(publishingBudget.getInteriorLayoutRate());
+        budgetDTO.setPrintingRate(publishingBudget.getPrintingRate());
+        budgetDTO.setColourPrintingRate(publishingBudget.getColourPrintingRate());
+        budgetDTO.setDeliveryToStorageRate(publishingBudget.getDeliveryToStorageRate());
+        budgetDTO.setAdvertisingCost(publishingBudget.getAdvertisingCost());
+        budgetDTO.setCopyMailingCost(publishingBudget.getCopyMailingCost());
         budgetDTO.setComments(publishingBudget.getComments().stream()
                 .filter(comment -> comment.getRootComment() == null)
                 .map(budgetComment -> commentDTOMapper.mapToDTO(budgetComment))
