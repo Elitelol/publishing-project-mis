@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -69,5 +71,10 @@ public class ContractService {
             throw new EntityNotFoundException(Contract.class);
         }
         return contract.get();
+    }
+
+    public Map<String, Object> getContractDataForPDF(Long id) {
+        Map<String, Object> contractData = new HashMap<>();
+        return contractData;
     }
 }

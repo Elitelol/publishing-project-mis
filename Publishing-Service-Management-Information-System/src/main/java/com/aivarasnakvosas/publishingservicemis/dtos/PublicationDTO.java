@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +28,7 @@ public class PublicationDTO {
     private Long pageNumber;
     private String language;
     private String genre;
-    private Long price;
+    private BigDecimal price;
     private Date publishDate;
     private Long managerId;
     private List<AttachmentDTO> attachments = new ArrayList<>();

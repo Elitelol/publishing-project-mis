@@ -70,18 +70,26 @@ public class PublishingBudgetService {
         Map<String, Object> publishingData = new HashMap<>();
         PublishingBudget publishingBudget = findBudget(id);
         Publication publication = publishingBudget.getPublication();
+
+        StringBuilder authorNames = new StringBuilder();
+        publication.getAuthors()
+                .iterator()
+                .forEachRemaining(user -> authorNames.append(user.getFirstName()).append(" ").append(user.getLastName()).append(", "));
+        authorNames.setLength(authorNames.length() - 2);
+        publication.setAuthorsName(authorNames.toString());
+
         BigDecimal numberOfPages = BigDecimal.valueOf(publication.getPageNumber());
         BigDecimal numberOfCopies = BigDecimal.valueOf(publishingBudget.getNumberOfCopies());
         publishingBudget.setCopyEditingCost(publishingBudget.getCopyEditingRate().multiply(numberOfPages));
         publishingBudget.setProofReadingCost(publishingBudget.getProofReadingRate().multiply(numberOfPages));
         publishingBudget.setPurchaseOfPhotosCost(publishingBudget.getPurchaseOfPhotosRate().multiply(BigDecimal.valueOf(publishingBudget.getPurchaseOfPhotosQuantity())));
-        publishingBudget.setCoverDesignCost(publishingBudget.getCoverDesignRate().multiply(publishingBudget.getCoverDesignQuantity()));
+        publishingBudget.setCoverDesignCost(publishingBudget.getCoverDesignRate().multiply(BigDecimal.valueOf(publishingBudget.getCoverDesignQuantity())));
         publishingBudget.setInteriorDesignCost(publishingBudget.getInteriorLayoutRate().multiply(numberOfPages));
         publishingBudget.setPrintingCost(publishingBudget.getPrintingRate().multiply(numberOfCopies));
         publishingBudget.setColourPrintingCost(numberOfPages.multiply(publishingBudget.getColourPrintingRate()));
         publishingBudget.setDeliveryToStorageCost(publishingBudget.getDeliveryToStorageRate().multiply(numberOfCopies));
         BigDecimal totalEditorialCost = publishingBudget.getCopyEditingCost()
-                .add(publishingBudget.getPrintingCost())
+                .add(publishingBudget.getProofReadingCost())
                 .add(publishingBudget.getPurchaseOfPhotosCost())
                 .add(publishingBudget.getCoverDesignCost())
                 .add(publishingBudget.getInteriorDesignCost());

@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,10 +19,17 @@ public class ContractDTO {
 
     private Long publicationId;
     private Long contractId;
-    private Long payment;
-    private Long advancedPayment;
-    private boolean appliesAfterPublishing;
-    private boolean ownedByPublisher;
-    private String agreements;
+    private Date publishDate;
+    private BigDecimal publicationPrice;
+    private BigDecimal amountOnSigningContract;
+    private BigDecimal amountOfCompletedManuscript;
+    private BigDecimal amountOnInitialPublish;
+    private Long withinMonthsAfterPublish;
+    private Long firstCoverRate;
+    private BigDecimal firstCoverPercent;
+    private Long secondCoverRate;
+    private BigDecimal secondCoverPercent;
+    private Long lastCoverRate;
+    private BigDecimal lastCoverPercent;
     private List<CommentDTO> comments = new ArrayList<>();
 }

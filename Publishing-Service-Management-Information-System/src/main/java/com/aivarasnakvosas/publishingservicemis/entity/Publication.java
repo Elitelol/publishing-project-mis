@@ -24,6 +24,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -61,7 +62,7 @@ public class Publication extends AbstractBasicEntity {
     @Enumerated(EnumType.STRING)
     private Genre genre;
 
-    private Long price;
+    private BigDecimal price;
 
     @Temporal(TemporalType.DATE)
     private Date publishDate;

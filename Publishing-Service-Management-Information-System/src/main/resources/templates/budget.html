@@ -23,15 +23,15 @@
     </head>
     <body>
     <div class ="introDiv">
-        <h1 th:text = "'Publishing budget for publication ' + ${publication.id}"> </h1>
-        <h2 th:text = "'Publication name ' + ${publication.name}">  </h2>
-        <h2 th:text = "'Publication type ' + ${publication.publicationType}">  </h2>
-        <h2 th:text = "'Publication page size ' + ${publication.pageNumber}">  </h2>
-        <h2 th:text = "'Publication author(s): "> </h2>
+        <h1 th:text = "'Publishing budget for publication: ' + ${publication.id}"> </h1>
+        <h2 th:text = "'Publication name: ' + ${publication.name}">  </h2>
+        <h2 th:text = "'Publication type: ' + ${publication.publicationType}">  </h2>
+        <h2 th:text = "'Publication page size: ' + ${publication.pageNumber}">  </h2>
+        <h2 th:text = "'Publication author(s): ' + ${publication.authorsName}"> </h2>
     </div>
     <div class = "prod">
         <table class = "center">
-            <h2 th:text = "'Number of copies ' + ${budget.numberOfCopies}"> </h2>
+            <h2 th:text = "'Number of copies: ' + ${budget.numberOfCopies}"> </h2>
             <caption> Content preparation </caption>
             <tr>
                 <th> Editorial </th>
@@ -75,10 +75,16 @@
                 <td th:text = "${publication.pageNumber}"> </td>
                 <td th:text = "${budget.interiorDesignCost}"> </td>
             </tr>
+            <tr>
+                <td> Total </td>
+                <td> </td>
+                <td> </td>
+                <td> </td>
+                <td th:text = "${budget.totalEditorialCost}"> </td>
+            </tr>
         </table>
-        <h2 th:text = "'Total: ' + ${budget.totalEditorialCost}">  </h2>
         <table class = "center">
-            <content> Printing preperation </content>
+            <content> Printing preparation </content>
                 <tr>
                     <th> Printing </th>
                     <th> Rate </th>
@@ -107,8 +113,14 @@
                     <td th:text = "${budget.numberOfCopies}"> </td>
                     <td th:text = "${budget.deliveryToStorageCost}"> </td>
                 </tr>
+            <tr>
+                <td> Total </td>
+                <td> </td>
+                <td> </td>
+                <td> </td>
+                <td th:text = "${budget.totalPrintingCost}"> </td>
+            </tr>
         </table>
-        <h2 th:text = "'Total: ' + ${budget.totalPrintingCost}"> </h2>
         <table class = "center">
             <content> Communications </content>
             <tr>
@@ -123,8 +135,11 @@
                 <td> Flyer/press copy mailing </td>
                 <td th:text = "${budget.copyMailingCost}"> </td>
             </tr>
+            <tr>
+                <td> Total </td>
+                <td th:text = "${budget.totalCommunicationCost}"> </td>
+            </tr>
         </table>
-        <h2 th:text = "'Total: ' + ${budget.totalCommunicationCost}"> </h2>
         <table class = "center">
             <content th:text = "'Total production cost for ' + ${budget.numberOfCopies} + ' copies'"> </content>
             <tr>
@@ -143,8 +158,11 @@
                 <td> Communications </td>
                 <td th:text =  "${budget.totalCommunicationCost}"> </td>
             </tr>
+            <tr>
+                <td> Total </td>
+                <td th:text =  "${budget.totalPublishingCost}"> </td>
+            </tr>
         </table>
-        <h2 th:text = "'Total: ' + ${budget.totalPublishingCost}"> </h2>
     </div>
     </body>
 </html>

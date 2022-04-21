@@ -1,6 +1,5 @@
 package com.aivarasnakvosas.publishingservicemis.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,11 +35,20 @@ public class Contract extends AbstractBasicEntity {
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
     private List<ContractComment> comments = new ArrayList<>();
 
-    private Long payment;
-    private Long advancedPayment;
-    private boolean appliesAfterPublishing;
-    private boolean ownedByPublisher;
-    private String agreements;
+    @Temporal(TemporalType.DATE)
+    private Date publishDate;
+
+    private BigDecimal publicationPrice;
+    private BigDecimal amountOnSigningContract;
+    private BigDecimal amountOfCompletedManuscript;
+    private BigDecimal amountOnInitialPublish;
+    private Long withinMonthsAfterPublish;
+    private Long firstCoverRate;
+    private BigDecimal firstCoverPercent;
+    private Long secondCoverRate;
+    private BigDecimal secondCoverPercent;
+    private Long lastCoverRate;
+    private BigDecimal lastCoverPercent;
 
     public void addComment(ContractComment contractComment) {
         comments.add(contractComment);
