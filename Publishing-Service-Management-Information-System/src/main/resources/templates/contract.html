@@ -5,57 +5,66 @@
     <body>
     <div>
         <h1> Introduction </h1>
-        <p> This publishing contract, the "contract", is entered into as of contract created date by and between , the "Publisher", and  , the "Author". This publishing contract governs the publication of the work </p>
+        <p th:text="'This publishing contract is entered into as of ' + ${contrat.createdDate} + ' by and between the Publisher, and ' + ${publication.authorsName} + '.This publishing contract governs the publication of the work: ' + ${publication.name}"> </p>
     </div>
     <div>
         <h1> Grants of rights </h1>
-        <p> Author grants  full right and title to the following, in perpetuity: </p>
+        <p th:text="'Author ' + ${publication.authorsName}  + ' grants full right and title to the Publisher the following, in perpetuity:'"> </p>
         <ul>
-            <li> The right to publish, sell, and profit from the listed works in all languages and formats in existence today and at any point in the future. </li>
+            <li > The right to publish, sell, and profit from the listed works in all languages and formats in existence today and at any point in the future. </li>
             <li> To create or devise modified, abridged, or derivative works based on the works listed. </li>
         </ul>
-        <p> These rights are granted by   on behalf of him/herself and their successors, heirs, executors, and any other party who may attempt to lay claim to these rights at any point now or in the future. </p>
-        <p> Any rights not granted to  above remain with  . </p>
-        <p> The rights granted to  by   shall not be constrained by geographic territories and are considered global in nature. </p>
+        <p th:text="'These rights are granted by ' + ${publication.authorsName} + ' on behalf of him/herself and their successors, heirs, executors, and any other party who may attempt to lay claim to these rights at any point now or in the future.'">  </p>
+        <p th:text="'Any rights not granted to the Publisher above remain with ' + ${publication.authorsName} + '.'">  </p>
+        <p th:text="'The rights granted to the Publisher by ' + ${publication.authorsName} + ' shall not be constrained by geographic territories and are considered global in nature.'"> </p>
     </div>
     <div>
         <h1> Author compensation </h1>
-        <p>  shall provide   with an advance against future royalties in the amount of advance amount.  This advance shall be paid to   as follows: </p>
+        <h2>Advance against royalties</h2>
+        <p th:text="'The publisher shall provide ' + ${publication.authorsName} + ' with an advance against future royalties in the amount of advance amount. This advance shall be paid to ' + ${publication.authorsName} + ' as follows:'"> </p>
         <ul>
+            <li th:text="${contract.amountOnSigningContract} + ' on signing of this Contract.'"> </li>
+            <li th:text="${contract.amountOfCompletedManuscript} + ' on acceptance of the complete manuscript of the ' + ${publication.publicationType} + '.'"> </li>
+            <li th:text="${contract.amountOnInitialPublish} + 'on Publishers initial publication of the work or within ' + ${contract.withinMonthsAfterPublish} + ' months after acceptance, whichever comes earlier.'"></li>
         </ul>
-        <p>  agrees to provide the   with royalties as follows: </p>
+        <h2>Royalties</h2>
+        <p th:text="'The publisher agrees to provide the ' + ${publication.authorsName} + ' with royalties as follows:'"> </p>
+        <p>Publisher shall pay Author the royalties on copies sold by Publisher through regular wholesale and retail channels, minus returns:</p>
         <ul>
-
+            <li th:text="'First ' + ${contract.firstCoverRate} + ' copies: ' +  ${contract.firstCoverPercent} + '% of the Retail Price.'"></li>
+            <li th:text="'Second ' + ${contract.secondCoverRate} + ' copies: ' +  ${contract.secondCoverPercent} + '% of the Retail Price.'"></li>
+            <li th:text="'First ' + ${contract.lastCoverRate} + ' copies: ' +  ${contract.lastCoverPercent} + '% of the Retail Price.'"></li>
         </ul>
     </div>
     <div>
         <h1> Publication </h1>
-        <p>  shall have the exclusive right to edit or modify the delivered materials at their discretion prior to publication. However,   shall have the right to review any modifications and grant approval prior to publication.
-            While   shall have the right to review and approve and changes to content, the work's format, cover design, and final artwork,  shall retain full right to manufacture, distribute, market, and sell the completed work as they deem necessary.
-            agrees to provide page proofs of the material prior to publication. These proofs shall include all content, including artwork.   agrees to review and return these proofs to  within 30 days. If   makes or requests changes to the content aside from typographical errors in excess of 5% of the typesetting cost, then   agrees to pay such costs to .
-            agrees that the works covered under this book publishing contract will be published within one year of delivery of the initial manuscript </p>
-        <p>  agrees to consult with   regarding marketing the published works, but reserves the right to make final decisions regarding sales and marketing of the works.   grants  the right to use  's name and likeness as they see fit for marketing purposes. </p>
+        <p th:text="'The publisher shall have the exclusive right to edit or modify the delivered materials at their discretion prior to publication. However, ' + ${publication.authorsName} +  ' shall have the right to review any modifications and grant approval prior to publication.
+            'While' + ${publication.authorsName} + ' shall have the right to review and approve and changes to content, the works format, cover design, and final artwork, the Publisher shall retain full right to manufacture, distribute, market, and sell the completed work as they deem necessary.
+            'the Publisher agrees to provide page proofs of the material prior to publication. These proofs shall include all content, including artwork.' +  ${publication.authorsName} + ' agrees to review and return these proofs to the Publisher within 30 days. If ' + ${publication.authorsName} + 'makes or requests changes to the content aside from typographical errors in excess of 5% of the typesetting cost, then ' + ${publication.authorsName} + ' agrees to pay such costs to the Publisher.
+            'the Publisher agrees that the works covered under this ' + ${publication.publicationType} + ' publishing contract will be published within one year of delivery of the initial manuscript'"> </p>
+        <p th:text="'The Publisher agrees to consult with '  +  ${publication.authorsName} +  ' regarding marketing the published work, but reserves the right to make final decisions regarding sales and marketing of the works. '  +  ${publication.authorsName} +  ' grants the right to use '  +  ${publication.authorsName} +  ' name and likeness as they see fit for marketing purposes.'">  </p>
+        <p th:text="'The publishing work: ' + ${publication.name} + ' will be published on ' + ${contract.publishDate} + ' for ' + ${contract.publicationPrice} + ' euros."></p>
     </div>
     <div>
         <h1> Copyright </h1>
-        <p>  shall include a copyright notice in  's name on all published copies of the works in accordance with copyright regulations. </p>
+        <p th:text="'The publisher shall include a copyright notice in ' +  ${publication.authorsName} +  ' name on all published copies of the works in accordance with copyright regulations.'"> </p>
     </div>
     <div>
         <h1> Warranties and Indemnity </h1>
-        <p>   warrants that the works governed by this book publishing contract are their sole intellectual property, that no other similar agreements governing these works exist, and that the works are not in the public domain. </p>
-        <p>Additionally,   warrants that the works do not infringe on copyrights, trademarks, or other intellectual rights of any third parties. If the works governed by this book publishing contract contain statements presented as fact,   warrants that such statements are true and accurate.</p>
-        <p>Furthermore,   agrees to refrain from entering into agreements with third parties that conflict with the terms of this book publishing contract. </p>
+        <p th:text="${publication.authorsName} + ' warrants that the works governed by this ' + ${publication.publicationType} + '  publishing contract are their sole intellectual property, that no other similar agreements governing these works exist, and that the works are not in the public domain.'"> </p>
+        <p th:text="'Additionally, ' +  ${publication.authorsName} + '  warrants that the works do not infringe on copyrights, trademarks, or other intellectual rights of any third parties. If the works governed by this ' + ${publication.publicationType} + ' publishing contract contain statements presented as fact, ' +  ${publication.authorsName} + ' warrants that such statements are true and accurate.'"></p>
+        <p th:text="'Furthermore, ' +  ${publication.authorsName} + ' agrees to refrain from entering into agreements with third parties that conflict with the terms of this ' +  ${publication.publicationType} + ' publishing contract.'"></p>
     </div>
     <div>
         <h1> General terms </h1>
-        <p> This book publishing contract represents the entire agreement between   and . </p>
+        <p th:text="'This ' + ${publication.publicationType} + ' publishing contract represents the entire agreement between the Publisher and ' +  ${publication.authorsName} + '.'"> </p>
         <p> This contract may not be altered, amended, or otherwise modified except through written form requiring signature by both parties.</p>
-        <p> Should multiple individuals be considered   of the works governed by this book publishing contract, each of those individuals shall be liable for adhering to the terms of this contract.</p>
-        <p>  and   shall be granted an extension on any time-sensitive duties related to this book publishing contract should circumstance beyond their control interfere with their ability to execute their contractual obligations.</p>
+        <p th:text="'Should multiple individuals be considered of the works governed by this ' + ${publication.publicationType} + ' publishing contract, each of those individuals shall be liable for adhering to the terms of this contract.'"> </p>
+        <p th:text="'The publisher and ' +  ${publication.authorsName} + ' shall be granted an extension on any time-sensitive duties related to this ' + ${publication.publicationType} + ' publishing contract should circumstance beyond their control interfere with their ability to execute their contractual obligations.'">  </p>
     </div>
     <div>
         <h1> Acceptance </h1>
-        <p> THEREFORE, having read and understood the terms of this book publishing contract,   and  (or their authorized representatives) hereby execute and enter into this contract with one another as of the dates below. </p>
+        <p th:text="'THEREFORE, having read and understood the terms of this ' + ${publication.publicationType} + ' publishing contract, ' +  ${publication.authorsName} + ' and Publisher (or their authorized representative) ' + ${publication.manager.firstName} + ' ' + ${publication.manager.lastName}  + ' hereby execute and enter into this contract with one another as of the dates below. '"> </p>
     </div>
     </body>
 </html>
