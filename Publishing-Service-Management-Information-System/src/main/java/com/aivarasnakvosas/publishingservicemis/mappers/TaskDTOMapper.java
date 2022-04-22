@@ -28,7 +28,7 @@ public class TaskDTOMapper {
     public void mapToTask(Task task, TaskDTO taskDTO, Publication publication, List<User> responsiblePeople) {
         task.setPublication(publication);
         task.setTaskName(taskDTO.getTaskName());
-        task.setTaskType(TaskType.valueOf(taskDTO.getTaskType()));
+        task.setTaskType(TaskType.getTask(taskDTO.getTaskType()));
         task.setDescription(taskDTO.getDescription());
         Date startDate = taskDTO.getStartDate();
         Date dueDate = taskDTO.getDueDate();
@@ -37,7 +37,7 @@ public class TaskDTOMapper {
         }
         task.setStartDate(taskDTO.getStartDate());
         task.setDueDate(taskDTO.getDueDate());
-        task.setProgressStatus(ProgressStatus.valueOf(taskDTO.getProgress()));
+        task.setProgressStatus(ProgressStatus.getStatus(taskDTO.getProgress()));
         task.setResponsiblePeople(responsiblePeople);
     }
 
@@ -46,11 +46,11 @@ public class TaskDTOMapper {
         taskDTO.setTaskId(task.getId());
         taskDTO.setPublicationId(task.getPublication().getId());
         taskDTO.setTaskName(task.getTaskName());
-        taskDTO.setTaskType(task.getTaskType().name());
+        taskDTO.setTaskType(task.getTaskType().getType());
         taskDTO.setDescription(task.getDescription());
         taskDTO.setStartDate(task.getStartDate());
         taskDTO.setDueDate(task.getDueDate());
-        taskDTO.setProgress(task.getProgressStatus().toString());
+        taskDTO.setProgress(task.getProgressStatus().getStatus());
         List<Long> users = task.getResponsiblePeople()
                 .stream()
                 .map(AbstractBasicEntity::getId)

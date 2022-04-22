@@ -23,7 +23,7 @@ public class AttachmentDTOMapper {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         attachment.setFileName(fileName);
         attachment.setFile(file.getBytes());
-        attachment.setAttachmentType(AttachmentType.valueOf(attachmentDTO.getAttachmentType()));
+        attachment.setAttachmentType(AttachmentType.getType(attachmentDTO.getAttachmentType()));
         attachment.setContentType(file.getContentType());
         attachment.setPublication(publication);
         return attachment;
@@ -38,7 +38,7 @@ public class AttachmentDTOMapper {
                 .toUriString();
         attachmentDTO.setPublicationId(attachment.getPublication().getId());
         attachmentDTO.setFileName(attachment.getFileName());
-        attachmentDTO.setAttachmentType(attachment.getAttachmentType().toString());
+        attachmentDTO.setAttachmentType(attachment.getAttachmentType().getType());
         attachmentDTO.setContentType(attachment.getContentType());
         attachmentDTO.setUrl(fileDownloadUri);
         return attachmentDTO;

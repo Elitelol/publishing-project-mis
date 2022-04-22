@@ -78,28 +78,28 @@ public class PublicationService {
         if (!publication.getManager().getId().equals(publicationAcceptanceDTO.getManagerId())) {
             throw new BusinessErrorException(String.format("Publication %d assigned manager isn't valid.", publication.getId()));
         }
-        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.REJECTED.name())) {
+        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.REJECTED.getStatus())) {
             if (!publication.getProgressStatus().equals(ProgressStatus.IN_REVIEW) || publicationAcceptanceDTO.getRejectionReason() == null) {
                 throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
             }
             publication.setRejectionReason(publicationAcceptanceDTO.getRejectionReason());
         }
-        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.ACCEPTED.name())) {
+        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.ACCEPTED.getStatus())) {
             if (!publication.getProgressStatus().equals(ProgressStatus.IN_REVIEW)) {
                 throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
             }
         }
-        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.IN_PROGRESS.name())) {
+        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.IN_PROGRESS.getStatus())) {
             if (!publication.getProgressStatus().equals(ProgressStatus.ACCEPTED)) {
                 throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
             }
         }
-        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.PUBLISHED.name())) {
+        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.PUBLISHED.getStatus())) {
             if (!publication.getProgressStatus().equals(ProgressStatus.COMPLETED)) {
                 throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
             }
         }
-        publication.setProgressStatus(ProgressStatus.valueOf(publicationAcceptanceDTO.getStatus()));
+        publication.setProgressStatus(ProgressStatus.getStatus(publicationAcceptanceDTO.getStatus()));
         publication.setDateModified(new Date());
         publicationRepository.save(publication);
     }
@@ -164,7 +164,7 @@ public class PublicationService {
     }
 
     public List<PublicationDTO> getPublicationByStatus(String status) {
-        ProgressStatus progressStatus = ProgressStatus.valueOf(status);
+        ProgressStatus progressStatus = ProgressStatus.getStatus(status);
         List<Publication> publications = publicationRepository.findPublicationsByProgressStatus(progressStatus);
         return getPublicationDTOS(publications);
     }

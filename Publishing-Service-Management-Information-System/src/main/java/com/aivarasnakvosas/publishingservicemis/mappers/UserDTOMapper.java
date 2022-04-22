@@ -24,7 +24,7 @@ public class UserDTOMapper {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
-        user.setRole(Role.valueOf(userDTO.getRole().toUpperCase()));
+        user.setRole(Role.getRole(userDTO.getRole()));
         return user;
     }
 }

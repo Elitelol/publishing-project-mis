@@ -36,10 +36,10 @@ public class PublicationDTOMapper {
         publication.setName(publicationDTO.getName());
         publication.setIsbn(publicationDTO.getIsbn());
         publication.setPageNumber(publicationDTO.getPageNumber());
-        publication.setLanguage(Language.valueOf(publicationDTO.getLanguage()));
-        publication.setGenre(Genre.valueOf(publicationDTO.getGenre()));
+        publication.setLanguage(Language.getLanguage(publicationDTO.getLanguage()));
+        publication.setGenre(Genre.getGenre(publicationDTO.getGenre()));
         publication.setPublishDate(publicationDTO.getPublishDate());
-        publication.setPublicationType(PublicationType.valueOf(publicationDTO.getPublicationType().toUpperCase()));
+        publication.setPublicationType(PublicationType.getType(publicationDTO.getPublicationType()));
         authors.forEach(publication::addAuthor);
     }
 
@@ -50,13 +50,13 @@ public class PublicationDTOMapper {
                 .map(AbstractBasicEntity::getId)
                 .collect(Collectors.toList()));
         publicationDTO.setName(publication.getName());
-        publicationDTO.setPublicationType(publication.getPublicationType().toString());
-        publicationDTO.setProgressStatus(publication.getProgressStatus().toString());
+        publicationDTO.setPublicationType(publication.getPublicationType().getType());
+        publicationDTO.setProgressStatus(publication.getProgressStatus().getStatus());
         publicationDTO.setRejectionReason(publication.getRejectionReason());
         publicationDTO.setIsbn((publication.getIsbn()));
         publicationDTO.setPageNumber(publication.getPageNumber());
-        publicationDTO.setLanguage(publication.getLanguage().toString());
-        publicationDTO.setGenre(publication.getGenre().toString());
+        publicationDTO.setLanguage(publication.getLanguage().getLanguage());
+        publicationDTO.setGenre(publication.getGenre().getGenre());
         publicationDTO.setPrice(publication.getPrice());
         publicationDTO.setPublishDate(publication.getPublishDate());
         if (publication.getManager() != null) {
