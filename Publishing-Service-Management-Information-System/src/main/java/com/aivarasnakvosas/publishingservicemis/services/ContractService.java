@@ -75,6 +75,18 @@ public class ContractService {
 
     public Map<String, Object> getContractDataForPDF(Long id) {
         Map<String, Object> contractData = new HashMap<>();
+        Contract contract = findContract(id);
+        Publication publication = contract.getPublication();
+
+        StringBuilder authorNames = new StringBuilder();
+        publication.getAuthors()
+                .iterator()
+                .forEachRemaining(user -> authorNames.append(user.getFirstName()).append(" ").append(user.getLastName()).append(", "));
+        authorNames.setLength(authorNames.length() - 2);
+        publication.setAuthorsName(authorNames.toString());
+
+        contractData.put("publication", publication);
+        contractData.put("contract", contract);
         return contractData;
     }
 }

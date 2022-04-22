@@ -5,7 +5,7 @@
     <body>
     <div>
         <h1> Introduction </h1>
-        <p th:text="'This publishing contract is entered into as of ' + ${contrat.createdDate} + ' by and between the Publisher, and ' + ${publication.authorsName} + '.This publishing contract governs the publication of the work: ' + ${publication.name}"> </p>
+        <p th:text="'This publishing contract is entered into as of ' + ${contract.dateCreated} + ' by and between the Publisher, and ' + ${publication.authorsName} + '.This publishing contract governs the publication of the work: ' + ${publication.name}"> </p>
     </div>
     <div>
         <h1> Grants of rights </h1>
@@ -39,11 +39,11 @@
     <div>
         <h1> Publication </h1>
         <p th:text="'The publisher shall have the exclusive right to edit or modify the delivered materials at their discretion prior to publication. However, ' + ${publication.authorsName} +  ' shall have the right to review any modifications and grant approval prior to publication.
-            'While' + ${publication.authorsName} + ' shall have the right to review and approve and changes to content, the works format, cover design, and final artwork, the Publisher shall retain full right to manufacture, distribute, market, and sell the completed work as they deem necessary.
-            'the Publisher agrees to provide page proofs of the material prior to publication. These proofs shall include all content, including artwork.' +  ${publication.authorsName} + ' agrees to review and return these proofs to the Publisher within 30 days. If ' + ${publication.authorsName} + 'makes or requests changes to the content aside from typographical errors in excess of 5% of the typesetting cost, then ' + ${publication.authorsName} + ' agrees to pay such costs to the Publisher.
-            'the Publisher agrees that the works covered under this ' + ${publication.publicationType} + ' publishing contract will be published within one year of delivery of the initial manuscript'"> </p>
+            While' + ${publication.authorsName} + ' shall have the right to review and approve and changes to content, the works format, cover design, and final artwork, the Publisher shall retain full right to manufacture, distribute, market, and sell the completed work as they deem necessary.
+            the Publisher agrees to provide page proofs of the material prior to publication. These proofs shall include all content, including artwork.' +  ${publication.authorsName} + ' agrees to review and return these proofs to the Publisher within 30 days. If ' + ${publication.authorsName} + ' makes or requests changes to the content aside from typographical errors in excess of 5% of the typesetting cost, then ' + ${publication.authorsName} + ' agrees to pay such costs to the Publisher.
+            the Publisher agrees that the works covered under this ' + ${publication.publicationType} + ' publishing contract will be published within one year of delivery of the initial manuscript'"> </p>
         <p th:text="'The Publisher agrees to consult with '  +  ${publication.authorsName} +  ' regarding marketing the published work, but reserves the right to make final decisions regarding sales and marketing of the works. '  +  ${publication.authorsName} +  ' grants the right to use '  +  ${publication.authorsName} +  ' name and likeness as they see fit for marketing purposes.'">  </p>
-        <p th:text="'The publishing work: ' + ${publication.name} + ' will be published on ' + ${contract.publishDate} + ' for ' + ${contract.publicationPrice} + ' euros."></p>
+        <p th:text="'The publishing work: ' + ${publication.name} + ' will be published on ' + ${contract.publishDate} + ' for ' + ${contract.publicationPrice} + ' euros.'"></p>
     </div>
     <div>
         <h1> Copyright </h1>
