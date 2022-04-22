@@ -89,4 +89,17 @@ public class ContractService {
         contractData.put("contract", contract);
         return contractData;
     }
+
+    public void deleteContractComment(Long id) {
+        ContractComment contractComment = findContractComment(id);
+        contractCommentRepository.delete(contractComment);
+    }
+
+    private ContractComment findContractComment(Long id) {
+        Optional<ContractComment> contractComment = contractCommentRepository.findById(id);
+        if (contractComment.isEmpty()) {
+            throw new EntityNotFoundException(ContractComment.class);
+        }
+        return contractComment.get();
+    }
 }

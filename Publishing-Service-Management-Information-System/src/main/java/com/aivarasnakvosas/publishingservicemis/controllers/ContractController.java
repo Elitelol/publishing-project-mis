@@ -7,6 +7,7 @@ import com.aivarasnakvosas.publishingservicemis.services.ExportPDFService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,5 +56,11 @@ public class ContractController {
         httpServletResponse.setContentType("application/octet-stream");
         httpServletResponse.setHeader("Content-Disposition", header);
         IOUtils.copy(byteArrayInputStream, httpServletResponse.getOutputStream());
+    }
+
+    @DeleteMapping(value = "/deleteComment")
+    public ResponseEntity<?> deleteContractComment(Long id) {
+        contractService.deleteContractComment(id);
+        return ResponseEntity.noContent().build();
     }
 }

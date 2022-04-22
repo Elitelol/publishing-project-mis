@@ -6,6 +6,8 @@ import com.aivarasnakvosas.publishingservicemis.entity.Task;
 import com.aivarasnakvosas.publishingservicemis.entity.TaskComment;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.TaskDTO;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
+import com.aivarasnakvosas.publishingservicemis.exceptions.BusinessErrorException;
 import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.CommentDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.mappers.TaskDTOMapper;
@@ -71,5 +73,26 @@ public class TaskService {
         task.addComment(comment);
         taskRepository.save(task);
         return taskDTOMapper.mapToDTO(task);
+    }
+
+    public void deleteTask(Long id) {
+        Task task = findTask(id);
+        if (task.getProgressStatus().equals(ProgressStatus.COMPLETED)) {
+            throw new BusinessErrorException(String.format("Completed task %d can't be deleted.", task.getId()));
+        }
+        taskRepository.delete(task);
+    }
+
+    public void deleteTaskComment(Long taskId) {
+        TaskComment taskComment = findTaskComment(taskId);
+        taskCommentRepository.delete(taskComment);
+    }
+
+    private TaskComment findTaskComment(Long id) {
+        Optional<TaskComment> taskComment = taskCommentRepository.findById(id);
+        if (taskComment.isEmpty()) {
+            throw new EntityNotFoundException(TaskComment.class);
+        }
+        return taskComment.get();
     }
 }

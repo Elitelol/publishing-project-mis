@@ -114,4 +114,17 @@ public class PublishingBudgetService {
         }
         return budget.get();
     }
+
+    public void deleteBudgetComment(Long id) {
+        BudgetComment budgetComment = findBudgetComment(id);
+        budgetCommentRepository.delete(budgetComment);
+    }
+
+    private BudgetComment findBudgetComment(Long id) {
+        Optional<BudgetComment> budgetComment = budgetCommentRepository.findById(id);
+        if (budgetComment.isEmpty()) {
+            throw new EntityNotFoundException(BudgetComment.class);
+        }
+        return budgetComment.get();
+    }
 }
