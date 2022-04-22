@@ -174,4 +174,14 @@ public class PublicationService {
                 .map(publication -> publicationDTOMapper.mapToDTO(publication))
                 .collect(Collectors.toList());
     }
+
+    public void deletePublication(Long id) {
+        Publication publication = findPublication(id);
+        if (!(publication.getProgressStatus().equals(ProgressStatus.NOT_SUBMITTED)
+                || publication.getProgressStatus().equals(ProgressStatus.REJECTED))) {
+            throw new BusinessErrorException(String.format("Deleting publication %d with status %s isn't allowed",
+                    publication.getId(), publication.getProgressStatus().getStatus()));
+        }
+        publicationRepository.delete(publication);
+    }
 }

@@ -1,13 +1,11 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
-import com.aivarasnakvosas.publishingservicemis.dtos.BudgetDTO;
-import com.aivarasnakvosas.publishingservicemis.dtos.ContractDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.PublicationAcceptanceDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.PublicationDTO;
 import com.aivarasnakvosas.publishingservicemis.services.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +26,7 @@ public class PublicationController {
     @Autowired
     private PublicationService publicationService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     ResponseEntity<PublicationDTO> savePublication(@RequestBody PublicationDTO publication) {
         return ResponseEntity.ok(publicationService.savePublication(publication));
     }
@@ -86,5 +84,11 @@ public class PublicationController {
     @PostMapping(value = "/{id}/setContract")
     ResponseEntity<PublicationDTO> setContractSigned(@PathVariable Long id) {
         return ResponseEntity.ok(publicationService.setContractSigned(id));
+    }
+
+    @DeleteMapping
+    ResponseEntity<?> deletePublication(@RequestParam Long id) {
+        publicationService.deletePublication(id);
+        return ResponseEntity.noContent().build();
     }
 }
