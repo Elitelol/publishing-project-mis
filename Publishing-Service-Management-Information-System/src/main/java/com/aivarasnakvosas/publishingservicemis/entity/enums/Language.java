@@ -1,6 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.entity.enums;
 
 import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,6 +10,7 @@ import java.util.Arrays;
 /**
  * @author Aivaras Nakvosas
  */
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @AllArgsConstructor
 @Getter
 public enum Language {
