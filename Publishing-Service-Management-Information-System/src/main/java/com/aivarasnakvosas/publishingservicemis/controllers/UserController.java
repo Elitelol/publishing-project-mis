@@ -1,10 +1,13 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
+import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,18 +24,26 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/test")
-    public String testingMethod() {
-        return "hello";
+    @PostMapping
+    ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userService.saveUser(userDTO));
     }
 
     @GetMapping(value = "/all")
-    ResponseEntity<List<User>> getAllUsers() {
+    ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    /*
     @GetMapping
-    ResponseEntity<User> getUser(@RequestParam Long id) {
+    ResponseEntity<List<UserDTO>> getUsersByIds(@RequestParam List<Long> ids) {
+        return ResponseEntity.ok(userService.getUsers(ids));
+    }
+
+     */
+
+    @GetMapping
+    ResponseEntity<UserDTO> getUser(@RequestParam Long id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 }

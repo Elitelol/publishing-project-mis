@@ -47,7 +47,7 @@ public class PublicationService {
     }
 
     public PublicationDTO savePublication(PublicationDTO publicationDTO) {
-        List<User> author = userService.getUsers(publicationDTO.getAuthorId());
+        List<User> author = userService.findUsers(publicationDTO.getAuthorId());
         Optional<Publication> existingPublication = publicationRepository.findPublicationById(publicationDTO.getPublicationId());
         Publication publication = existingPublication.orElseGet(Publication::new);
         publicationDTOMapper.mapToPublication(publication, publicationDTO, author);
@@ -105,7 +105,7 @@ public class PublicationService {
     }
 
     public PublicationDTO addManager(Long publicationId, Long managerId) {
-        User manager = userService.getUser(managerId);
+        User manager = userService.findUser(managerId);
         Publication publication = findPublication(publicationId);
         publication.setManager(manager);
         publication.setProgressStatus(ProgressStatus.IN_REVIEW);

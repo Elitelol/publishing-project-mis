@@ -50,7 +50,7 @@ public class PublishingBudgetService {
 
     public BudgetDTO addComment(CommentDTO commentDTO) {
         PublishingBudget publishingBudget = findBudget(commentDTO.getEntityId());
-        User user = userService.getUser(commentDTO.getUserId());
+        User user = userService.findUser(commentDTO.getUserId());
         BudgetComment rootComment = null;
         if (commentDTO.getRootCommentId() != null) {
             rootComment = budgetCommentRepository.getById(commentDTO.getRootCommentId());

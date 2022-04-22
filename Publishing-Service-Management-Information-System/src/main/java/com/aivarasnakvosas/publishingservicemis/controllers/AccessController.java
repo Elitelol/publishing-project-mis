@@ -1,6 +1,5 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
-import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.LoginFormDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
 import com.aivarasnakvosas.publishingservicemis.security.JWT.JWTResponse;
@@ -42,7 +41,7 @@ public class AccessController {
     }
 
     @PostMapping(value = "/signIn", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> registerNewUser(@RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(userService.createNewUser(userDTO));
+    public ResponseEntity<UserDTO> registerNewUser(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userService.saveUser(userDTO));
     }
 }

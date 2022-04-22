@@ -17,14 +17,26 @@ public class UserDTOMapper {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User mapToUser(UserDTO userDTO) {
-        User user = new User();
+    public void mapToUser(User user, UserDTO userDTO) {
         user.setUsername(userDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));;
+        String password = userDTO.getPassword();
+        if (password != null && password.isEmpty()) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         user.setRole(Role.getRole(userDTO.getRole()));
-        return user;
+    }
+
+    public UserDTO mapToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setRole(user.getRole().getRole());
+        return userDTO;
     }
 }

@@ -40,7 +40,7 @@ public class TaskService {
 
     public TaskDTO saveTask(TaskDTO taskDTO) {
         Publication publication = publicationService.findPublication(taskDTO.getPublicationId());
-        List<User> responsiblePeople = userService.getUsers(taskDTO.getResponsiblePeopleIds());
+        List<User> responsiblePeople = userService.findUsers(taskDTO.getResponsiblePeopleIds());
         Task task = taskDTO.getTaskId() != null ? findTask(taskDTO.getTaskId()) : new Task();
         taskDTOMapper.mapToTask(task, taskDTO, publication, responsiblePeople);
         taskRepository.save(task);
@@ -62,7 +62,7 @@ public class TaskService {
 
     public TaskDTO addComment(CommentDTO commentDTO) {
         Task task = findTask(commentDTO.getEntityId());
-        User user = userService.getUser(commentDTO.getUserId());
+        User user = userService.findUser(commentDTO.getUserId());
         TaskComment rootComment = null;
         if (commentDTO.getRootCommentId() != null) {
             rootComment = taskCommentRepository.getById(commentDTO.getRootCommentId());

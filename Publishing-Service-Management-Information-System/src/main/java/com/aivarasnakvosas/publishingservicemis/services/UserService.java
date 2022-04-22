@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Aivaras Nakvosas
@@ -24,12 +25,14 @@ public class UserService {
     @Autowired
     private UserDTOMapper userDTOMapper;
 
-    public User createNewUser(UserDTO userDTO) {
-        User user = userDTOMapper.mapToUser(userDTO);
-        return userRepository.save(user);
+    public UserDTO saveUser(UserDTO userDTO) {
+        User user = userDTO.getId() != null ? findUser(userDTO.getId()) : new User();
+        userDTOMapper.mapToUser(user, userDTO);
+        userRepository.save(user);
+        return userDTOMapper.mapToDTO(user);
     }
 
-    public User getUser(Long id) {
+    public User findUser(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new EntityNotFoundException(User.class);
@@ -37,12 +40,27 @@ public class UserService {
         return user.get();
     }
 
-    public List<User> getUsers(List<Long> ids) {
+    public UserDTO getUser(Long id) {
+        User user = findUser(id);
+        return userDTOMapper.mapToDTO(user);
+    }
+
+    public List<User> findUsers(List<Long> ids) {
         return userRepository.findUsersById(ids);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getUsers(List<Long> ids) {
+        List<User> users = findUsers(ids);
+        return users.stream()
+                .map(user -> userDTOMapper.mapToDTO(user))
+                .collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> userDTOMapper.mapToDTO(user))
+                .collect(Collectors.toList());
     }
 
 }
