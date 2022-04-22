@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 
 /**
  * @author Aivaras Nakvosas
@@ -33,7 +35,7 @@ public class AccessController {
     private UserService userService;
 
     @PostMapping(path = "/login")
-    public ResponseEntity<JWTResponse> loginUser(@RequestBody LoginFormDTO loginFormDTO) {
+    public ResponseEntity<JWTResponse> loginUser(@Valid @RequestBody LoginFormDTO loginFormDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginFormDTO.getUsername(), loginFormDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = jwtUtils.generateJwtToken(authentication);
@@ -41,7 +43,7 @@ public class AccessController {
     }
 
     @PostMapping(value = "/signIn", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> registerNewUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> registerNewUser(@Valid @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.saveUser(userDTO));
     }
 }

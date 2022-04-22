@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class PublicationController {
     private PublicationService publicationService;
 
     @PostMapping
-    ResponseEntity<PublicationDTO> savePublication(@RequestBody PublicationDTO publication) {
+    ResponseEntity<PublicationDTO> savePublication(@Valid @RequestBody PublicationDTO publication) {
         return ResponseEntity.ok(publicationService.savePublication(publication));
     }
 

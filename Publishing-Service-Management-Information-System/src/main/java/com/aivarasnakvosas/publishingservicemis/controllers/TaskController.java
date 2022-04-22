@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * @author Aivaras Nakvosas
  */
@@ -25,7 +27,7 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping
-    ResponseEntity<TaskDTO> saveTask(@RequestBody TaskDTO taskDTO){
+    ResponseEntity<TaskDTO> saveTask(@Valid @RequestBody TaskDTO taskDTO){
         TaskDTO task = taskService.saveTask(taskDTO);
         return ResponseEntity.ok(task);
     }
@@ -37,7 +39,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "/comment")
-    ResponseEntity<TaskDTO> addComment(@RequestBody CommentDTO commentDTO) {
+    ResponseEntity<TaskDTO> addComment(@Valid @RequestBody CommentDTO commentDTO) {
         TaskDTO task = taskService.addComment(commentDTO);
         return ResponseEntity.ok(task);
     }

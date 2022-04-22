@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class ContractController {
     }
 
     @PostMapping(value = "/comment")
-    public ResponseEntity<ContractDTO> addComment(@RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<ContractDTO> addComment(@Valid @RequestBody CommentDTO commentDTO) {
         return ResponseEntity.ok(contractService.addComment(commentDTO));
     }
 

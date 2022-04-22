@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class PublishingBudgetController {
     }
 
     @PostMapping(value = "/comment")
-    ResponseEntity<BudgetDTO> addComment(@RequestBody CommentDTO commentDTO){
+    ResponseEntity<BudgetDTO> addComment(@Valid @RequestBody CommentDTO commentDTO){
         return ResponseEntity.ok(publishingBudgetService.addComment(commentDTO));
     }
 
