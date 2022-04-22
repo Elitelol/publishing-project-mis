@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +21,7 @@ public class PublicationDTO {
     private Long publicationId;
     private List<Long> authorId = new ArrayList<>();
 
+    @NotBlank(message = "Name can't be empty")
     private String name;
     private String publicationType;
     private String progressStatus;
