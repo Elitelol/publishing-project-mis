@@ -6,6 +6,8 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Aivaras Nakvosas
@@ -18,5 +20,5 @@ public class ErrorMessage {
     private LocalDateTime timestamp;
     private Integer httpCode;
     private HttpStatus httpStatus;
-    private String message;
+    private List<String> message = new ArrayList<>();
 }
