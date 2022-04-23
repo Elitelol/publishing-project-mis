@@ -8,7 +8,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public class AttachmentResponseMessage {
+public class EntityCreationResponseMessage {
 
     private final String message;
 }

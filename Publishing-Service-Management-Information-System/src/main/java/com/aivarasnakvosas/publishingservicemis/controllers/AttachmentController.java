@@ -1,7 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Attachment;
-import com.aivarasnakvosas.publishingservicemis.utilities.AttachmentResponseMessage;
+import com.aivarasnakvosas.publishingservicemis.utilities.EntityCreationResponseMessage;
 import com.aivarasnakvosas.publishingservicemis.dtos.AttachmentDTO;
 import com.aivarasnakvosas.publishingservicemis.services.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +32,14 @@ public class AttachmentController {
     private AttachmentService attachmentService;
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<AttachmentResponseMessage> saveAttachment(
+    public ResponseEntity<EntityCreationResponseMessage> saveAttachment(
             @RequestPart("attachmentDTO") String attachmentDTO,
             @RequestPart("file") MultipartFile file) {
         try {
             attachmentService.saveAttachment(file, attachmentDTO);
-            return ResponseEntity.status(HttpStatus.OK).body(new AttachmentResponseMessage("File uploaded successfully."));
+            return ResponseEntity.status(HttpStatus.OK).body(new EntityCreationResponseMessage("File uploaded successfully."));
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new AttachmentResponseMessage("Could not upload the file."));
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new EntityCreationResponseMessage("Could not upload the file."));
         }
     }
 

@@ -5,6 +5,7 @@ import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
 import com.aivarasnakvosas.publishingservicemis.security.JWT.JWTResponse;
 import com.aivarasnakvosas.publishingservicemis.security.JWT.JWTUtils;
 import com.aivarasnakvosas.publishingservicemis.services.UserService;
+import com.aivarasnakvosas.publishingservicemis.utilities.EntityCreationResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,9 @@ public class AccessController {
     }
 
     @PostMapping(value = "/signIn", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> registerNewUser(@Valid @RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(userService.saveUser(userDTO));
+    public ResponseEntity<EntityCreationResponseMessage> registerNewUser(@Valid @RequestBody UserDTO userDTO) {
+        userService.saveUser(userDTO);
+        EntityCreationResponseMessage userCreationResponse = new EntityCreationResponseMessage("User created.");
+        return ResponseEntity.ok(userCreationResponse);
     }
 }
