@@ -32,9 +32,9 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-    @GetMapping
-    ResponseEntity<TaskDTO> getTask(@RequestParam Long taskId) {
-        TaskDTO task = taskService.getTask(taskId);
+    @GetMapping(value = "/{id}")
+    ResponseEntity<TaskDTO> getTask(@PathVariable Long id) {
+        TaskDTO task = taskService.getTask(id);
         return ResponseEntity.ok(task);
     }
 
@@ -44,8 +44,8 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-    @DeleteMapping
-    ResponseEntity<?> deleteTask(@RequestParam Long id) {
+    @DeleteMapping(value = "/{id}")
+    ResponseEntity<?> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }

@@ -42,8 +42,8 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.changePublicationStatus(publicationAcceptanceDTO));
     }
 
-    @GetMapping
-    ResponseEntity<PublicationDTO> getPublication(@RequestParam Long id) {
+    @GetMapping(value = "/{id}")
+    ResponseEntity<PublicationDTO> getPublication(@PathVariable Long id) {
         return ResponseEntity.ok(publicationService.getPublication(id));
     }
 

@@ -6,6 +6,7 @@ import com.aivarasnakvosas.publishingservicemis.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,8 +43,8 @@ public class UserController {
 
      */
 
-    @GetMapping
-    ResponseEntity<UserDTO> getUser(@RequestParam Long id) {
+    @GetMapping(value = "/{id}")
+    ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 }
