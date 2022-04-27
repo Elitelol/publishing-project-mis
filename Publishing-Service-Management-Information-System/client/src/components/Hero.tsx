@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {Container} from "react-bootstrap";
-import ModalComponent from "./modals/Modal";
+import SignUpModalComponent from "./modals/SignUpModal";
+import LoginModalComponent from "./modals/LoginModal";
 
 const HeroComponent = styled.header`
    padding: 5rem, 0;
@@ -36,7 +37,8 @@ const Hero = () => {
                        Start making publications
                    </SubHeading>
                </Heading>
-               <ModalComponent/>
+               <SignUpModalComponent/>
+               <LoginModalComponent/>
            </HeaderContainer>
        </Container>
    </HeroComponent>

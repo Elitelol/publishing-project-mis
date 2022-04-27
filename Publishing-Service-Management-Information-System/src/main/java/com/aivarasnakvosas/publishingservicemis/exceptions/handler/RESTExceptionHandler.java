@@ -6,6 +6,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -56,6 +57,14 @@ public class RESTExceptionHandler extends ResponseEntityExceptionHandler {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList());
         ErrorMessage errorMessage =  new ErrorMessage(LocalDateTime.now(), httpStatus.value(), httpStatus, errorMessages);
+        return buildResponse(errorMessage);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception) {
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        List<String> errorMessages = Collections.singletonList("Incorrect username.");
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), httpStatus.value(), httpStatus, errorMessages);
         return buildResponse(errorMessage);
     }
 

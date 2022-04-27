@@ -10,5 +10,7 @@ import lombok.Getter;
 @Getter
 public class JWTResponse {
 
-    private String token;
+    private final String token;
+    private final Long id;
+    private final String role;
 }

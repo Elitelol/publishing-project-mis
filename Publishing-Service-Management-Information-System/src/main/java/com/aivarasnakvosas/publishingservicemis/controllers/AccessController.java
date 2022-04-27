@@ -4,6 +4,7 @@ import com.aivarasnakvosas.publishingservicemis.dtos.LoginFormDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
 import com.aivarasnakvosas.publishingservicemis.security.JWT.JWTResponse;
 import com.aivarasnakvosas.publishingservicemis.security.JWT.JWTUtils;
+import com.aivarasnakvosas.publishingservicemis.security.UserContext;
 import com.aivarasnakvosas.publishingservicemis.services.UserService;
 import com.aivarasnakvosas.publishingservicemis.utilities.EntityCreationResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +41,11 @@ public class AccessController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginFormDTO.getUsername(), loginFormDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = jwtUtils.generateJwtToken(authentication);
-        return ResponseEntity.ok(new JWTResponse(jwtToken));
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        return ResponseEntity.ok(new JWTResponse(jwtToken, userContext.getId(), userContext.getRole()));
     }
 
-    @PostMapping(value = "/signIn", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/signUp", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EntityCreationResponseMessage> registerNewUser(@Valid @RequestBody UserDTO userDTO) {
         userService.saveUser(userDTO);
         EntityCreationResponseMessage userCreationResponse = new EntityCreationResponseMessage("User created.");

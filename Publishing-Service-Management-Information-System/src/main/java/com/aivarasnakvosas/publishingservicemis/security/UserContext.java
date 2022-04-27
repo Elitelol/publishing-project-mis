@@ -55,4 +55,12 @@ public class UserContext implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public Long getId() {
+        return user.getId();
+    }
+
+    public String getRole() {
+        return user.getRole().getRole();
+    }
 }

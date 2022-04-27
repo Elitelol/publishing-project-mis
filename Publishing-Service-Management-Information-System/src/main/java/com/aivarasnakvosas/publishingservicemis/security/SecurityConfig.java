@@ -21,6 +21,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * @author Aivaras Nakvosas
@@ -109,9 +111,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
+        config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE"));
         config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
