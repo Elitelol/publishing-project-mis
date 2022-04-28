@@ -1,5 +1,5 @@
-type Role = {
+interface Role {
   role: string
-};
+}
 
 export default Role;

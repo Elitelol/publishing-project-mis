@@ -3,33 +3,38 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Role from "../../models/ConfigModels";
 
+interface UserResponse {
+    message: String
+}
+
 const SignUpModalComponent = () => {
 
-    type RoleResponse = {
-        data: Role[]
-    }
-
-    const [show, setShow] = useState(false);
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [role, setRole] = useState("Author");
-    const [roleSelection, setRoleSelection] = useState([]);
+    const [show, setShow] = useState<boolean>(false);
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+    const [role, setRole] = useState<string>("Author");
+    const [roleSelection, setRoleSelection] = useState<Role[]>([]);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const handleClick = () => {
-        axios.post("http://localhost:8080/publishing-app/access/signUp")
+    const handleClick = async () => {
+        const response = await axios.post<UserResponse>("http://localhost:8080/publishing-app/access/signUp", {
+            username,
+            password,
+            firstName,
+            lastName,
+            email,
+            role
+        })
+        console.log(response.data.message)
     }
 
     useEffect(() => {
-        axios.get("http://localhost:8080/publishing-app/type/roles").then(response => {
-            setRoleSelection(response.data)
-        })
-        console.log(roleSelection);
+        axios.get<Role[]>("http://localhost:8080/publishing-app/type/roles").then(response => setRoleSelection(response.data));
     }, [])
 
     return(
@@ -63,15 +68,17 @@ const SignUpModalComponent = () => {
                     <InputGroup className = "mb-3">
                         <InputGroup.Text>Role</InputGroup.Text>
                         <Form.Select value = {role} onChange = {event => setRole(event.target.value)}>
-                            {roleSelection.map((roles, index) => {
-                                return <option> {roles} </option>
-                            })};
+                            {
+                                roleSelection.map((value) => {
+                                    return <option value={value.role}>{value.role}</option>
+                                })
+                            }
                         </Form.Select>
                     </InputGroup>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant = "secondary" onClick ={handleClose}> Close </Button>
-                    <Button variant = "primary">Sign Up</Button>
+                    <Button variant = "primary" onClick = {handleClick}> Sign Up</Button>
                 </Modal.Footer>
             </Modal>
         </>
