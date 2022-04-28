@@ -1,17 +1,20 @@
 import React from 'react';
 import './App.css';
-import Login from "./components/Login";
-import SignUp from "./components/SignUp";
 import Nav from "./components/Nav";
-import Hero from "./components/Hero";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import MainPage from "./Page/MainPage";
+import DashboardPage from "./Page/DashboardPage";
 
 function App() {
 
   return (
-    <div>
+    <BrowserRouter>
       <Nav/>
-        <Hero/>
-    </div>
+        <Routes>
+            <Route path = "/" element={<MainPage/>}/>
+            <Route path = "/dashboard" element={<DashboardPage/>}/>
+        </Routes>
+    </BrowserRouter>
   );
 }
 

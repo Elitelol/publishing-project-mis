@@ -22,17 +22,25 @@ const SignUpModalComponent = () => {
     const handleShow = () => setShow(true);
 
     const handleClick = async () => {
-        const response = await axios.post<UserResponse>("http://localhost:8080/publishing-app/access/signUp", {
-            username,
-            password,
-            firstName,
-            lastName,
-            email,
-            role
-        })
-        console.log(response.data.message)
-    }
+        try {
+            await axios.post<UserResponse>("http://localhost:8080/publishing-app/access/signUp", {
+                username,
+                password,
+                firstName,
+                lastName,
+                email,
+                role
+            })
+            setUsername("");
+            setPassword("");
+            setFirstName("");
+            setLastName("");
+            setEmail("");
+            setRole("");
+        } catch (error) {
 
+        }
+    }
     useEffect(() => {
         axios.get<Role[]>("http://localhost:8080/publishing-app/type/roles").then(response => setRoleSelection(response.data));
     }, [])

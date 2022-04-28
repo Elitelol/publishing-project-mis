@@ -63,4 +63,12 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public User getUserByUsername(String username) {
+        Optional<User> user = userRepository.findUserByUsername(username);
+        if (user.isEmpty()) {
+            throw new EntityNotFoundException(User.class);
+        }
+        return user.get();
+    }
+
 }
