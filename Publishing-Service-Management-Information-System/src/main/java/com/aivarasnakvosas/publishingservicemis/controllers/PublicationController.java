@@ -57,8 +57,8 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.getPublications());
     }
 
-    @GetMapping(value = "/author")
-    ResponseEntity<List<PublicationDTO>> getAuthorPublications(@RequestParam Long id) {
+    @GetMapping(value = "/author/{id}")
+    ResponseEntity<List<PublicationDTO>> getAuthorPublications(@PathVariable Long id) {
         return ResponseEntity.ok(publicationService.getAuthorPublications(id));
     }
 

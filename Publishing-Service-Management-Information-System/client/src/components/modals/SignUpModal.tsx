@@ -2,6 +2,7 @@ import {Modal, Button, InputGroup, FormControl, Form} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Role from "../../models/ConfigModels";
+import ApiUrl from "../../config/api.config";
 
 interface UserResponse {
     message: String
@@ -23,7 +24,7 @@ const SignUpModalComponent = () => {
 
     const handleClick = async () => {
         try {
-            await axios.post<UserResponse>("http://localhost:8080/publishing-app/access/signUp", {
+            await axios.post<UserResponse>(ApiUrl() + "access/signUp", {
                 username,
                 password,
                 firstName,
