@@ -1,4 +1,3 @@
-import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
 import {useContext, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -39,24 +38,6 @@ const LoginModalComponent = () => {
 
     return(
         <>
-            <Button variant = "danger" style = {{marginRight: "1rem", padding: "1rem, 4rem"}} onClick = {handleShow}>Login</Button>
-            <Modal show = {show} onHide = {handleClose}>
-                <Modal.Header>Login</Modal.Header>
-                <Modal.Body>
-                    <InputGroup className = "mb-3">
-                        <InputGroup.Text>Username</InputGroup.Text>
-                        <FormControl value={username} onChange = {event => setUsername(event.target.value)} />
-                    </InputGroup>
-                    <InputGroup className = "mb-3">
-                        <InputGroup.Text>Password</InputGroup.Text>
-                        <FormControl type="password" value = {password} onChange = {event => setPassword(event.target.value)}/>
-                    </InputGroup>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant = "secondary" onClick ={handleClose}> Close </Button>
-                    <Button variant = "primary" onClick = {handleClick}>Login</Button>
-                </Modal.Footer>
-            </Modal>
         </>
     )
 };
