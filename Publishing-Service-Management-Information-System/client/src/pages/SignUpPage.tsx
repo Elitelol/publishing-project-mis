@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import Role from "../models/ConfigModels";
+import Role from "../models/Role";
 import axios from "axios";
 import ApiUrl from "../config/api.config";
 import {

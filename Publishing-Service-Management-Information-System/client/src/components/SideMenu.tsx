@@ -19,7 +19,7 @@ const SideMenu = () => {
         <Box sx={{ width: '70%', maxWidth: 200, backgroundColor: 'lightgray' }}>
             <List>
                 <ListItem disablePadding>
-                    <ListItemButton onClick={() => console.log("test")}>
+                    <ListItemButton onClick={() => navigate("/")}>
                         <ListItemIcon>
                             <InboxIcon />
                         </ListItemIcon>
@@ -27,7 +27,7 @@ const SideMenu = () => {
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={() => navigate("/dashboard")}>
                         <ListItemIcon>
                             <InboxIcon />
                         </ListItemIcon>

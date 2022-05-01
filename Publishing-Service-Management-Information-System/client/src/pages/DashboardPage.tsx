@@ -28,7 +28,6 @@ const DashboardPage = () => {
     useEffect(() => {
         fetchPublications().then(res => {
             setPublications(res.data)
-            console.log(publications)
         });
     }, [])
 

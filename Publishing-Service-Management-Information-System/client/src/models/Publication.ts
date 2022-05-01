@@ -4,21 +4,21 @@ import Budget from "./Budget";
 import Task from "./Task";
 
 export default interface Publication {
-    publicationId: number
-    authorId: number[]
+    publicationId: number | null
+    authorId: number[] | undefined[]
     name: string
     publicationType: string
     progressStatus: string
     rejectionReason: string
     isbn: string
-    pageNumber: number
+    pageNumber: number | null
     language: string
     genre: string
-    price: string
-    publishDate: Date
-    managerId: number
+    price: number | null
+    publishDate: Date | null
+    managerId: number | null
     attachments: Attachment[]
-    contract: Contract
-    budget: Budget
+    contract: Contract | null
+    budget: Budget | null
     tasks: Task[]
 }
