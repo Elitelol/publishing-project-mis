@@ -3,9 +3,25 @@ import Publication from "../models/Publication";
 import {UserContext} from "../auth";
 import axios from "axios";
 import ApiUrl from "../config/api.config";
+import {
+    Box, Button,
+    Container, LinearProgress, LinearProgressProps,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography
+} from "@mui/material";
+import Navbar from "../components/Navbar";
+import Publications from "../components/Publications";
+import {useNavigate} from "react-router-dom";
 
 const DashboardPage = () => {
 
+    const navigate = useNavigate();
     const [context, setContext] = useContext(UserContext);
     const [publications, setPublications] = useState<Publication[]>([]);
 
@@ -30,8 +46,13 @@ const DashboardPage = () => {
         return await axios.get(ApiUrl() + url + userId);
     }
 
-    return <>
-    </>
+    return (
+        <>
+            <Container >
+                <Publications publications = {publications}/>
+            </Container>
+        </>
+    )
 }
 
 export default DashboardPage
