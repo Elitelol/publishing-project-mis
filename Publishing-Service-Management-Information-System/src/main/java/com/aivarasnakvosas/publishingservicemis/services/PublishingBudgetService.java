@@ -6,6 +6,7 @@ import com.aivarasnakvosas.publishingservicemis.entity.BudgetComment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.PublishingBudget;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
 import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.BudgetDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.mappers.CommentDTOMapper;
@@ -42,6 +43,9 @@ public class PublishingBudgetService {
 
     public BudgetDTO savePublishingBudget(BudgetDTO budgetDTO) {
         Publication publication = publicationService.findPublication(budgetDTO.getPublicationId());
+        if (ProgressStatus.ACCEPTED.equals(publication.getProgressStatus())) {
+            publication.setProgressStatus(ProgressStatus.IN_PROGRESS);
+        }
         PublishingBudget publishingBudget = budgetDTO.getBudgetId() != null ? findBudget(budgetDTO.getBudgetId()) : new PublishingBudget();
         budgetDTOMapper.mapToPublishingBudget(publishingBudget, budgetDTO, publication);
         budgetRepository.save(publishingBudget);

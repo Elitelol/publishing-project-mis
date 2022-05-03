@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Aivaras Nakvosas
@@ -30,5 +31,13 @@ public enum ProgressStatus {
         return Arrays.stream(values())
                 .filter(progressStatus -> progressStatus.getStatus().equals(typeName)).
                         findFirst().orElseThrow(() -> new EntityNotFoundException(ProgressStatus.class));
+    }
+
+    public static List<ProgressStatus> getPublicationProgressStatus() {
+        return Arrays.asList(IN_PROGRESS, COMPLETED, PUBLISHED);
+    }
+
+    public static List<ProgressStatus> getTaskProgressStatus() {
+        return Arrays.asList(NOT_STARTED, IN_PROGRESS, COMPLETED);
     }
 }

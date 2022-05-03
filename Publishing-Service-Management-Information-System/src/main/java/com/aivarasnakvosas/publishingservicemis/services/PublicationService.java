@@ -1,6 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.services;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
+import com.aivarasnakvosas.publishingservicemis.entity.Task;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.PublicationAcceptanceDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.PublicationDTO;
@@ -10,6 +11,7 @@ import com.aivarasnakvosas.publishingservicemis.exceptions.BusinessErrorExceptio
 import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.PublicationDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.PublicationRepository;
+import com.aivarasnakvosas.publishingservicemis.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,8 @@ public class PublicationService {
     private UserService userService;
     @Autowired
     private PublicationDTOMapper publicationDTOMapper;
+    @Autowired
+    private TaskRepository taskRepository;
 
     public PublicationDTO getPublication(Long id) {
         Publication publication = findPublication(id);
@@ -170,6 +174,15 @@ public class PublicationService {
     public List<PublicationDTO> getPublicationByStatus(String status) {
         ProgressStatus progressStatus = ProgressStatus.getStatus(status);
         List<Publication> publications = publicationRepository.findPublicationsByProgressStatus(progressStatus);
+        return getPublicationDTOS(publications);
+    }
+
+    public List<PublicationDTO> getPublicationsByResponsiblePeople(Long userId) {
+        List<User> userList = Collections.singletonList(userService.findUser(userId));
+        List<Task> userTasks = taskRepository.findTaskByResponsiblePeopleIn(userList);
+        List<Publication> publications = userTasks.stream()
+                .map(Task::getPublication)
+                .collect(Collectors.toList());
         return getPublicationDTOS(publications);
     }
 

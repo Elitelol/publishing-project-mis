@@ -6,6 +6,7 @@ import com.aivarasnakvosas.publishingservicemis.entity.Contract;
 import com.aivarasnakvosas.publishingservicemis.entity.ContractComment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
 import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.CommentDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.mappers.ContractDTOMapper;
@@ -41,6 +42,9 @@ public class ContractService {
 
     public ContractDTO saveContract(ContractDTO contractDTO) {
         Publication publication = publicationService.findPublication(contractDTO.getPublicationId());
+        if (ProgressStatus.ACCEPTED.equals(publication.getProgressStatus())) {
+            publication.setProgressStatus(ProgressStatus.IN_PROGRESS);
+        }
         Contract contract = contractDTO.getContractId() != null ? findContract(contractDTO.getContractId()) : new Contract();
         contractDTOMapper.mapToContract(contract, contractDTO, publication);
         contractRepository.save(contract);

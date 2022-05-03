@@ -72,6 +72,11 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.getPublicationByStatus(status));
     }
 
+    @GetMapping(value = "/byWorker/{workerId}")
+    ResponseEntity<List<PublicationDTO>> getPublicationsByWorker(@PathVariable Long workerId) {
+        return ResponseEntity.ok(publicationService.getPublicationsByResponsiblePeople(workerId));
+    }
+
     @GetMapping(value = "/unmanaged")
     ResponseEntity<List<PublicationDTO>> getUnmanagedPublications() {
         return ResponseEntity.ok(publicationService.getUnmanagedPublications());

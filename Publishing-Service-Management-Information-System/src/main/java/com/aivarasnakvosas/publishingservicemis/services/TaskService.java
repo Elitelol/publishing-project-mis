@@ -42,6 +42,9 @@ public class TaskService {
 
     public TaskDTO saveTask(TaskDTO taskDTO) {
         Publication publication = publicationService.findPublication(taskDTO.getPublicationId());
+        if (ProgressStatus.ACCEPTED.equals(publication.getProgressStatus())) {
+            publication.setProgressStatus(ProgressStatus.IN_PROGRESS);
+        }
         List<User> responsiblePeople = userService.findUsers(taskDTO.getResponsiblePeopleIds());
         Task task = taskDTO.getTaskId() != null ? findTask(taskDTO.getTaskId()) : new Task();
         taskDTOMapper.mapToTask(task, taskDTO, publication, responsiblePeople);

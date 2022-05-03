@@ -17,9 +17,7 @@ public enum Role {
 
     AUTHOR("Author"),
     PUBLICATION_MANAGER("Publication Manager"),
-    EDITOR("Editor"),
-    TRANSLATOR("Translator"),
-    DESIGNER("Designer");
+    WORKER("Worker");
 
     private final String role;
 

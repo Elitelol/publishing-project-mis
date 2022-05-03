@@ -40,9 +40,15 @@ public class TypeController {
         return ResponseEntity.ok(languages);
     }
 
-    @GetMapping(value = "/progress")
-    public ResponseEntity<List<ProgressStatus>> getProgress() {
-        List<ProgressStatus> progressStatuses = Arrays.asList(ProgressStatus.values());
+    @GetMapping(value = "/publicationProgress")
+    public ResponseEntity<List<ProgressStatus>> getPublicationProgress() {
+        List<ProgressStatus> progressStatuses = ProgressStatus.getPublicationProgressStatus();
+        return ResponseEntity.ok(progressStatuses);
+    }
+
+    @GetMapping(value = "/taskProgress")
+    public ResponseEntity<List<ProgressStatus>> getTaskProgress() {
+        List<ProgressStatus> progressStatuses = ProgressStatus.getTaskProgressStatus();
         return ResponseEntity.ok(progressStatuses);
     }
 
