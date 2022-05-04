@@ -7,7 +7,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./route/ProtectedRoute";
 import SignUpPage from "./pages/SignUpPage";
 import Navbar from "./components/Navbar";
-import PublicationPage from "./pages/PublicationPage";
+import PublicationDetailsPage from "./pages/PublicationDetailsPage";
 import {UserContext} from "./auth";
 import SideMenu from "./components/SideMenu";
 import ContractPage from "./pages/ContractPage";
@@ -30,7 +30,7 @@ function App() {
                       <Route path = "/dashboard" element={<DashboardPage/>}/>
                   </Route>
                   <Route path = "/publication/:id" element={<ProtectedRoute/>}>
-                      <Route path = "/publication/:id" element={<PublicationPage/>}/>
+                      <Route path = "/publication/:id" element={<PublicationDetailsPage/>}/>
                   </Route>
                   <Route path = "/:id/contract" element={<ProtectedRoute/>}>
                       <Route path = "/:id/contract" element={<ContractPage/>}/>

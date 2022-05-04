@@ -22,7 +22,7 @@ import PublicationType from "../models/PublicationType";
 import NavigationGroup from "../components/NavigationGroup";
 import User from "../models/User";
 
-const PublicationPage = () => {
+const PublicationDetailsPage = () => {
 
     const {id} = useParams();
     const navigate = useNavigate();
@@ -54,7 +54,6 @@ const PublicationPage = () => {
 
     useEffect(() => {
         const typeUrl = "type/";
-        console.log(id)
         if (id !== "new") {
             axios.get(ApiUrl() + "publication/" + id).then(response => {
                 handleStateChange(response)
@@ -208,4 +207,4 @@ const PublicationPage = () => {
     )
 }
 
-export default PublicationPage;
+export default PublicationDetailsPage;
