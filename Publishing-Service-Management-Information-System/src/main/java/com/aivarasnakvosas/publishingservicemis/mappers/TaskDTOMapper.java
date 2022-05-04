@@ -1,6 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.mappers;
 
 import com.aivarasnakvosas.publishingservicemis.dtos.CommentDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.UserView;
 import com.aivarasnakvosas.publishingservicemis.entity.AbstractBasicEntity;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
@@ -24,6 +25,8 @@ public class TaskDTOMapper {
 
     @Autowired
     private CommentDTOMapper commentDTOMapper;
+    @Autowired
+    private UserDTOMapper userDTOMapper;
 
     public void mapToTask(Task task, TaskDTO taskDTO, Publication publication, List<User> responsiblePeople) {
         task.setPublication(publication);
@@ -51,11 +54,11 @@ public class TaskDTOMapper {
         taskDTO.setStartDate(task.getStartDate());
         taskDTO.setDueDate(task.getDueDate());
         taskDTO.setProgress(task.getProgressStatus().getStatus());
-        List<Long> users = task.getResponsiblePeople()
+        List<UserView> users = task.getResponsiblePeople()
                 .stream()
-                .map(AbstractBasicEntity::getId)
+                .map(user -> userDTOMapper.mapToView(user))
                 .collect(Collectors.toList());
-        taskDTO.setResponsiblePeopleIds(users);
+        taskDTO.setResponsiblePeople(users);
         List<CommentDTO> comments = task.getComments().stream()
                 .filter(comment -> comment.getRootComment() == null)
                 .map(comment -> commentDTOMapper.mapToDTO(comment))

@@ -1,7 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import Publication from "../models/Publication";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import ApiUrl from "../config/api.config";
 import {
     Button,
@@ -20,6 +20,7 @@ import Language from "../models/Language";
 import Progress from "../models/Progress";
 import PublicationType from "../models/PublicationType";
 import NavigationGroup from "../components/NavigationGroup";
+import User from "../models/User";
 
 const PublicationPage = () => {
 
@@ -27,17 +28,18 @@ const PublicationPage = () => {
     const navigate = useNavigate();
     const [publication, setPublication] = useState<Publication>({
         attachments: [],
-        authorId: [],
+        authors: [],
         budget: null,
         contract: null,
         genre: "",
         isbn: "",
         language: "",
-        managerId: null,
+        manager: null,
         name: "",
         pageNumber: null,
         price: null,
         progressStatus: "",
+        progressPercent: 0,
         publicationId: null,
         publicationType: "",
         publishDate: null,
@@ -55,19 +57,7 @@ const PublicationPage = () => {
         console.log(id)
         if (id !== "new") {
             axios.get(ApiUrl() + "publication/" + id).then(response => {
-                setPublication(response.data)
-                setPublicationId(response.data.publicationId)
-                setAuthorId(response.data.authorId)
-                setName(response.data.name)
-                setPublicationType(response.data.publicationType)
-                setRejectionReason(response.data.rejectionReason)
-                setIsbn(response.data.isbn)
-                setPageNumber(response.data.pageNumber)
-                setPrice(response.data.price)
-                setGenre(response.data.genre)
-                setLanguage(response.data.language)
-                setManagerId(response.data.managerId)
-                setProgressStatus(response.data.progressStatus)
+                handleStateChange(response)
             });
         }
         axios.get(ApiUrl() + typeUrl + "publications").then(response => {
@@ -84,18 +74,34 @@ const PublicationPage = () => {
         })
     }, [])
 
-    const [publicationId, setPublicationId] = useState(publication?.publicationId);
-    const [authorId, setAuthorId] = useState(publication?.authorId)
-    const [name, setName] = useState(publication.name);
-    const [publicationType, setPublicationType] = useState(publication?.publicationType);
-    const [progressStatus, setProgressStatus] = useState(publication?.progressStatus);
-    const [rejectionReason, setRejectionReason] = useState(publication?.rejectionReason);
-    const [isbn, setIsbn] = useState(publication?.isbn);
-    const [pageNumber, setPageNumber] = useState(publication?.pageNumber);
-    const [language, setLanguage] = useState(publication?.language);
-    const [genre, setGenre] = useState(publication?.genre);
-    const [price, setPrice] = useState(publication?.price);
-    const [managerId, setManagerId] = useState(publication?.managerId);
+    const [publicationId, setPublicationId] = useState<number | null>(publication?.publicationId);
+    const [authors, setAuthors] = useState<User[]>(publication?.authors)
+    const [name, setName] = useState<string>(publication.name);
+    const [publicationType, setPublicationType] = useState<string>(publication?.publicationType);
+    const [progressStatus, setProgressStatus] = useState<string>(publication?.progressStatus);
+    const [rejectionReason, setRejectionReason] = useState<string>(publication?.rejectionReason);
+    const [isbn, setIsbn] = useState<string>(publication?.isbn);
+    const [pageNumber, setPageNumber] = useState<number | null>(publication?.pageNumber);
+    const [language, setLanguage] = useState<string>(publication?.language);
+    const [genre, setGenre] = useState<string>(publication?.genre);
+    const [price, setPrice] = useState<number | null>(publication?.price);
+    const [manager, setManager] = useState<User | null>(publication?.manager);
+
+    const handleStateChange = (response: AxiosResponse<any, any>) => {
+        setPublication(response.data)
+        setPublicationId(response.data.publicationId)
+        setAuthors(response.data.authors)
+        setName(response.data.name)
+        setPublicationType(response.data.publicationType)
+        setRejectionReason(response.data.rejectionReason)
+        setIsbn(response.data.isbn)
+        setPageNumber(response.data.pageNumber)
+        setPrice(response.data.price)
+        setGenre(response.data.genre)
+        setLanguage(response.data.language)
+        setManager(response.data.manager)
+        setProgressStatus(response.data.progressStatus)
+    }
 
     const handleDelete = () => {
 
@@ -104,7 +110,7 @@ const PublicationPage = () => {
     const handleSave = () => {
         axios.post<Publication>(ApiUrl() + "publication", {
             publicationId,
-            authorId,
+            authors,
             name,
             publicationType,
             progressStatus,
@@ -114,8 +120,8 @@ const PublicationPage = () => {
             language,
             genre,
             price,
-            managerId
-        }).then(response => setPublication(response.data))
+            manager
+        }).then(response => handleStateChange(response))
     }
 
     const handleLanguageChange = (event: SelectChangeEvent) => {
@@ -143,6 +149,11 @@ const PublicationPage = () => {
                     <CardContent>
                         <TextField disabled fullWidth label="Publication id" margin = "normal" value={publication.publicationId} onChange = {event => setPublicationId(parseInt(event.target.value))}/>
                         <TextField fullWidth label="Publication name" margin = "normal" value={name} onChange = {event => setName(event.target.value)}/>
+                        <TextField fullWidth label = "Publication authors" margin = "normal" value = {
+                            publication.authors.map(user => {
+                                return user.firstName + " " + user.lastName;
+                            })
+                        }/>
                         <FormControl fullWidth>
                             <InputLabel>Publication Type</InputLabel>
                             <Select onChange = {handleTypeChange} value = {publicationType}>
@@ -163,9 +174,9 @@ const PublicationPage = () => {
                                 }
                             </Select>
                         </FormControl>
-                        <TextField fullWidth label="Publication rejection reason" margin = "normal" value={publication.rejectionReason} onChange = {event => setRejectionReason(event.target.value)}/>
+                        <TextField disabled fullWidth label="Publication rejection reason" margin = "normal" value={publication.rejectionReason} onChange = {event => setRejectionReason(event.target.value)}/>
                         <TextField fullWidth label="Publication ISBN" margin = "normal" value={publication.isbn} onChange = {event => setIsbn(event.target.value)}/>
-                        <TextField fullWidth label="Publication page number" margin = "normal" value={publication.pageNumber} onChange = {event => setPageNumber(parseInt(event.target.value))}/>
+                        <TextField disabled fullWidth label="Publication page number" margin = "normal" value={publication.pageNumber} onChange = {event => setPageNumber(parseInt(event.target.value))}/>
                         <FormControl fullWidth>
                             <InputLabel>Publication language</InputLabel>
                             <Select onChange = {handleLanguageChange} value = {language}>
@@ -186,11 +197,8 @@ const PublicationPage = () => {
                                 }
                             </Select>
                         </FormControl>
-                        <TextField fullWidth label="Publication price" margin = "normal" value={publication.price} onChange = {event => setPrice(parseFloat(event.target.value))}/>
-                        <TextField fullWidth label="Publication manager" margin = "normal" value={publication.managerId}/>
-                        {
-
-                        }
+                        <TextField disabled fullWidth label="Publication price" margin = "normal" value={publication.price} onChange = {event => setPrice(parseFloat(event.target.value))}/>
+                        <TextField disabled fullWidth label="Publication manager" margin = "normal" value={publication.manager?.firstName + " " + publication.manager?.lastName}/>
                         <Button onClick = {handleSave}>Save</Button>
                         <Button onClick = {handleDelete}>Delete</Button>
                     </CardContent>

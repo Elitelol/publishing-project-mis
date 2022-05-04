@@ -9,6 +9,7 @@ import com.aivarasnakvosas.publishingservicemis.entity.PublishingBudget;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
 import com.aivarasnakvosas.publishingservicemis.entity.TaskComment;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,6 +20,9 @@ import java.util.stream.Collectors;
  */
 @Component
 public class CommentDTOMapper {
+
+    @Autowired
+    private UserDTOMapper userDTOMapper;
 
     private void mapToComment(CommentDTO commentDTO, User user, Comment comment) {
         comment.setCommentator(user);
@@ -53,7 +57,7 @@ public class CommentDTOMapper {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setCommentId(comment.getId());
         commentDTO.setText(comment.getText());
-        commentDTO.setUserId(comment.getCommentator().getId());
+        commentDTO.setUser(userDTOMapper.mapToView(comment.getCommentator()));
         commentDTO.setPosted(comment.getDateCreated());
         if (comment instanceof TaskComment) {
             mapRootComments((TaskComment) comment, commentDTO);

@@ -53,7 +53,7 @@ public class ContractService {
 
     public ContractDTO addComment(CommentDTO commentDTO) {
         Contract contract = findContract(commentDTO.getEntityId());
-        User user = userService.findUser(commentDTO.getUserId());
+        User user = userService.findUser(commentDTO.getUser().getId());
         ContractComment rootComment = null;
         if (commentDTO.getRootCommentId() != null) {
             rootComment = contractCommentRepository.getById(commentDTO.getRootCommentId());

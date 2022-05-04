@@ -1,6 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.services;
 
 import com.aivarasnakvosas.publishingservicemis.dtos.CommentDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.UserView;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
 import com.aivarasnakvosas.publishingservicemis.entity.TaskComment;
@@ -17,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Aivaras Nakvosas
@@ -45,9 +48,13 @@ public class TaskService {
         if (ProgressStatus.ACCEPTED.equals(publication.getProgressStatus())) {
             publication.setProgressStatus(ProgressStatus.IN_PROGRESS);
         }
-        List<User> responsiblePeople = userService.findUsers(taskDTO.getResponsiblePeopleIds());
+        List<Long> responsiblePeopleIds = taskDTO.getResponsiblePeople().stream()
+                .map(UserView::getId)
+                .collect(Collectors.toList());
+        List<User> responsiblePeople = userService.findUsers(responsiblePeopleIds);
         Task task = taskDTO.getTaskId() != null ? findTask(taskDTO.getTaskId()) : new Task();
         taskDTOMapper.mapToTask(task, taskDTO, publication, responsiblePeople);
+        publication.setProgressPercent(determineProgressPercent(publication, task));
         taskRepository.save(task);
         return taskDTOMapper.mapToDTO(task);
     }
@@ -67,7 +74,7 @@ public class TaskService {
 
     public TaskDTO addComment(CommentDTO commentDTO) {
         Task task = findTask(commentDTO.getEntityId());
-        User user = userService.findUser(commentDTO.getUserId());
+        User user = userService.findUser(commentDTO.getUser().getId());
         TaskComment rootComment = null;
         if (commentDTO.getRootCommentId() != null) {
             rootComment = taskCommentRepository.getById(commentDTO.getRootCommentId());
@@ -97,5 +104,18 @@ public class TaskService {
             throw new EntityNotFoundException(TaskComment.class);
         }
         return taskComment.get();
+    }
+
+    private BigDecimal determineProgressPercent(Publication publication, Task newTask) {
+        List<Task> publicationTasks = publication.getTasks();
+        int totalTaskSize = publicationTasks.size();
+        long completedTasks = publicationTasks.stream()
+                .filter(task -> ProgressStatus.COMPLETED.equals(task.getProgressStatus()))
+                .count();
+        if (ProgressStatus.COMPLETED.equals(newTask.getProgressStatus())) {
+            completedTasks++;
+        }
+        totalTaskSize++;
+        return BigDecimal.valueOf((completedTasks / totalTaskSize) * 100L);
     }
 }

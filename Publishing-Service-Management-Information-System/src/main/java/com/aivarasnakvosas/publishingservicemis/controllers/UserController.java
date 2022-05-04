@@ -1,6 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
 import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
+import com.aivarasnakvosas.publishingservicemis.dtos.UserView;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
+    ResponseEntity<UserView> saveUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.saveUser(userDTO));
     }
 
     @GetMapping(value = "/all")
-    ResponseEntity<List<UserDTO>> getAllUsers() {
+    ResponseEntity<List<UserView>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
@@ -44,7 +45,7 @@ public class UserController {
      */
 
     @GetMapping(value = "/{id}")
-    ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+    ResponseEntity<UserView> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 }

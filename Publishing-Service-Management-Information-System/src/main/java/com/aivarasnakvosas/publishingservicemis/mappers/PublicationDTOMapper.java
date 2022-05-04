@@ -28,6 +28,8 @@ public class PublicationDTOMapper {
     private BudgetDTOMapper budgetDTOMapper;
     @Autowired
     private TaskDTOMapper taskDTOMapper;
+    @Autowired
+    private UserDTOMapper userDTOMapper;
 
     public void mapToPublication(Publication publication, PublicationDTO publicationDTO, List<User> authors) {
         if (publication.getId() == null){
@@ -46,12 +48,13 @@ public class PublicationDTOMapper {
     public PublicationDTO mapToDTO(Publication publication) {
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setPublicationId(publication.getId());
-        publicationDTO.setAuthorId(publication.getAuthors().stream()
-                .map(AbstractBasicEntity::getId)
+        publicationDTO.setAuthors(publication.getAuthors().stream()
+                .map(author -> userDTOMapper.mapToView(author))
                 .collect(Collectors.toList()));
         publicationDTO.setName(publication.getName());
         publicationDTO.setPublicationType(publication.getPublicationType().getType());
         publicationDTO.setProgressStatus(publication.getProgressStatus().getStatus());
+        publicationDTO.setProgressPercent(publication.getProgressPercent());
         publicationDTO.setRejectionReason(publication.getRejectionReason());
         publicationDTO.setIsbn((publication.getIsbn()));
         publicationDTO.setPageNumber(publication.getPageNumber());
@@ -60,7 +63,7 @@ public class PublicationDTOMapper {
         publicationDTO.setPrice(publication.getPrice());
         publicationDTO.setPublishDate(publication.getPublishDate());
         if (publication.getManager() != null) {
-            publicationDTO.setManagerId(publication.getManager().getId());
+            publicationDTO.setManager(userDTOMapper.mapToView(publication.getManager()));
         }
         publicationDTO.setAttachments(publication.getAttachments().stream()
                 .map(attachment -> attachmentDTOMapper.mapToDTO(attachment))

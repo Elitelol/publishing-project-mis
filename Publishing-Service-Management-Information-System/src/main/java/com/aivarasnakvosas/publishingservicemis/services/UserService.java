@@ -1,5 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.services;
 
+import com.aivarasnakvosas.publishingservicemis.dtos.UserView;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
 import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
@@ -25,11 +26,11 @@ public class UserService {
     @Autowired
     private UserDTOMapper userDTOMapper;
 
-    public UserDTO saveUser(UserDTO userDTO) {
+    public UserView saveUser(UserDTO userDTO) {
         User user = userDTO.getId() != null ? findUser(userDTO.getId()) : new User();
         userDTOMapper.mapToUser(user, userDTO);
         userRepository.save(user);
-        return userDTOMapper.mapToDTO(user);
+        return userDTOMapper.mapToView(user);
     }
 
     public User findUser(Long id) {
@@ -40,26 +41,26 @@ public class UserService {
         return user.get();
     }
 
-    public UserDTO getUser(Long id) {
+    public UserView getUser(Long id) {
         User user = findUser(id);
-        return userDTOMapper.mapToDTO(user);
+        return userDTOMapper.mapToView(user);
     }
 
     public List<User> findUsers(List<Long> ids) {
         return userRepository.findUsersById(ids);
     }
 
-    public List<UserDTO> getUsers(List<Long> ids) {
+    public List<UserView> getUsers(List<Long> ids) {
         List<User> users = findUsers(ids);
         return users.stream()
-                .map(user -> userDTOMapper.mapToDTO(user))
+                .map(user -> userDTOMapper.mapToView(user))
                 .collect(Collectors.toList());
     }
 
-    public List<UserDTO> getAllUsers() {
+    public List<UserView> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .map(user -> userDTOMapper.mapToDTO(user))
+                .map(user -> userDTOMapper.mapToView(user))
                 .collect(Collectors.toList());
     }
 

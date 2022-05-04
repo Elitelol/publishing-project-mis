@@ -2,13 +2,15 @@ import Attachment from "./Attachment";
 import Contract from "./Contract";
 import Budget from "./Budget";
 import Task from "./Task";
+import User from "./User";
 
 export default interface Publication {
     publicationId: number | null
-    authorId: number[] | undefined[]
+    authors: User[]
     name: string
     publicationType: string
     progressStatus: string
+    progressPercent: number
     rejectionReason: string
     isbn: string
     pageNumber: number | null
@@ -16,7 +18,7 @@ export default interface Publication {
     genre: string
     price: number | null
     publishDate: Date | null
-    managerId: number | null
+    manager: User | null
     attachments: Attachment[]
     contract: Contract | null
     budget: Budget | null

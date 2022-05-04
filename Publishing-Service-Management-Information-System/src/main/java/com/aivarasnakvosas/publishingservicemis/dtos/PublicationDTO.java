@@ -19,12 +19,13 @@ import java.util.List;
 public class PublicationDTO {
 
     private Long publicationId;
-    private List<Long> authorId = new ArrayList<>();
+    private List<UserView> authors = new ArrayList<>();
 
     @NotBlank(message = "Name can't be empty")
     private String name;
     private String publicationType;
     private String progressStatus;
+    private BigDecimal progressPercent;
     private String rejectionReason;
     private String isbn;
     private Long pageNumber;
@@ -32,7 +33,7 @@ public class PublicationDTO {
     private String genre;
     private BigDecimal price;
     private Date publishDate;
-    private Long managerId;
+    private UserView manager;
     private List<AttachmentDTO> attachments = new ArrayList<>();
     private ContractDTO contract;
     private BudgetDTO budget;

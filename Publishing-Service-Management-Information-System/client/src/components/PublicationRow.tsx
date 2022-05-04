@@ -1,7 +1,8 @@
 import {Box, Button, LinearProgress, LinearProgressProps, TableCell, TableRow, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import Publication from "../models/Publication";
 
-const PublicationRow = ({value}: any) => {
+const PublicationRow = ({value}: Publication | any) => {
 
     const navigate = useNavigate();
 
@@ -35,12 +36,14 @@ const PublicationRow = ({value}: any) => {
             <TableCell align="right">{value.name}</TableCell>
             <TableCell align="right">{value.publicationType}</TableCell>
             <TableCell align="right">{value.genre}</TableCell>
-            <TableCell align="right">{value.authorId}</TableCell>
+            <TableCell align="right">{value.authors.map((author: { firstName: string; lastName: string; }) => {
+                return author.firstName + " " + author.lastName;
+            })}</TableCell>
             <TableCell align="right">{value.progressStatus}</TableCell>
             <TableCell align="right">
-                <LinearProgressWithLabel value={70}/>
+                <LinearProgressWithLabel value={value.progressPercent}/>
             </TableCell>
-            <TableCell align="right">{value.managerId}</TableCell>
+            <TableCell align="right">{value.manager ? value.manager.firstName + " " + value.manager.lastName : ""}</TableCell>
             <TableCell align="right">
                 <Button variant = "text" onClick ={handleNavigate}>
                     View

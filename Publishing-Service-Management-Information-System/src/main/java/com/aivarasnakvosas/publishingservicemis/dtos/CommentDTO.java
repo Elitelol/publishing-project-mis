@@ -17,7 +17,7 @@ import java.util.List;
 public class CommentDTO {
 
     private Long commentId;
-    private Long userId;
+    private UserView user;
     private Long entityId;
     private Date posted;
     @NotBlank(message = "Text can't be empty")

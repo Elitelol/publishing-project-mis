@@ -19,7 +19,7 @@ public class TaskDTO {
 
     private Long taskId;
     private Long publicationId;
-    private List<Long> responsiblePeopleIds;
+    private List<UserView> responsiblePeople;
     private String taskType;
     @NotBlank(message = "Task must have a name")
     private String taskName;

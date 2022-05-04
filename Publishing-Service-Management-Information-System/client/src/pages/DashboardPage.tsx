@@ -40,7 +40,7 @@ const DashboardPage = () => {
         } else if (role === "Publication Manager") {
             url = "publication/manager/";
         } else {
-            url = "todo";
+            url = "publication/byWorker/";
         }
         return await axios.get(ApiUrl() + url + userId);
     }

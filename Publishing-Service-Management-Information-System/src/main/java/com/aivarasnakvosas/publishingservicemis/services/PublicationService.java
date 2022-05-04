@@ -1,5 +1,6 @@
 package com.aivarasnakvosas.publishingservicemis.services;
 
+import com.aivarasnakvosas.publishingservicemis.dtos.UserView;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
@@ -54,7 +55,10 @@ public class PublicationService {
     }
 
     public PublicationDTO savePublication(PublicationDTO publicationDTO) {
-        List<User> author = userService.findUsers(publicationDTO.getAuthorId());
+        List<Long> authorIds = publicationDTO.getAuthors().stream()
+                .map(UserView::getId)
+                .collect(Collectors.toList());
+        List<User> author = userService.findUsers(authorIds);
         Optional<Publication> existingPublication = publicationRepository.findPublicationById(publicationDTO.getPublicationId());
         Publication publication = existingPublication.orElseGet(Publication::new);
         publicationDTOMapper.mapToPublication(publication, publicationDTO, author);

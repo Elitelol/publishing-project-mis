@@ -47,6 +47,8 @@ public class Publication extends AbstractBasicEntity {
     @Enumerated(EnumType.STRING)
     private ProgressStatus progressStatus;
 
+    private BigDecimal progressPercent = BigDecimal.ZERO;
+
     private String rejectionReason;
 
     private String isbn;

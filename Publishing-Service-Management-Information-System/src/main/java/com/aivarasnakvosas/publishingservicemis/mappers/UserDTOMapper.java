@@ -1,6 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.mappers;
 
 
+import com.aivarasnakvosas.publishingservicemis.dtos.UserView;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.Role;
@@ -33,14 +34,14 @@ public class UserDTOMapper {
         user.setRole(Role.getRole(userDTO.getRole()));
     }
 
-    public UserDTO mapToDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setRole(user.getRole().getRole());
-        return userDTO;
+    public UserView mapToView(User user) {
+        UserView userView = new UserView();
+        userView.setId(user.getId());
+        userView.setUsername(user.getUsername());
+        userView.setFirstName(user.getFirstName());
+        userView.setLastName(user.getLastName());
+        userView.setEmail(user.getEmail());
+        userView.setRole(user.getRole().getRole());
+        return userView;
     }
 }
