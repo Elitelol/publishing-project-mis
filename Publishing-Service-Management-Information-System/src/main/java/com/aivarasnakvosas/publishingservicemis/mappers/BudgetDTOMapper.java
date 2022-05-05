@@ -18,6 +18,8 @@ public class BudgetDTOMapper {
     private CommentDTOMapper commentDTOMapper;
 
     public void mapToPublishingBudget(PublishingBudget publishingBudget, BudgetDTO budgetDTO, Publication publication){
+        publishingBudget.setPageNumber(budgetDTO.getPageNumber());
+        publication.setPageNumber(budgetDTO.getPageNumber());
         publishingBudget.setNumberOfCopies(budgetDTO.getNumberOfCopies());
         publishingBudget.setCopyEditingRate(budgetDTO.getCopyEditingRate());
         publishingBudget.setProofReadingRate(budgetDTO.getProofReadingRate());

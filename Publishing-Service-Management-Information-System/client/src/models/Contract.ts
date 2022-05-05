@@ -1,9 +1,9 @@
 import UserComment from "./UserComment";
 
 export default interface Contract {
-    publicationId: number
-    contractId: number
-    publishDate: Date
+    publicationId: number | null
+    contractId: number | null
+    publishDate: Date | null
     publicationPrice: number
     amountOnSigningContract: number
     amountOfCompletedManuscript: number

@@ -1,8 +1,9 @@
 import UserComment from "./UserComment";
 
 export default interface Budget {
-    publicationId: number
-    budgetId: number
+    publicationId: number | null
+    budgetId: number | null
+    pageNumber: number
     numberOfCopies: number
     copyEditingRate: number
     proofReadingRate: number

@@ -18,6 +18,7 @@ public class BudgetDTO {
 
     private Long publicationId;
     private Long budgetId;
+    private Long pageNumber;
     private Long numberOfCopies;
     private BigDecimal copyEditingRate;
     private BigDecimal proofReadingRate;

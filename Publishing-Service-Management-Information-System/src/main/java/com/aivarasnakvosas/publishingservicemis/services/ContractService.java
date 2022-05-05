@@ -70,7 +70,7 @@ public class ContractService {
     }
 
     private Contract findContract(Long id) {
-        Optional<Contract> contract = contractRepository.findById(id);
+        Optional<Contract> contract = contractRepository.findContractByPublicationId(id);
         if (contract.isEmpty()) {
             throw new EntityNotFoundException(Contract.class);
         }

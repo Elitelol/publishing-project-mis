@@ -103,7 +103,6 @@ const PublicationDetailsPage = () => {
     }
 
     const handleDelete = () => {
-
     }
 
     const handleSave = () => {
@@ -121,6 +120,10 @@ const PublicationDetailsPage = () => {
             price,
             manager
         }).then(response => handleStateChange(response))
+    }
+
+    const handleSubmit = () => {
+        axios.post<Publication>(ApiUrl() + "publication/" + id + "/submit").then(response => setPublication(response.data))
     }
 
     const handleLanguageChange = (event: SelectChangeEvent) => {
@@ -153,7 +156,7 @@ const PublicationDetailsPage = () => {
                                 return user.firstName + " " + user.lastName;
                             })
                         }/>
-                        <FormControl fullWidth>
+                        <FormControl fullWidth margin = "normal">
                             <InputLabel>Publication Type</InputLabel>
                             <Select onChange = {handleTypeChange} value = {publicationType}>
                                 {
@@ -163,7 +166,7 @@ const PublicationDetailsPage = () => {
                                 }
                             </Select>
                         </FormControl>
-                        <FormControl fullWidth>
+                        <FormControl fullWidth margin = "normal">
                             <InputLabel>Publication status</InputLabel>
                             <Select onChange = {handleProgressChange} value = {progressStatus}>
                                 {
@@ -176,7 +179,7 @@ const PublicationDetailsPage = () => {
                         <TextField disabled fullWidth label="Publication rejection reason" margin = "normal" value={publication.rejectionReason} onChange = {event => setRejectionReason(event.target.value)}/>
                         <TextField fullWidth label="Publication ISBN" margin = "normal" value={publication.isbn} onChange = {event => setIsbn(event.target.value)}/>
                         <TextField disabled fullWidth label="Publication page number" margin = "normal" value={publication.pageNumber} onChange = {event => setPageNumber(parseInt(event.target.value))}/>
-                        <FormControl fullWidth>
+                        <FormControl fullWidth margin = "normal">
                             <InputLabel>Publication language</InputLabel>
                             <Select onChange = {handleLanguageChange} value = {language}>
                                 {
@@ -186,7 +189,7 @@ const PublicationDetailsPage = () => {
                                 }
                             </Select>
                         </FormControl>
-                        <FormControl fullWidth>
+                        <FormControl fullWidth margin = "normal">
                             <InputLabel>Publication genre</InputLabel>
                             <Select onChange = {handleGenreChange} value = {genre}>
                                 {
@@ -199,6 +202,12 @@ const PublicationDetailsPage = () => {
                         <TextField disabled fullWidth label="Publication price" margin = "normal" value={publication.price} onChange = {event => setPrice(parseFloat(event.target.value))}/>
                         <TextField disabled fullWidth label="Publication manager" margin = "normal" value={publication.manager?.firstName + " " + publication.manager?.lastName}/>
                         <Button onClick = {handleSave}>Save</Button>
+                        {publication.progressStatus === "Not Submitted" ?
+                            <Button onClick ={handleSubmit}>
+                                Submit
+                            </Button>
+                            : ""
+                        }
                         <Button onClick = {handleDelete}>Delete</Button>
                     </CardContent>
                 </Card>

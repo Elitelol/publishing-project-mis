@@ -34,6 +34,7 @@ public class PublishingBudget extends AbstractBasicEntity {
     @OneToMany(mappedBy = "publishingBudget", cascade = CascadeType.ALL)
     private List<BudgetComment> comments = new ArrayList<>();
 
+    private Long pageNumber;
     private Long numberOfCopies;
     // content preparation
     private BigDecimal copyEditingRate;

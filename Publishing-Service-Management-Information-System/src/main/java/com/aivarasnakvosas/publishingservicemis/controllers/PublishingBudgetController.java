@@ -45,9 +45,9 @@ public class PublishingBudgetController {
         return ResponseEntity.ok(publishingBudgetService.addComment(commentDTO));
     }
 
-    @GetMapping(value = "/{id}")
-    ResponseEntity<BudgetDTO> getPublishingBudget(@PathVariable Long id) {
-        return ResponseEntity.ok(publishingBudgetService.getPublishingBudget(id));
+    @GetMapping(value = "/{publicationId}")
+    ResponseEntity<BudgetDTO> getPublishingBudget(@PathVariable Long publicationId) {
+        return ResponseEntity.ok(publishingBudgetService.getPublishingBudget(publicationId));
     }
 
     @GetMapping(value = "/{id}/downloadBudget")

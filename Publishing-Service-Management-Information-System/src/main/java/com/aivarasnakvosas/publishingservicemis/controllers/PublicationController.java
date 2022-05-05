@@ -62,8 +62,8 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.getAuthorPublications(id));
     }
 
-    @GetMapping(value = "/manager")
-    ResponseEntity<List<PublicationDTO>> getManagerPublications(@RequestParam Long id) {
+    @GetMapping(value = "/manager/{id}")
+    ResponseEntity<List<PublicationDTO>> getManagerPublications(@PathVariable Long id) {
         return ResponseEntity.ok(publicationService.getManagerPublications(id));
     }
 
