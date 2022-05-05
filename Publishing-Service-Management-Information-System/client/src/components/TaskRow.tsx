@@ -7,7 +7,7 @@ const TaskRow = ({value}: Task | any) => {
     const navigate = useNavigate();
 
     const handleNavigate = () => {
-
+        navigate("/task/" + value.taskId);
     }
 
     return(

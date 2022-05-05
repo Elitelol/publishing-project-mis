@@ -8,8 +8,8 @@ export default interface Task {
     taskType: string
     taskName: string
     description: string
-    startDate: Date
-    dueDate: Date
+    startDate: Date | null
+    dueDate: Date | null
     progress: string
     comments: UserComment[]
 }

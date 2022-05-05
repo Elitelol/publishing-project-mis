@@ -1,6 +1,5 @@
 import React, {useContext} from 'react';
 import './App.css';
-import Nav from "./components/Nav";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -13,6 +12,7 @@ import SideMenu from "./components/SideMenu";
 import ContractPage from "./pages/ContractPage";
 import BudgetPage from "./pages/BudgetPage";
 import TaskPage from "./pages/TaskPage";
+import TaskDetailsPage from "./pages/TaskDetailsPage";
 
 function App() {
 
@@ -40,6 +40,9 @@ function App() {
                   </Route>
                   <Route path = "/:id/task" element={<ProtectedRoute/>}>
                       <Route path = "/:id/task" element={<TaskPage/>}/>
+                  </Route>
+                  <Route path = "/task/:id" element={<ProtectedRoute/>}>
+                      <Route path = "/task/:id" element={<TaskDetailsPage/>}/>
                   </Route>
               </Routes>
           </BrowserRouter>
