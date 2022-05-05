@@ -2,6 +2,7 @@ package com.aivarasnakvosas.publishingservicemis.controllers;
 
 import com.aivarasnakvosas.publishingservicemis.dtos.CommentDTO;
 import com.aivarasnakvosas.publishingservicemis.dtos.TaskDTO;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
 import com.aivarasnakvosas.publishingservicemis.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author Aivaras Nakvosas
@@ -36,6 +38,25 @@ public class TaskController {
     ResponseEntity<TaskDTO> getTask(@PathVariable Long id) {
         TaskDTO task = taskService.getTask(id);
         return ResponseEntity.ok(task);
+    }
+
+    @GetMapping(value = "/{publicationId}/notStartedTasks")
+    ResponseEntity<List<TaskDTO>> getNotStartedPublicationTasks(@PathVariable Long publicationId) {
+        List<TaskDTO> tasks = taskService.getPublicationTasksByProgress(publicationId, ProgressStatus.NOT_STARTED);
+        return ResponseEntity.ok(tasks);
+    }
+
+    @GetMapping(value = "/{publicationId}/inProgressTasks")
+    ResponseEntity<List<TaskDTO>> getInProgressPublicationTasks(@PathVariable Long publicationId) {
+        List<TaskDTO> tasks = taskService.getPublicationTasksByProgress(publicationId, ProgressStatus.IN_PROGRESS);
+        return ResponseEntity.ok(tasks);
+    }
+
+
+    @GetMapping(value = "/{publicationId}/completedTasks")
+    ResponseEntity<List<TaskDTO>> getCompletedPublicationTasks(@PathVariable Long publicationId) {
+        List<TaskDTO> tasks = taskService.getPublicationTasksByProgress(publicationId, ProgressStatus.COMPLETED);
+        return ResponseEntity.ok(tasks);
     }
 
     @PostMapping(value = "/comment")

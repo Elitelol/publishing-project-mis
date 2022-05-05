@@ -64,6 +64,13 @@ public class TaskService {
         return taskDTOMapper.mapToDTO(task);
     }
 
+    public List<TaskDTO> getPublicationTasksByProgress(Long publicationId, ProgressStatus progressStatus) {
+        List<Task> tasks = taskRepository.findTaskByPublicationIdAndProgressStatus(publicationId, progressStatus);
+        return tasks.stream()
+                .map(task -> taskDTOMapper.mapToDTO(task))
+                .collect(Collectors.toList());
+    }
+
     private Task findTask(Long taskId) {
         Optional<Task> task = taskRepository.findById(taskId);
         if (task.isEmpty()){
