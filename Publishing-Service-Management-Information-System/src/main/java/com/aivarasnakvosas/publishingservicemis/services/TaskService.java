@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,6 +67,14 @@ public class TaskService {
 
     public List<TaskDTO> getPublicationTasksByProgress(Long publicationId, ProgressStatus progressStatus) {
         List<Task> tasks = taskRepository.findTaskByPublicationIdAndProgressStatus(publicationId, progressStatus);
+        return tasks.stream()
+                .map(task -> taskDTOMapper.mapToDTO(task))
+                .collect(Collectors.toList());
+    }
+
+    public List<TaskDTO> getUserTasks(Long publicationId, Long userId) {
+        User user = userService.findUser(userId);
+        List<Task> tasks = taskRepository.findTaskByPublicationIdAndResponsiblePeopleIn(publicationId, Collections.singletonList(user));
         return tasks.stream()
                 .map(task -> taskDTOMapper.mapToDTO(task))
                 .collect(Collectors.toList());

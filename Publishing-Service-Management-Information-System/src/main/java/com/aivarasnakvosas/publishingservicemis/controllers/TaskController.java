@@ -59,6 +59,12 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
+    @GetMapping(value = "/userTasks/{publicationId}/{userId}")
+    ResponseEntity<List<TaskDTO>> getUserTasks(@PathVariable Long publicationId, @PathVariable Long userId) {
+        List<TaskDTO> tasks = taskService.getUserTasks(publicationId, userId);
+        return ResponseEntity.ok(tasks);
+    }
+
     @PostMapping(value = "/comment")
     ResponseEntity<TaskDTO> addComment(@Valid @RequestBody CommentDTO commentDTO) {
         TaskDTO task = taskService.addComment(commentDTO);

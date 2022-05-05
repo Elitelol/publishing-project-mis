@@ -22,4 +22,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findTaskByResponsiblePeopleIn(List<User> workers);
 
     List<Task> findTaskByPublicationIdAndProgressStatus(Long publicationId, ProgressStatus progressStatus);
+
+    List<Task> findTaskByPublicationIdAndResponsiblePeopleIn(Long publicationId, List<User> users);
 }

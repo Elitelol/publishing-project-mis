@@ -1,9 +1,10 @@
 import UserComment from "./UserComment";
+import User from "./User";
 
 export default interface Task {
-    taskId: number
-    publicationId: number
-    responsiblePeopleIds: number[]
+    taskId: number | null
+    publicationId: number | null
+    responsiblePeople: User[]
     taskType: string
     taskName: string
     description: string

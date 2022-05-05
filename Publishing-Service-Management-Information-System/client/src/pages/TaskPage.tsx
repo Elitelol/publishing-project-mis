@@ -5,41 +5,60 @@ import {
     Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography
 } from "@mui/material";
 import NavigationGroup from "../components/NavigationGroup";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Task from "../models/Task";
 import TaskRow from "../components/TaskRow";
+import axios from "axios";
+import ApiUrl from "../config/api.config";
+import {UserContext, UserProvider} from "../auth";
 
 
 const TaskPage = () => {
     const {id} = useParams()
-
-    useEffect(() => {
-        axios.g
-    })
+    const [context, setContext] = useContext(UserContext);
 
     const [showNotCompleted, setShowNotCompleted] = useState<boolean>(true);
     const [showInProgress, setShowInProgress] = useState<boolean>(false);
     const [showCompleted, setShowCompleted] = useState<boolean>(false);
+    const [showUserTasks, setShowUserTasks] = useState<boolean>(false);
     const [notCompletedTasks, setNotCompletedTask] = useState<Task[]>([]);
     const [inProgressTasks, setInProgressTasks] = useState<Task[]>([]);
     const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
+    const [userTasks, setUserTasks] = useState<Task[]>([]);
+
+    useEffect(() => {
+        axios.get<Task[]>(ApiUrl() + "task/" + id + "/notStartedTasks").then(response => setNotCompletedTask(response.data))
+        axios.get<Task[]>(ApiUrl() + "task/" + id + "/inProgressTasks").then(response => setInProgressTasks(response.data))
+        axios.get<Task[]>(ApiUrl() + "task/" + id + "/completedTasks").then(response => setCompletedTasks(response.data))
+        axios.get<Task[]>(ApiUrl() + "task/userTasks/" + id + "/" + context.data?.id).then(response => setUserTasks(response.data))
+    })
 
     const handleNotCompleted = () => {
         setShowNotCompleted(true);
         setShowInProgress(false);
         setShowCompleted(false);
+        setShowUserTasks(false);
     }
 
     const handleInProgress = () => {
         setShowNotCompleted(false);
         setShowInProgress(true);
         setShowCompleted(false);
+        setShowUserTasks(false);
     }
 
     const handleCompleted = () => {
         setShowNotCompleted(false);
         setShowInProgress(false);
         setShowCompleted(true);
+        setShowUserTasks(false);
+    }
+
+    const handleUsers = () => {
+        setShowNotCompleted(false);
+        setShowInProgress(false);
+        setShowCompleted(false);
+        setShowUserTasks(true);
     }
 
     return(
@@ -49,6 +68,7 @@ const TaskPage = () => {
             <Button onClick={handleNotCompleted}>Not started tasks</Button>
             <Button onClick={handleInProgress}>In progress tasks</Button>
             <Button onClick={handleCompleted}>Completed tasks</Button>
+            <Button onClick={handleUsers}>My tasks</Button>
             <Container>
                 <Button>Add task</Button>
             </Container>
@@ -66,13 +86,24 @@ const TaskPage = () => {
                     </TableHead>
                     <TableBody>
                         {
-                            showNotCompleted && <TaskRow/>
+                            showNotCompleted && notCompletedTasks.map(task => {
+                                return <TaskRow value = {task}/>
+                            })
                         }
                         {
-
+                            showInProgress && inProgressTasks.map(task => {
+                                return <TaskRow value = {task}/>
+                            })
                         }
                         {
-
+                            showCompleted && completedTasks.map(task => {
+                                return <TaskRow value = {task}/>
+                            })
+                        }
+                        {
+                            showUserTasks && userTasks.map(task => {
+                                return <TaskRow value = {task}/>
+                            })
                         }
                     </TableBody>
                 </Table>
