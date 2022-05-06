@@ -11,6 +11,7 @@ import lombok.Setter;
 public class AttachmentDTO {
 
     private Long publicationId;
+    private String attachmentId;
     private String fileName;
     private String attachmentType;
     private String contentType;

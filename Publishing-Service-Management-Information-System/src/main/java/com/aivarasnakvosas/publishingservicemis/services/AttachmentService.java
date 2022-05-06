@@ -3,6 +3,7 @@ package com.aivarasnakvosas.publishingservicemis.services;
 import com.aivarasnakvosas.publishingservicemis.entity.Attachment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.dtos.AttachmentDTO;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.AttachmentType;
 import com.aivarasnakvosas.publishingservicemis.mappers.AttachmentDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.AttachmentRepository;
 import com.aivarasnakvosas.publishingservicemis.repositories.PublicationRepository;
@@ -38,8 +39,8 @@ public class AttachmentService {
         attachmentRepository.save(attachment);
     }
 
-    public List<AttachmentDTO> getPublicationAttachments(Long publicationId) {
-        List<Attachment> attachments = attachmentRepository.findAttachmentByPublicationId(publicationId);
+    public List<AttachmentDTO> getPublicationAttachments(Long publicationId, AttachmentType attachmentType) {
+        List<Attachment> attachments = attachmentRepository.findAttachmentByPublicationIdAndAttachmentType(publicationId, attachmentType);
         return attachments.stream()
                 .map(attachment -> attachmentDTOMapper.mapToDTO(attachment))
                 .collect(Collectors.toList());

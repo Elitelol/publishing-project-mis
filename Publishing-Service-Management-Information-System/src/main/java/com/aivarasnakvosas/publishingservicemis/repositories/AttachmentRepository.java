@@ -1,6 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.repositories;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Attachment;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.AttachmentType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +15,5 @@ public interface AttachmentRepository extends JpaRepository<Attachment, String> 
 
     Attachment findAttachmentByAttachmentId(String id);
 
-    List<Attachment> findAttachmentByPublicationId(Long publicationId);
+    List<Attachment> findAttachmentByPublicationIdAndAttachmentType(Long publicationId, AttachmentType attachmentType);
 }

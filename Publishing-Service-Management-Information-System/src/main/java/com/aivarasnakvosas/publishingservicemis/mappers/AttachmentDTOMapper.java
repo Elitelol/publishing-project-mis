@@ -37,6 +37,7 @@ public class AttachmentDTOMapper {
                 .path(attachment.getAttachmentId())
                 .toUriString();
         attachmentDTO.setPublicationId(attachment.getPublication().getId());
+        attachmentDTO.setAttachmentId(attachment.getAttachmentId());
         attachmentDTO.setFileName(attachment.getFileName());
         attachmentDTO.setAttachmentType(attachment.getAttachmentType().getType());
         attachmentDTO.setContentType(attachment.getContentType());

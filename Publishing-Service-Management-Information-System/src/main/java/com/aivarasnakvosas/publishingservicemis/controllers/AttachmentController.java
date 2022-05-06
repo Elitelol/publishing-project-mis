@@ -1,6 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.controllers;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Attachment;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.AttachmentType;
 import com.aivarasnakvosas.publishingservicemis.utilities.EntityCreationResponseMessage;
 import com.aivarasnakvosas.publishingservicemis.dtos.AttachmentDTO;
 import com.aivarasnakvosas.publishingservicemis.services.AttachmentService;
@@ -44,9 +45,24 @@ public class AttachmentController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<AttachmentDTO>> getPublicationAttachments(@RequestParam Long publicationId) {
-        return ResponseEntity.ok(attachmentService.getPublicationAttachments(publicationId));
+    @GetMapping(value = "/{publicationId}/manuscript")
+    public ResponseEntity<List<AttachmentDTO>> getPublicationManuscriptAttachments(@PathVariable Long publicationId) {
+        return ResponseEntity.ok(attachmentService.getPublicationAttachments(publicationId, AttachmentType.MANUSCRIPT));
+    }
+
+    @GetMapping(value = "/{publicationId}/contract")
+    public ResponseEntity<List<AttachmentDTO>> getPublicationContractAttachments(@PathVariable Long publicationId) {
+        return ResponseEntity.ok(attachmentService.getPublicationAttachments(publicationId, AttachmentType.CONTRACT));
+    }
+
+    @GetMapping(value = "/{publicationId}/task")
+    public ResponseEntity<List<AttachmentDTO>> getPublicationTaskAttachments(@PathVariable Long publicationId) {
+        return ResponseEntity.ok(attachmentService.getPublicationAttachments(publicationId, AttachmentType.TASK_FILE));
+    }
+
+    @GetMapping(value = "/{publicationId}/cover")
+    public ResponseEntity<List<AttachmentDTO>> getPublicationCoverAttachments(@PathVariable Long publicationId) {
+        return ResponseEntity.ok(attachmentService.getPublicationAttachments(publicationId, AttachmentType.COVER_PHOTO));
     }
 
     @GetMapping(value = "/{id}")
@@ -58,5 +74,4 @@ public class AttachmentController {
         header.set("Content-Disposition", "attachment; filename=" + attachment.getFileName());
         return new ResponseEntity<>(attachment.getFile(), header, HttpStatus.OK);
     }
-
 }
