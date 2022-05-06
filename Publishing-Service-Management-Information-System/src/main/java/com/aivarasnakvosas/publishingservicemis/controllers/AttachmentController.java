@@ -7,6 +7,7 @@ import com.aivarasnakvosas.publishingservicemis.services.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,8 @@ public class AttachmentController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<EntityCreationResponseMessage> saveAttachment(
-            @RequestPart("attachmentDTO") String attachmentDTO,
-            @RequestPart("file") MultipartFile file) {
+            @RequestParam String attachmentDTO,
+            @RequestParam MultipartFile file) {
         try {
             attachmentService.saveAttachment(file, attachmentDTO);
             return ResponseEntity.status(HttpStatus.OK).body(new EntityCreationResponseMessage("File uploaded successfully."));
@@ -49,11 +50,13 @@ public class AttachmentController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Resource> getAttachment(@PathVariable String id) {
+    public ResponseEntity<byte[]> getAttachment(@PathVariable String id) {
         Attachment attachment = attachmentService.getAttachment(id);
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(attachment.getContentType()))
-                .body(new ByteArrayResource(attachment.getFile()));
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.valueOf(attachment.getContentType()));
+        header.setContentLength(attachment.getFile().length);
+        header.set("Content-Disposition", "attachment; filename=" + attachment.getFileName());
+        return new ResponseEntity<>(attachment.getFile(), header, HttpStatus.OK);
     }
 
 }

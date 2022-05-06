@@ -82,6 +82,7 @@ const TaskDetailsPage = () => {
         setTaskId(response.data.taskId)
         setTaskName(response.data.taskName)
         setTaskType(response.data.taskType)
+        setTaskComments(response.data.comments)
     }
 
     const handleProgressChange = (event: SelectChangeEvent) => {

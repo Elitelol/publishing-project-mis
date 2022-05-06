@@ -79,6 +79,7 @@ const ContractPage = () => {
         setSecondCoverPercent(response.data.secondCoverPercent)
         setLastCoverRate(response.data.lastCoverRate)
         setLastCoverPercent(response.data.lastCoverPercent)
+        setComments(response.data.comments)
     }
 
     const handleSave = () => {
