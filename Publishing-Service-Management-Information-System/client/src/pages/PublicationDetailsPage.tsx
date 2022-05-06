@@ -1,5 +1,5 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Publication from "../models/Publication";
 import axios, {AxiosResponse} from "axios";
 import ApiUrl from "../config/api.config";
@@ -21,6 +21,8 @@ import Progress from "../models/Progress";
 import PublicationType from "../models/PublicationType";
 import NavigationGroup from "../components/NavigationGroup";
 import User from "../models/User";
+import Navbar from "../components/Navbar";
+import SideMenu from "../components/SideMenu";
 
 const PublicationDetailsPage = () => {
 
@@ -144,6 +146,8 @@ const PublicationDetailsPage = () => {
 
     return (
         <>
+            <Navbar/>
+            <SideMenu/>
             <Container>
                 <NavigationGroup id = {id}/>
                 <Card>

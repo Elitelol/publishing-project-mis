@@ -8,6 +8,7 @@ const NavigationGroup = ({id}: any) => {
     return (
         <ButtonGroup>
             <Button onClick = {() => navigate("/publication/" + id)}> Details </Button>
+            <Button onClick = {() => navigate("/" + id + "/attachments")}> Attachments </Button>
             <Button onClick = {() => navigate("/" + id + "/contract")}> Contract </Button>
             <Button onClick = {() => navigate("/" + id + "/budget")}> Budget </Button>
             <Button onClick = {() => navigate("/" + id + "/task")}> Tasks </Button>

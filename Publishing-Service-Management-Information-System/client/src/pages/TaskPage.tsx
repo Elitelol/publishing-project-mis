@@ -20,13 +20,15 @@ import {
     Typography
 } from "@mui/material";
 import NavigationGroup from "../components/NavigationGroup";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Task from "../models/Task";
 import TaskRow from "../components/TaskRow";
 import axios from "axios";
 import ApiUrl from "../config/api.config";
 import {UserContext, UserProvider} from "../auth";
 import TaskType from "../models/TaskType";
+import Navbar from "../components/Navbar";
+import SideMenu from "../components/SideMenu";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -124,71 +126,75 @@ const TaskPage = () => {
     }
 
     return(
-        <Container>
-            <NavigationGroup id = {id}/>
-            <Typography variant = "h2">Publication tasks</Typography>
-            <Button onClick={handleNotCompleted}>Not started tasks</Button>
-            <Button onClick={handleInProgress}>In progress tasks</Button>
-            <Button onClick={handleCompleted}>Completed tasks</Button>
-            <Button onClick={handleUsers}>My tasks</Button>
+        <>
+            <Navbar/>
+            <SideMenu/>
             <Container>
-                <Button onClick={handleOpen}>Add task</Button>
-            </Container>
-            <Modal open = {open} onClose = {handleClose}>
-                <Box sx = {style}>
-                    <Typography variant = "h3">New task</Typography>
-                    <TextField fullWidth label="Task name" margin = "normal" value={taskName} onChange = {event => setTaskName(event.target.value)}/>
-                    <TextField fullWidth label="Task description" margin = "normal" value={description} onChange = {event => setDescription(event.target.value)}/>
-                    <FormControl fullWidth>
-                        <InputLabel>Task type</InputLabel>
-                        <Select onChange = {handleTypeChange} value = {selectedType}>
+                <NavigationGroup id = {id}/>
+                <Typography variant = "h2">Publication tasks</Typography>
+                <Button onClick={handleNotCompleted}>Not started tasks</Button>
+                <Button onClick={handleInProgress}>In progress tasks</Button>
+                <Button onClick={handleCompleted}>Completed tasks</Button>
+                <Button onClick={handleUsers}>My tasks</Button>
+                <Container>
+                    <Button onClick={handleOpen}>Add task</Button>
+                </Container>
+                <Modal open = {open} onClose = {handleClose}>
+                    <Box sx = {style}>
+                        <Typography variant = "h3">New task</Typography>
+                        <TextField fullWidth label="Task name" margin = "normal" value={taskName} onChange = {event => setTaskName(event.target.value)}/>
+                        <TextField fullWidth label="Task description" margin = "normal" value={description} onChange = {event => setDescription(event.target.value)}/>
+                        <FormControl fullWidth>
+                            <InputLabel>Task type</InputLabel>
+                            <Select onChange = {handleTypeChange} value = {selectedType}>
+                                {
+                                    typeSelection.map(t => {
+                                        return <MenuItem value = {t.type}> {t.type} </MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                        <Button onClick ={handleSave}>Create</Button>
+                    </Box>
+                </Modal>
+                <TableContainer component = {Paper}>
+                    <Table sx = {{minWidth: 650}}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align ="right">Task Id</TableCell>
+                                <TableCell align ="right">Task name</TableCell>
+                                <TableCell align ="right">Task type</TableCell>
+                                <TableCell align ="right">Task start date</TableCell>
+                                <TableCell align ="right">Task due date</TableCell>
+                                <TableCell align ="right">Task progress</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
                             {
-                                typeSelection.map(t => {
-                                    return <MenuItem value = {t.type}> {t.type} </MenuItem>
+                                showNotCompleted && notCompletedTasks.map(task => {
+                                    return <TaskRow value = {task}/>
                                 })
                             }
-                        </Select>
-                    </FormControl>
-                    <Button onClick ={handleSave}>Create</Button>
-                </Box>
-            </Modal>
-            <TableContainer component = {Paper}>
-                <Table sx = {{minWidth: 650}}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align ="right">Task Id</TableCell>
-                            <TableCell align ="right">Task name</TableCell>
-                            <TableCell align ="right">Task type</TableCell>
-                            <TableCell align ="right">Task start date</TableCell>
-                            <TableCell align ="right">Task due date</TableCell>
-                            <TableCell align ="right">Task progress</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            showNotCompleted && notCompletedTasks.map(task => {
-                                return <TaskRow value = {task}/>
-                            })
-                        }
-                        {
-                            showInProgress && inProgressTasks.map(task => {
-                                return <TaskRow value = {task}/>
-                            })
-                        }
-                        {
-                            showCompleted && completedTasks.map(task => {
-                                return <TaskRow value = {task}/>
-                            })
-                        }
-                        {
-                            showUserTasks && userTasks.map(task => {
-                                return <TaskRow value = {task}/>
-                            })
-                        }
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Container>
+                            {
+                                showInProgress && inProgressTasks.map(task => {
+                                    return <TaskRow value = {task}/>
+                                })
+                            }
+                            {
+                                showCompleted && completedTasks.map(task => {
+                                    return <TaskRow value = {task}/>
+                                })
+                            }
+                            {
+                                showUserTasks && userTasks.map(task => {
+                                    return <TaskRow value = {task}/>
+                                })
+                            }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Container>
+        </>
     )
 }
 

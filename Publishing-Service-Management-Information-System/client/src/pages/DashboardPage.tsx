@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Publication from "../models/Publication";
 import {UserContext} from "../auth";
 import axios from "axios";
@@ -18,6 +18,7 @@ import {
 import Navbar from "../components/Navbar";
 import Publications from "../components/Publications";
 import {useNavigate} from "react-router-dom";
+import SideMenu from "../components/SideMenu";
 
 const DashboardPage = () => {
 
@@ -47,6 +48,8 @@ const DashboardPage = () => {
 
     return (
         <>
+            <Navbar/>
+            <SideMenu/>
             <Container >
                 <Publications publications = {publications}/>
             </Container>

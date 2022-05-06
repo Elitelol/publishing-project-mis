@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import {Button, Card, CardContent, Container, TextField, Typography} from "@mui/material";
 import NavigationGroup from "../components/NavigationGroup";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Contract from "../models/Contract";
 import axios, {AxiosResponse} from "axios";
 import ApiUrl from "../config/api.config";
@@ -10,6 +10,8 @@ import Comments from "../components/Comments";
 import UserComment from "../models/UserComment";
 import User from "../models/User";
 import {UserContext} from "../auth";
+import Navbar from "../components/Navbar";
+import SideMenu from "../components/SideMenu";
 
 
 const ContractPage = () => {
@@ -108,39 +110,43 @@ const ContractPage = () => {
 
 
     return(
-        <Container>
-            <NavigationGroup id = {id}/>
-            <Card>
-                <Typography variant = "h2">Contract details</Typography>
-                <CardContent>
-                    <TextField margin = "normal" fullWidth label = "Publish date" value={publishDate}/>
-                    <TextField margin = "normal" fullWidth label = "Publication price" value = {publicationPrice} onChange={event => setPublicationPrice(parseFloat(event.target.value))}/>
-                    <TextField margin = "normal" fullWidth label = "Amount on signing contract" value = {amountOnSigningContract} onChange={event => setAmountOnSigningContract(parseFloat(event.target.value))} />
-                    <TextField margin = "normal" fullWidth label = "Amount on completing manuscript" value = {amountOfCompletedManuscript} onChange={event => setAmountOfCompletedManuscript(parseFloat(event.target.value))} />
-                    <TextField margin = "normal" fullWidth label = "Amount on initial publish" value = {amountOnInitialPublish} onChange={event => setAmountOnInitialPublish(parseFloat(event.target.value))} />
-                    <TextField margin = "normal" fullWidth label = "Within months after publish" value = {withinMonthsAfterPublish} onChange={event => setWithinMonthsAfterPublish(parseFloat(event.target.value))}/>
-                    <TextField margin = "normal" fullWidth label = "First cover rate" value = {firstCoverRate} onChange={event => setFirstCoverRate(parseFloat(event.target.value))}/>
-                    <TextField margin = "normal" fullWidth label = "First cover percent" value = {firstCoverPercent} onChange={event => setFirstCoverPercent(parseFloat(event.target.value))} />
-                    <TextField margin = "normal" fullWidth label = "Second cover rate" value = {secondCoverRate} onChange={event => setSecondCoverRate(parseFloat(event.target.value))}/>
-                    <TextField margin = "normal" fullWidth label = "Second cover percent" value = {secondCoverPercent} onChange={event => setSecondCoverPercent(parseFloat(event.target.value))} />
-                    <TextField margin = "normal" fullWidth label = "Last cover rate" value = {lastCoverRate} onChange={event => setLastCoverRate(parseFloat(event.target.value))}/>
-                    <TextField margin = "normal" fullWidth label = "Last cover percent" value={lastCoverPercent} onChange={event => setLastCoverPercent(parseFloat(event.target.value))} />
-                    <Button onClick = {handleSave}>Save contract details</Button>
-                    {
-                        contractId !== null ? <Button onClick = {handleGenerateContract}>Generate contract</Button> : ""
-                    }
-                    {
-                        contractId !== null ? <Button>Submit signed contract</Button> : ""
-                    }
-                    {
-                        contractId !== null ? <Button onClick ={handleContractSigned}>Set contract signed</Button> : ""
-                    }
-                </CardContent>
-            </Card>
-            {
-                contract.contractId !== null && <Comments comments={contractComments} url ={"contract"} entityId={contract.contractId} setComments={setComments} commentator={commentator}/>
-            }
-        </Container>
+        <>
+            <Navbar/>
+            <SideMenu/>
+            <Container>
+                <NavigationGroup id = {id}/>
+                <Card>
+                    <Typography variant = "h2">Contract details</Typography>
+                    <CardContent>
+                        <TextField margin = "normal" fullWidth label = "Publish date" value={publishDate}/>
+                        <TextField margin = "normal" fullWidth label = "Publication price" value = {publicationPrice} onChange={event => setPublicationPrice(parseFloat(event.target.value))}/>
+                        <TextField margin = "normal" fullWidth label = "Amount on signing contract" value = {amountOnSigningContract} onChange={event => setAmountOnSigningContract(parseFloat(event.target.value))} />
+                        <TextField margin = "normal" fullWidth label = "Amount on completing manuscript" value = {amountOfCompletedManuscript} onChange={event => setAmountOfCompletedManuscript(parseFloat(event.target.value))} />
+                        <TextField margin = "normal" fullWidth label = "Amount on initial publish" value = {amountOnInitialPublish} onChange={event => setAmountOnInitialPublish(parseFloat(event.target.value))} />
+                        <TextField margin = "normal" fullWidth label = "Within months after publish" value = {withinMonthsAfterPublish} onChange={event => setWithinMonthsAfterPublish(parseFloat(event.target.value))}/>
+                        <TextField margin = "normal" fullWidth label = "First cover rate" value = {firstCoverRate} onChange={event => setFirstCoverRate(parseFloat(event.target.value))}/>
+                        <TextField margin = "normal" fullWidth label = "First cover percent" value = {firstCoverPercent} onChange={event => setFirstCoverPercent(parseFloat(event.target.value))} />
+                        <TextField margin = "normal" fullWidth label = "Second cover rate" value = {secondCoverRate} onChange={event => setSecondCoverRate(parseFloat(event.target.value))}/>
+                        <TextField margin = "normal" fullWidth label = "Second cover percent" value = {secondCoverPercent} onChange={event => setSecondCoverPercent(parseFloat(event.target.value))} />
+                        <TextField margin = "normal" fullWidth label = "Last cover rate" value = {lastCoverRate} onChange={event => setLastCoverRate(parseFloat(event.target.value))}/>
+                        <TextField margin = "normal" fullWidth label = "Last cover percent" value={lastCoverPercent} onChange={event => setLastCoverPercent(parseFloat(event.target.value))} />
+                        <Button onClick = {handleSave}>Save contract details</Button>
+                        {
+                            contractId !== null ? <Button onClick = {handleGenerateContract}>Generate contract</Button> : ""
+                        }
+                        {
+                            contractId !== null ? <Button>Submit signed contract</Button> : ""
+                        }
+                        {
+                            contractId !== null ? <Button onClick ={handleContractSigned}>Set contract signed</Button> : ""
+                        }
+                    </CardContent>
+                </Card>
+                {
+                    contract.contractId !== null && <Comments comments={contractComments} url ={"contract"} entityId={contract.contractId} setComments={setComments} commentator={commentator}/>
+                }
+            </Container>
+        </>
     )
 }
 

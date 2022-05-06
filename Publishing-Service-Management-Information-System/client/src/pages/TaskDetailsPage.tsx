@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Task from "../models/Task";
 import {
     Button,
@@ -22,6 +22,8 @@ import Comments from "../components/Comments";
 import User from "../models/User";
 import {UserContext} from "../auth";
 import UserComment from "../models/UserComment";
+import Navbar from "../components/Navbar";
+import SideMenu from "../components/SideMenu";
 
 const TaskDetailsPage = () => {
 
@@ -106,41 +108,45 @@ const TaskDetailsPage = () => {
     ]
 
     return(
-        <Container>
-            <NavigationGroup id = {task.publicationId} />
-            <Card>
-                <Typography variant = "h2">Task details</Typography>
-                <CardContent>
-                    <TextField fullWidth label="Task name" margin = "normal" value={taskName} onChange = {event => setTaskName(event.target.value)}/>
-                    <TextField fullWidth label="Task description" margin = "normal" value={description} onChange = {event => setDescription(event.target.value)}/>
-                    <TextField fullWidth label="Task responsible people" margin = "normal" value={responsiblePeople}/>
-                    <FormControl fullWidth margin = "normal">
-                        <InputLabel>Task type</InputLabel>
-                        <Select onChange = {handleTypeChange} value = {selectedType}>
-                            {
-                                typeSelection.map(t => {
-                                    return <MenuItem value = {t.type}> {t.type} </MenuItem>
-                                })
-                            }
-                        </Select>
-                    </FormControl>
-                    <TextField fullWidth label="Task start date" margin = "normal" value={startDate}/>
-                    <TextField fullWidth label="Task due date" margin = "normal" value={dueDate}/>
-                    <FormControl fullWidth margin = "normal">
-                        <InputLabel>Progress status</InputLabel>
-                        <Select onChange = {handleProgressChange} value = {selectedProgress}>
-                            {
-                                progressSelection.map(t => {
-                                    return <MenuItem value = {t.status}> {t.status} </MenuItem>
-                                })
-                            }
-                        </Select>
-                    </FormControl>
-                    <Button onClick = {handleSave}>Save</Button>
-                </CardContent>
-            </Card>
-            <Comments comments={taskComments} url ={"task"} entityId={task.taskId} setComments={setTaskComments} commentator={commentator}/>
-        </Container>
+        <>
+            <Navbar/>
+            <SideMenu/>
+            <Container>
+                <NavigationGroup id = {task.publicationId} />
+                <Card>
+                    <Typography variant = "h2">Task details</Typography>
+                    <CardContent>
+                        <TextField fullWidth label="Task name" margin = "normal" value={taskName} onChange = {event => setTaskName(event.target.value)}/>
+                        <TextField fullWidth label="Task description" margin = "normal" value={description} onChange = {event => setDescription(event.target.value)}/>
+                        <TextField fullWidth label="Task responsible people" margin = "normal" value={responsiblePeople}/>
+                        <FormControl fullWidth margin = "normal">
+                            <InputLabel>Task type</InputLabel>
+                            <Select onChange = {handleTypeChange} value = {selectedType}>
+                                {
+                                    typeSelection.map(t => {
+                                        return <MenuItem value = {t.type}> {t.type} </MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                        <TextField fullWidth label="Task start date" margin = "normal" value={startDate}/>
+                        <TextField fullWidth label="Task due date" margin = "normal" value={dueDate}/>
+                        <FormControl fullWidth margin = "normal">
+                            <InputLabel>Progress status</InputLabel>
+                            <Select onChange = {handleProgressChange} value = {selectedProgress}>
+                                {
+                                    progressSelection.map(t => {
+                                        return <MenuItem value = {t.status}> {t.status} </MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                        <Button onClick = {handleSave}>Save</Button>
+                    </CardContent>
+                </Card>
+                <Comments comments={taskComments} url ={"task"} entityId={task.taskId} setComments={setTaskComments} commentator={commentator}/>
+            </Container>
+        </>
     )
 }
 

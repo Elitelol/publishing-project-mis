@@ -13,6 +13,7 @@ import ContractPage from "./pages/ContractPage";
 import BudgetPage from "./pages/BudgetPage";
 import TaskPage from "./pages/TaskPage";
 import TaskDetailsPage from "./pages/TaskDetailsPage";
+import AttachmentPage from "./pages/AttachmentPage";
 
 function App() {
 
@@ -21,8 +22,6 @@ function App() {
   return (
       <>
           <BrowserRouter>
-              <Navbar/>
-              <SideMenu/>
               <Routes>
                   <Route path = "/" element={<LoginPage/>}/>
                   <Route path = "/signup" element={<SignUpPage/>}/>
@@ -31,6 +30,9 @@ function App() {
                   </Route>
                   <Route path = "/publication/:id" element={<ProtectedRoute/>}>
                       <Route path = "/publication/:id" element={<PublicationDetailsPage/>}/>
+                  </Route>
+                  <Route path = "/:id/attachments" element={<ProtectedRoute/>}>
+                      <Route path = "/:id/attachments" element={<AttachmentPage/>}/>
                   </Route>
                   <Route path = "/:id/contract" element={<ProtectedRoute/>}>
                       <Route path = "/:id/contract" element={<ContractPage/>}/>
