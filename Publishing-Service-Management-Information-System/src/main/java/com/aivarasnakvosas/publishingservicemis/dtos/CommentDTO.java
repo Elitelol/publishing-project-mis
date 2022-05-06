@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,5 +24,5 @@ public class CommentDTO {
     @NotBlank(message = "Text can't be empty")
     private String text;
     private Long rootCommentId;
-    private List<CommentDTO> replies;
+    private List<CommentDTO> replies = new ArrayList<>();
 }

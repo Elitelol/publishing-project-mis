@@ -1,11 +1,13 @@
 package com.aivarasnakvosas.publishingservicemis.mappers;
 
+import com.aivarasnakvosas.publishingservicemis.entity.BudgetComment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.PublishingBudget;
 import com.aivarasnakvosas.publishingservicemis.dtos.BudgetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -53,7 +55,11 @@ public class BudgetDTOMapper {
         budgetDTO.setDeliveryToStorageRate(publishingBudget.getDeliveryToStorageRate());
         budgetDTO.setAdvertisingCost(publishingBudget.getAdvertisingCost());
         budgetDTO.setCopyMailingCost(publishingBudget.getCopyMailingCost());
-        budgetDTO.setComments(publishingBudget.getComments().stream()
+        List<BudgetComment> distinctComments = publishingBudget.getComments()
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
+        budgetDTO.setComments(distinctComments.stream()
                 .filter(comment -> comment.getRootComment() == null)
                 .map(budgetComment -> commentDTOMapper.mapToDTO(budgetComment))
                 .collect(Collectors.toList()));

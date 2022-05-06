@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Task from "../models/Task";
 import {
     Button,
@@ -18,12 +18,18 @@ import ApiUrl from "../config/api.config";
 import Progress from "../models/Progress";
 import TaskType from "../models/TaskType";
 import NavigationGroup from "../components/NavigationGroup";
+import Comments from "../components/Comments";
+import User from "../models/User";
+import {UserContext} from "../auth";
+import UserComment from "../models/UserComment";
 
 const TaskDetailsPage = () => {
 
     const {id} = useParams();
+    const [context, setContext] = useContext(UserContext);
 
     useEffect(() => {
+        axios.get<User>(ApiUrl() + "user/" + context.data?.id).then(response => setCommentator(response.data))
         axios.get<Task>(ApiUrl() + "task/" + id).then(response => handleStateChange(response))
         axios.get<Progress[]>(ApiUrl() + "type/taskProgress").then(response => setProgressSelection(response.data))
         axios.get<TaskType[]>(ApiUrl() + "type/tasks").then(response => setTypeSelection(response.data))
@@ -57,6 +63,10 @@ const TaskDetailsPage = () => {
     const [progressSelection, setProgressSelection] = useState<Progress[]>([]);
     const [selectedProgress, setSelectedProgress] = useState<string>(progress);
     const [selectedType, setSelectedType] = useState<string>(taskType);
+    const [taskComments, setTaskComments] = useState<UserComment[]>([]);
+    const [commentator, setCommentator] = useState<User>({
+        email: "", firstName: "", id: null, lastName: "", role: "", username: ""
+    })
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         setTask(response.data)
@@ -129,6 +139,7 @@ const TaskDetailsPage = () => {
                     <Button onClick = {handleSave}>Save</Button>
                 </CardContent>
             </Card>
+            <Comments comments={taskComments} url ={"task"} entityId={task.taskId} setComments={setTaskComments} commentator={commentator}/>
         </Container>
     )
 }

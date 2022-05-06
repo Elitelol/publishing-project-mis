@@ -1,18 +1,24 @@
 import {Button, Card, CardContent, Container, TextField, Typography} from "@mui/material";
 import NavigationGroup from "../components/NavigationGroup";
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Budget from "../models/Budget";
 import axios, {AxiosResponse} from "axios";
 import ApiUrl from "../config/api.config";
 import Contract from "../models/Contract";
+import Comments from "../components/Comments";
+import UserComment from "../models/UserComment";
+import User from "../models/User";
+import {UserContext} from "../auth";
 
 const BudgetPage = () => {
 
     const {id} = useParams()
+    const [context, setContext] = useContext(UserContext);
 
     useEffect(() => {
         try{
+            axios.get<User>(ApiUrl() + "user/" + context.data?.id).then(response => setCommentator(response.data))
             axios.get<Contract>(ApiUrl() + "budget/" + id).then(response => handleStateChange(response));
         } catch (error) {
 
@@ -55,6 +61,10 @@ const BudgetPage = () => {
     const [deliveryToStorageRate, setDeliveryToStorageRate] = useState<number>(budget.deliveryToStorageRate);
     const [advertisingCost, setAdvertisingCost] = useState<number>(budget.advertisingCost);
     const [copyMailingCost, setCopyMailingCost] = useState<number>(budget.copyMailingCost);
+    const [budgetComments, setComments] = useState<UserComment[]>([]);
+    const [commentator, setCommentator] = useState<User>({
+        email: "", firstName: "", id: null, lastName: "", role: "", username: ""
+    })
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         setBudget(response.data)
@@ -74,6 +84,7 @@ const BudgetPage = () => {
         setDeliveryToStorageRate(response.data.deliveryToStorageRate)
         setAdvertisingCost(response.data.advertisingCost)
         setCopyMailingCost(response.data.copyMailingCost)
+        setComments(response.data.comments)
     }
 
     const handleSave = () => {
@@ -127,6 +138,9 @@ const BudgetPage = () => {
                    }
                </CardContent>
            </Card>
+           {
+               budget.budgetId !== null && <Comments comments={budgetComments} url ={"budget"} entityId={budget.budgetId} setComments={setComments} commentator={commentator}/>
+           }
        </Container>
    )
 }

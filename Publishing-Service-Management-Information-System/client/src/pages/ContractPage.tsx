@@ -1,18 +1,24 @@
 import {useParams} from "react-router-dom";
 import {Button, Card, CardContent, Container, TextField, Typography} from "@mui/material";
 import NavigationGroup from "../components/NavigationGroup";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Contract from "../models/Contract";
 import axios, {AxiosResponse} from "axios";
 import ApiUrl from "../config/api.config";
 import Publication from "../models/Publication";
+import Comments from "../components/Comments";
+import UserComment from "../models/UserComment";
+import User from "../models/User";
+import {UserContext} from "../auth";
 
 
 const ContractPage = () => {
     const {id} = useParams();
+    const [context, setContext] = useContext(UserContext);
 
     useEffect( () => {
         try{
+            axios.get<User>(ApiUrl() + "user/" + context.data?.id).then(response => setCommentator(response.data))
             axios.get<Contract>(ApiUrl() + "contract/" + id).then(response => handleStateChange(response));
         } catch (error) {
 
@@ -51,6 +57,10 @@ const ContractPage = () => {
     const [secondCoverPercent, setSecondCoverPercent] = useState<number>(contract.secondCoverPercent)
     const [secondCoverRate, setSecondCoverRate] = useState<number>(contract.secondCoverRate)
     const [withinMonthsAfterPublish, setWithinMonthsAfterPublish] = useState<number>(contract.withinMonthsAfterPublish)
+    const [contractComments, setComments] = useState<UserComment[]>([]);
+    const [commentator, setCommentator] = useState<User>({
+        email: "", firstName: "", id: null, lastName: "", role: "", username: ""
+    })
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         setContract(response.data)
@@ -127,6 +137,9 @@ const ContractPage = () => {
                     }
                 </CardContent>
             </Card>
+            {
+                contract.contractId !== null && <Comments comments={contractComments} url ={"contract"} entityId={contract.contractId} setComments={setComments} commentator={commentator}/>
+            }
         </Container>
     )
 }

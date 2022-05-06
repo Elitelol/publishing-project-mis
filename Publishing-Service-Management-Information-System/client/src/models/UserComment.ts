@@ -1,9 +1,11 @@
+import User from "./User";
+
 export default interface UserComment {
-    commentId: number
-    userId: number
+    commentId: number | null
+    user: User
     entityId: number
     posted: Date
     text: string
-    rootCommentId: number
+    rootCommentId: number | null
     replies: UserComment[]
 }

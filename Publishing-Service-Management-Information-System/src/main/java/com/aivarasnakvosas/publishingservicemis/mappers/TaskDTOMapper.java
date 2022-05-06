@@ -5,6 +5,7 @@ import com.aivarasnakvosas.publishingservicemis.dtos.UserView;
 import com.aivarasnakvosas.publishingservicemis.entity.AbstractBasicEntity;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
+import com.aivarasnakvosas.publishingservicemis.entity.TaskComment;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.TaskDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
@@ -59,7 +60,11 @@ public class TaskDTOMapper {
                 .map(user -> userDTOMapper.mapToView(user))
                 .collect(Collectors.toList());
         taskDTO.setResponsiblePeople(users);
-        List<CommentDTO> comments = task.getComments().stream()
+        List<TaskComment> distinctComments = task.getComments()
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
+        List<CommentDTO> comments = distinctComments.stream()
                 .filter(comment -> comment.getRootComment() == null)
                 .map(comment -> commentDTOMapper.mapToDTO(comment))
                 .collect(Collectors.toList());

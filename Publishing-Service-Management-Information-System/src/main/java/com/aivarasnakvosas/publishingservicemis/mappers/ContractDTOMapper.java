@@ -2,10 +2,12 @@ package com.aivarasnakvosas.publishingservicemis.mappers;
 
 import com.aivarasnakvosas.publishingservicemis.entity.Contract;
 import com.aivarasnakvosas.publishingservicemis.dtos.ContractDTO;
+import com.aivarasnakvosas.publishingservicemis.entity.ContractComment;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +52,11 @@ public class ContractDTOMapper {
         contractDTO.setSecondCoverPercent(contract.getSecondCoverPercent());
         contractDTO.setLastCoverRate(contract.getLastCoverRate());
         contractDTO.setLastCoverPercent(contract.getLastCoverPercent());
-        contractDTO.setComments(contract.getComments().stream()
+        List<ContractComment> distinctComments = contract.getComments()
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
+        contractDTO.setComments(distinctComments.stream()
                 .filter(comment -> comment.getRootComment() == null)
                 .map(contractComment -> commentDTOMapper.mapToDTO(contractComment))
                 .collect(Collectors.toList()));
