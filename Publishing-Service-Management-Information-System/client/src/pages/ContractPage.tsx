@@ -12,6 +12,9 @@ import User from "../models/User";
 import {UserContext} from "../auth";
 import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
+import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
+import {DatePicker} from "@mui/x-date-pickers";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 
 
 const ContractPage = () => {
@@ -119,7 +122,16 @@ const ContractPage = () => {
                 <Card>
                     <Typography variant = "h2">Contract details</Typography>
                     <CardContent>
-                        <TextField margin = "normal" fullWidth label = "Publish date" value={publishDate}/>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="Publish date"
+                                value={publishDate}
+                                onChange={(newValue) => {
+                                    setPublishDate(newValue);
+                                }}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
                         <TextField margin = "normal" fullWidth label = "Publication price" value = {publicationPrice} onChange={event => setPublicationPrice(parseFloat(event.target.value))}/>
                         <TextField margin = "normal" fullWidth label = "Amount on signing contract" value = {amountOnSigningContract} onChange={event => setAmountOnSigningContract(parseFloat(event.target.value))} />
                         <TextField margin = "normal" fullWidth label = "Amount on completing manuscript" value = {amountOfCompletedManuscript} onChange={event => setAmountOfCompletedManuscript(parseFloat(event.target.value))} />

@@ -61,7 +61,7 @@ public class AccessController {
     public ResponseEntity<AuthUser> getAuthenticatedUser(HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader("auth").substring(6);
         String username = jwtUtils.getUsernameFromJwtToken(token);
-        User user = userService.getUserByUsername(username);
+        User user = userService.findUserByUsername(username);
         AuthUserResponse authUserResponse = new AuthUserResponse(user.getId(), user.getRole().getRole());
         return ResponseEntity.ok(new AuthUser(authUserResponse));
     }

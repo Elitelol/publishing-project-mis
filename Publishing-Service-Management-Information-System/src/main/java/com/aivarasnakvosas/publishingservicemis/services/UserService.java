@@ -64,7 +64,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public User getUserByUsername(String username) {
+    public User findUserByUsername(String username) {
         Optional<User> user = userRepository.findUserByUsername(username);
         if (user.isEmpty()) {
             throw new EntityNotFoundException(User.class);
@@ -72,4 +72,8 @@ public class UserService {
         return user.get();
     }
 
+    public UserView getUserByUsername(String username) {
+        User user = findUserByUsername(username);
+        return userDTOMapper.mapToView(user);
+    }
 }

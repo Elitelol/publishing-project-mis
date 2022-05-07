@@ -6,7 +6,7 @@ import {
     CardContent,
     Container,
     FormControl,
-    InputLabel,
+    InputLabel, List, ListItem, ListItemButton, ListItemText,
     MenuItem,
     Select, SelectChangeEvent,
     TextField,
@@ -24,6 +24,10 @@ import {UserContext} from "../auth";
 import UserComment from "../models/UserComment";
 import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
+import {DatePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import Role from "../models/Role";
 
 const TaskDetailsPage = () => {
 
@@ -52,11 +56,11 @@ const TaskDetailsPage = () => {
 
     const [comments, setComments] = useState(task.comments)
     const [description, setDescription] = useState(task.description)
-    const [dueDate, setDueDate] = useState(task.dueDate)
+    const [dueDate, setDueDate] = useState<Date | null>(task.dueDate)
     const [progress, setProgress] = useState(task.progress)
     const [publicationId, setPublicationId] = useState(task.publicationId)
-    const [responsiblePeople, setResponsiblePeople] = useState(task.responsiblePeople)
-    const [startDate, setStartDate] = useState(task.startDate)
+    const [responsiblePeople, setResponsiblePeople] = useState<User[]>(task.responsiblePeople)
+    const [startDate, setStartDate] = useState<Date | null>(task.startDate)
     const [taskId, setTaskId] = useState(task.taskId)
     const [taskName, setTaskName] = useState(task.taskName)
     const [taskType, setTaskType] = useState(task.taskType)
@@ -66,9 +70,24 @@ const TaskDetailsPage = () => {
     const [selectedProgress, setSelectedProgress] = useState<string>(progress);
     const [selectedType, setSelectedType] = useState<string>(taskType);
     const [taskComments, setTaskComments] = useState<UserComment[]>([]);
+    const [addUserText, setAddUserText] = useState<string>("");
     const [commentator, setCommentator] = useState<User>({
         email: "", firstName: "", id: null, lastName: "", role: "", username: ""
     })
+    const [newResponsibleUser, setNewResponsibleUser] = useState<User>({
+        email: "",
+        firstName: "",
+        id: null,
+        lastName: "",
+        role: "",
+        username: ""
+    })
+    const [userId, setUserId] = useState<number | null>(null);
+    const [username, setUsername] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+    const [role, setRole] = useState<string>("");
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         setTask(response.data)
@@ -93,7 +112,7 @@ const TaskDetailsPage = () => {
         setSelectedType(event.target.value as string);
     }
 
-    const handleSave = () => [
+    const handleSave = () => {
         axios.post<Task>(ApiUrl() + "task", {
             taskId,
             taskName,
@@ -106,7 +125,49 @@ const TaskDetailsPage = () => {
             description,
             comments
         }).then(response => handleStateChange(response))
-    ]
+    }
+
+    const handleAddUser = () => {
+        axios.get<User>(ApiUrl() + "user/byUsername/" + addUserText).then(response => {
+            setUserId(response.data.id)
+            setUsername(response.data.username)
+            setEmail(response.data.email)
+            setFirstName(response.data.firstName)
+            setLastName(response.data.lastName)
+            setRole(response.data.role)
+        })
+        responsiblePeople.push({
+            id: userId,
+            username,
+            email,
+            firstName,
+            lastName,
+            role
+        })
+        axios.post<Task>(ApiUrl() + "task", {
+            taskId,
+            taskName,
+            taskType: selectedType,
+            startDate,
+            responsiblePeople,
+            publicationId,
+            progress: selectedProgress,
+            dueDate,
+            description,
+            comments
+        }).then(response => handleStateChange(response))
+        setUserId(null)
+        setUsername("")
+        setEmail("")
+        setFirstName("")
+        setLastName("")
+        setRole("")
+        setAddUserText("");
+    }
+
+    const handleRemoveUser = () => {
+
+    }
 
     return(
         <>
@@ -119,7 +180,30 @@ const TaskDetailsPage = () => {
                     <CardContent>
                         <TextField fullWidth label="Task name" margin = "normal" value={taskName} onChange = {event => setTaskName(event.target.value)}/>
                         <TextField fullWidth label="Task description" margin = "normal" value={description} onChange = {event => setDescription(event.target.value)}/>
-                        <TextField fullWidth label="Task responsible people" margin = "normal" value={responsiblePeople}/>
+                        <Typography variant = "h4">Responsible people</Typography>
+                        <List>
+                            {
+                                responsiblePeople.map(worker => {
+                                    return (
+                                        <ListItem>
+                                            <ListItemText primary={
+                                                <Typography>
+                                                    {worker.username + " (" + worker.firstName + " " + worker.lastName + ")"}
+                                                </Typography>
+                                            }
+                                                secondary={<ListItemButton onClick ={handleRemoveUser}>
+                                                    Remove
+                                                </ListItemButton>}
+                                            />
+                                        </ListItem>
+                                    )
+                                })
+                            }
+                        </List>
+                        <TextField fullWidth label = "Add responsible user by username" margin = "normal" value={addUserText} onChange={event => setAddUserText(event.target.value)} />
+                        {
+                            addUserText.length > 0 && <Button onClick = {handleAddUser}>Add</Button>
+                        }
                         <FormControl fullWidth margin = "normal">
                             <InputLabel>Task type</InputLabel>
                             <Select onChange = {handleTypeChange} value = {selectedType}>
@@ -130,8 +214,26 @@ const TaskDetailsPage = () => {
                                 }
                             </Select>
                         </FormControl>
-                        <TextField fullWidth label="Task start date" margin = "normal" value={startDate}/>
-                        <TextField fullWidth label="Task due date" margin = "normal" value={dueDate}/>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="Start date"
+                                value={startDate}
+                                onChange={(newValue) => {
+                                    setStartDate(newValue);
+                                }}
+                                renderInput={(params) => <TextField {...params} />}
+                             />
+                        </LocalizationProvider>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="Due date"
+                                value={dueDate}
+                                onChange={(newValue) => {
+                                    setDueDate(newValue);
+                                }}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
                         <FormControl fullWidth margin = "normal">
                             <InputLabel>Progress status</InputLabel>
                             <Select onChange = {handleProgressChange} value = {selectedProgress}>
