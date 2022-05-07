@@ -40,7 +40,7 @@ const ContractPage = () => {
         firstCoverRate: 0,
         lastCoverPercent: 0,
         lastCoverRate: 0,
-        publicationId: null,
+        publicationId: "",
         publicationPrice: 0,
         publishDate: null,
         secondCoverPercent: 0,
@@ -56,7 +56,6 @@ const ContractPage = () => {
     const [lastCoverPercent, setLastCoverPercent] = useState<number>(contract.lastCoverPercent)
     const [lastCoverRate, setLastCoverRate] = useState<number>(contract.lastCoverRate)
     const [contractId, setContractId] = useState<number | null>(contract.contractId)
-    const [publicationId, setPublicationId] = useState<number | null>(contract.publicationId)
     const [publicationPrice, setPublicationPrice] = useState<number>(contract.publicationPrice)
     const [publishDate, setPublishDate] = useState<Date | null>(contract.publishDate)
     const [secondCoverPercent, setSecondCoverPercent] = useState<number>(contract.secondCoverPercent)
@@ -87,7 +86,7 @@ const ContractPage = () => {
 
     const handleSave = () => {
         axios.post<Contract>(ApiUrl() + "contract", {
-            publicationId: typeof id === "string" ? parseInt(id) : null,
+            publicationId: id,
             contractId,
             publishDate,
             publicationPrice,
@@ -109,7 +108,13 @@ const ContractPage = () => {
     }
 
     const handleGenerateContract = () => {
-        axios.get(ApiUrl() + "contract/" + id + "/downloadContract");
+        axios.get(ApiUrl() + "contract/" + id + "/downloadContract", {responseType: "blob"}).then(response => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = "contract_" + id + ".pdf"
+            link.click()
+        })
     }
 
 

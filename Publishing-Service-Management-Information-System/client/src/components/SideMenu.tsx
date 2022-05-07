@@ -35,13 +35,23 @@ const SideMenu = () => {
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={() => navigate("/dashboard")}>
                         <ListItemIcon>
                             <InboxIcon />
                         </ListItemIcon>
                         <ListItemText primary="Projects" />
                     </ListItemButton>
                 </ListItem>
+                {
+                    state.data?.role === "Publication Manager" && <ListItem disablePadding>
+                        <ListItemButton onClick={() => navigate("/unmanagedWorks")}>
+                            <ListItemIcon>
+                                <InboxIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Unmanaged projects" />
+                        </ListItemButton>
+                    </ListItem>
+                }
                 <ListItem disablePadding>
                     <ListItemButton>
                         <ListItemIcon>

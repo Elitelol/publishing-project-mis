@@ -39,13 +39,33 @@ const AttachmentPage = () => {
 
     useEffect(() => {
         axios.get<AttachmentType[]>(ApiUrl() + "type/attachments").then(response => setTypeSelection(response.data))
-        axios.get<Attachment[]>(ApiUrl() + "attachment/" + id + "/manuscript").then(response => setManuscripts(response.data))
-        axios.get<Attachment[]>(ApiUrl() + "attachment/" + id + "/contract").then(response => setContracts(response.data))
-        axios.get<Attachment[]>(ApiUrl() + "attachment/" + id + "/task").then(response => setTasks(response.data))
-        axios.get<Attachment[]>(ApiUrl() + "attachment/" + id + "/cover").then(response => setCovers(response.data))
+        fetchManuscript()
+        fetchCover()
+        fetchContract()
+        fetchTask()
     }, [])
 
     const [open, setOpen] = useState<boolean>(false);
+
+    const fetchManuscript = () => {
+        axios.get<Attachment[]>(ApiUrl() + "attachment/" + id + "/manuscript").then(response => setManuscripts(response.data))
+    }
+
+    const fetchContract = () => {
+        axios.get<Attachment[]>(ApiUrl() + "attachment/" + id + "/contract").then(response => setContracts(response.data))
+    }
+
+    const fetchTask = () => {
+        axios.get<Attachment[]>(ApiUrl() + "attachment/" + id + "/task").then(response => setTasks(response.data))
+    }
+
+    const fetchCover = () => {
+        axios.get<Attachment[]>(ApiUrl() + "attachment/" + id + "/cover").then(response => setCovers(response.data))
+    }
+
+
+
+
 
     const handleOpen = () => {
         setOpen(true);
@@ -84,7 +104,12 @@ const AttachmentPage = () => {
             const formData = new FormData();
             formData.append("attachmentDTO", attachmentDto);
             formData.append("file", file, file.name);
-            axios.post(ApiUrl() + "attachment", formData)
+            axios.post(ApiUrl() + "attachment", formData).then(() => {
+                fetchManuscript()
+                fetchCover()
+                fetchContract()
+                fetchTask()
+            })
             handleClose()
         }
     }

@@ -14,6 +14,7 @@ import BudgetPage from "./pages/BudgetPage";
 import TaskPage from "./pages/TaskPage";
 import TaskDetailsPage from "./pages/TaskDetailsPage";
 import AttachmentPage from "./pages/AttachmentPage";
+import UnmanagedWorksPage from "./pages/UnmanagedWorksPage";
 
 function App() {
 
@@ -27,6 +28,9 @@ function App() {
                   <Route path = "/signup" element={<SignUpPage/>}/>
                   <Route path = "/dashboard" element={<ProtectedRoute/>}>
                       <Route path = "/dashboard" element={<DashboardPage/>}/>
+                  </Route>
+                  <Route path = "/unmanagedWorks" element={<ProtectedRoute/>}>
+                      <Route path = "/unmanagedWorks" element={<UnmanagedWorksPage/>}/>
                   </Route>
                   <Route path = "/publication/:id" element={<ProtectedRoute/>}>
                       <Route path = "/publication/:id" element={<PublicationDetailsPage/>}/>

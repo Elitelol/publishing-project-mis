@@ -41,7 +41,7 @@ const LoginPage = () => {
     return <>
         <Container>
             <Card>
-                <CardHeader title = "Publishing Management"/>
+                <CardHeader title = "Publishing House Project Management System"/>
                 <CardContent>
                     <TextField fullWidth label="Username" margin = "normal" onChange = {event => setUsername(event.target.value)}/>
                     <TextField fullWidth label="Password" type = "password" onChange = {event => setPassword(event.target.value)}/>

@@ -1,7 +1,7 @@
 import UserComment from "./UserComment";
 
 export default interface Budget {
-    publicationId: number | null
+    publicationId: string | undefined
     budgetId: number | null
     pageNumber: number
     numberOfCopies: number

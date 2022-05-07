@@ -51,7 +51,7 @@ const DashboardPage = () => {
             <Navbar/>
             <SideMenu/>
             <Container >
-                <Publications publications = {publications}/>
+                <Publications publications = {publications} publicationText={"My publication works"}/>
             </Container>
         </>
     )

@@ -31,7 +31,12 @@ const style = {
     p: 4,
 };
 
-const Publications = ({publications}: any) => {
+type Props = {
+    publications: Publication[],
+    publicationText: string
+}
+
+const Publications = ({publications, publicationText}: Props) => {
     const [open, setOpen] = useState<boolean>(false);
     const navigate = useNavigate();
     const [context, setContext] = useContext(UserContext);
@@ -97,7 +102,7 @@ const Publications = ({publications}: any) => {
 
     return (
         <>
-            <Typography variant = "h2" >My publication works</Typography>
+            <Typography variant = "h2" >{publicationText}</Typography>
             {
                 context.data?.role === "Author" ? <Button onClick = {handleOpen}>Add new publication</Button> : ""
             }

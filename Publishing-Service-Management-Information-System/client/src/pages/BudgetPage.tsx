@@ -41,13 +41,12 @@ const BudgetPage = () => {
         numberOfCopies: 0,
         printingRate: 0,
         proofReadingRate: 0,
-        publicationId: null,
+        publicationId: "",
         purchaseOfPhotosQuantity: 0,
         purchaseOfPhotosRate: 0,
         pageNumber: 0
     })
 
-    const [publicationId, setPublicationId] = useState<number | null>(budget.publicationId);
     const [budgetId, setBudgetId] = useState<number | null>(budget.budgetId);
     const [pageNumber, setPageNumber] = useState<number>(budget.pageNumber);
     const [numberOfCopies, setNumberOfCopies] = useState<number>(budget.numberOfCopies);
@@ -70,7 +69,6 @@ const BudgetPage = () => {
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         setBudget(response.data)
-        setPublicationId(response.data.publicationId)
         setBudgetId(response.data.budgetId)
         setPageNumber(response.data.pageNumber)
         setNumberOfCopies(response.data.numberOfCopies)
@@ -91,7 +89,7 @@ const BudgetPage = () => {
 
     const handleSave = () => {
         axios.post<Budget>(ApiUrl() + "budget",{
-            publicationId: typeof id === "string" ? parseInt(id) : null,
+            publicationId: id,
             budgetId,
             pageNumber,
             numberOfCopies,
@@ -111,7 +109,13 @@ const BudgetPage = () => {
     }
 
     const handleGetReport = () => {
-        axios.get(ApiUrl() + "budget/" + id + "/downloadBudget");
+        axios.get(ApiUrl() + "budget/" + id + "/downloadBudget", {responseType: "blob"}).then(response => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = "budget_" + id + ".pdf"
+            link.click()
+        })
     }
 
    return(

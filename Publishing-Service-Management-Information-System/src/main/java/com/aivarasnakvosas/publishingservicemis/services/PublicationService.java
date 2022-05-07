@@ -171,7 +171,7 @@ public class PublicationService {
     }
 
     public List<PublicationDTO> getUnmanagedPublications() {
-        List<Publication> publications = publicationRepository.findUnmanagedPublications();
+        List<Publication> publications = publicationRepository.findPublicationsByManagerIsNullAndProgressStatus(ProgressStatus.NOT_STARTED);
         return getPublicationDTOS(publications);
     }
 

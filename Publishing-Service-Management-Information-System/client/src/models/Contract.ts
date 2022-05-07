@@ -1,7 +1,7 @@
 import UserComment from "./UserComment";
 
 export default interface Contract {
-    publicationId: number | null
+    publicationId: string | undefined
     contractId: number | null
     publishDate: Date | null
     publicationPrice: number

@@ -15,6 +15,10 @@ const AttachmentRow = ({value} : Attachment | any) => {
         })
     }
 
+    const handleDelete = () => {
+        axios.delete(ApiUrl() + "attachment/" + value.attachmentId)
+    }
+
     return(
         <TableRow key={value.attachmentId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
             <TableCell align="right">{value.fileName}</TableCell>
@@ -23,6 +27,9 @@ const AttachmentRow = ({value} : Attachment | any) => {
             <TableCell align="right">
                 <Button variant = "text" onClick ={handleDownload}>
                     Download
+                </Button>
+                <Button variant = "text" onClick ={handleDelete}>
+                    Delete
                 </Button>
             </TableCell>
         </TableRow>
