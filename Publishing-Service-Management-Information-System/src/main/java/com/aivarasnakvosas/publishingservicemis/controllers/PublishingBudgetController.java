@@ -6,6 +6,9 @@ import com.aivarasnakvosas.publishingservicemis.services.ExportPDFService;
 import com.aivarasnakvosas.publishingservicemis.services.PublishingBudgetService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,13 +54,15 @@ public class PublishingBudgetController {
     }
 
     @GetMapping(value = "/{id}/downloadBudget")
-    public void downloadBudgetPDF(@PathVariable Long id, HttpServletResponse httpServletResponse) throws IOException {
+    public ResponseEntity<byte[]> downloadBudgetPDF(@PathVariable Long id) {
         Map<String, Object> data = publishingBudgetService.getBudgetDataForPDF(id);
-        String header = "attachment; filename =" + id.toString() + "_" + "budget.pdf";
-        ByteArrayInputStream byteArrayInputStream = exportPDFService.exportPDF("budget", data);
-        httpServletResponse.setContentType("application/octet-stream");
-        httpServletResponse.setHeader("Content-Disposition", header);
-        IOUtils.copy(byteArrayInputStream, httpServletResponse.getOutputStream());
+        String headerString = "attachment; filename =" + id.toString() + "_" + "budget.pdf";
+        byte[] bytes = exportPDFService.exportPDF("budget", data);
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        header.setContentLength(bytes.length);
+        header.set("Content-Disposition", headerString);
+        return new ResponseEntity<>(bytes, header, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/deleteComment")

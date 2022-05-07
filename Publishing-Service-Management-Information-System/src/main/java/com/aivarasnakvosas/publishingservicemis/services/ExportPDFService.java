@@ -24,22 +24,20 @@ public class ExportPDFService {
     @Autowired
     private TemplateEngine templateEngine;
 
-    public ByteArrayInputStream exportPDF(String templateName, Map<String, Object> data) {
+    public byte[] exportPDF(String templateName, Map<String, Object> data) {
         Context context = new Context();
         context.setVariables(data);
         String htmlContent = templateEngine.process(templateName, context);
-        ByteArrayInputStream byteArrayInputStream = null;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ITextRenderer iTextRenderer = new ITextRenderer();
             iTextRenderer.setDocumentFromString(htmlContent);
             iTextRenderer.layout();
             iTextRenderer.createPDF(byteArrayOutputStream, false);
             iTextRenderer.finishPDF();
-            byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
         } catch (DocumentException e) {
             logger.error(e.getMessage());
         }
-        return byteArrayInputStream;
+        return byteArrayOutputStream.toByteArray();
     }
 }
