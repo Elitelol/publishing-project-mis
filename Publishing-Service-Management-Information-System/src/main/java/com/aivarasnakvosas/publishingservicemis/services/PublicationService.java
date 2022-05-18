@@ -1,6 +1,7 @@
 package com.aivarasnakvosas.publishingservicemis.services;
 
 import com.aivarasnakvosas.publishingservicemis.dtos.UserView;
+import com.aivarasnakvosas.publishingservicemis.entity.AbstractBasicEntity;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -204,5 +206,24 @@ public class PublicationService {
                     publication.getId(), publication.getProgressStatus().getStatus()));
         }
         publicationRepository.delete(publication);
+    }
+
+    //...
+    public List<Long> getAssociatedUsers(Long id) {
+        Publication publication = findPublication(id);
+        List<Long> ids = publication.getAuthors().stream()
+                .map(AbstractBasicEntity::getId).collect(Collectors.toList());
+        List<Long> workerIds = new ArrayList<>();
+        publication.getTasks().forEach(task -> workerIds.addAll(
+                    task.getResponsiblePeople().stream()
+                        .map(AbstractBasicEntity::getId)
+                        .collect(Collectors.toList())
+                )
+        );
+        ids.addAll(workerIds);
+        if (publication.getManager() != null) {
+            ids.add(publication.getManager().getId());
+        }
+        return ids;
     }
 }

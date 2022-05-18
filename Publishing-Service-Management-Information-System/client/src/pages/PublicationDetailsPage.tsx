@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import Genre from "../models/Genre";
 import Language from "../models/Language";
-import Progress from "../models/Progress";
 import PublicationType from "../models/PublicationType";
 import NavigationGroup from "../components/NavigationGroup";
 import User from "../models/User";
@@ -44,6 +43,7 @@ const PublicationDetailsPage = () => {
     const {id} = useParams();
     const navigate = useNavigate();
     const [context, setContext] = useContext(UserContext);
+    const [allowedUsers, setAllowedUsers] = useState<number[]>([]);
 
     const [publication, setPublication] = useState<Publication>({
         attachments: [],
@@ -67,23 +67,20 @@ const PublicationDetailsPage = () => {
     })
 
     const [types, setTypes] = useState<PublicationType[]>([]);
-    const [progresses, setProgress] = useState<Progress[]>([]);
     const [genres, setGenres] = useState<Genre[]>([]);
     const [languages, setLanguages] = useState<Language[]>([]);
     const [open, setOpen] = useState<boolean>(false);
+    const [disabled, setDisabled] = useState<boolean>(true);
 
     useEffect(() => {
         const typeUrl = "type/";
         if (id !== "new") {
             axios.get(ApiUrl() + "publication/" + id).then(response => {
                 handleStateChange(response)
-            });
+            })
         }
         axios.get(ApiUrl() + typeUrl + "publications").then(response => {
             setTypes(response.data)
-        })
-        axios.get(ApiUrl() + typeUrl + "progress").then(response => {
-            setProgress(response.data)
         })
         axios.get(ApiUrl() + typeUrl + "genres").then(response => {
             setGenres(response.data)
@@ -106,11 +103,14 @@ const PublicationDetailsPage = () => {
     const [price, setPrice] = useState<number | null>(publication?.price);
     const [manager, setManager] = useState<User | null>(publication?.manager);
     const [rejectionText, setRejectionText] = useState<string>("");
+    const [unallowedToClick, setUnallowedToClick] = useState<boolean>(false);
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
+        const currentStatus = response.data.progressStatus;
+        const responseAuthors = response.data.authors;
         setPublication(response.data)
         setPublicationId(response.data.publicationId)
-        setAuthors(response.data.authors)
+        setAuthors(responseAuthors)
         setName(response.data.name)
         setPublicationType(response.data.publicationType)
         setRejectionReason(response.data.rejectionReason)
@@ -120,7 +120,18 @@ const PublicationDetailsPage = () => {
         setGenre(response.data.genre)
         setLanguage(response.data.language)
         setManager(response.data.manager)
-        setProgressStatus(response.data.progressStatus)
+        setProgressStatus(currentStatus)
+        const authorIds = responseAuthors.map((user: { id: any; }) => {
+            return user.id;
+        })
+        setDisabled(!(!authorIds.includes(context.data?.id) || context.data?.id !== response.data.manager.id));
+        axios.get(ApiUrl() + "publication/" + id + "/users").then(response => handleUserChange(response, currentStatus))
+    }
+
+    const handleUserChange = (response: AxiosResponse<any, any>, currentStatus: any) => {
+        setAllowedUsers(response.data);
+        setUnallowedToClick( !response.data.includes(context.data?.id as number) ||
+            (currentStatus === "Not Submitted" || currentStatus === "Rejected" || currentStatus === "Not Started" || currentStatus === "In Review"))
     }
 
     const handleOpen = () => {
@@ -166,13 +177,9 @@ const PublicationDetailsPage = () => {
         setPublicationType(event.target.value as string);
     }
 
-    const handleProgressChange = (event: SelectChangeEvent) => {
-        setProgressStatus(event.target.value as string);
-    }
-
     const handleAssign = () => {
         axios.post<Publication>(ApiUrl() + "publication/assign/?publicationId=" + id + "&managerId=" + context.data?.id).then(response => handleStateChange(response));
-        handleDisabled()
+        handleDisabled();
     }
 
     const handleAccept = () => {
@@ -196,8 +203,6 @@ const PublicationDetailsPage = () => {
         handleDisabled()
     }
 
-    const [disabled, setDisabled] = useState<boolean>(false);
-
     const handleDisabled = () => {
         setDisabled(true);
     }
@@ -214,13 +219,13 @@ const PublicationDetailsPage = () => {
                         <Button onClick = {handleReject}>Reject</Button>
                     </Box>
                 </Modal>
-                <NavigationGroup id = {id} pubStatus = {publication.progressStatus}/>
+                <NavigationGroup id = {id} unallowedToClick={unallowedToClick} unallowedAttach={!allowedUsers.includes(context.data?.id as number)}/>
                 <Card>
                     <Typography variant = "h2">Publication details</Typography>
                     <CardContent>
-                        <TextField disabled fullWidth label="Publication id" margin = "normal" value={publication.publicationId} onChange = {event => setPublicationId(parseInt(event.target.value))}/>
+                        <TextField disabled fullWidth label="Publication id" margin = "normal" value={publication.publicationId}/>
                         <TextField disabled = {disabled} fullWidth label="Publication name" margin = "normal" value={name} onChange = {event => setName(event.target.value)}/>
-                        <TextField disabled = {disabled} fullWidth label = "Publication authors" margin = "normal" value = {
+                        <TextField disabled fullWidth label = "Publication authors" margin = "normal" value = {
                             publication.authors.map(user => {
                                 return user.firstName + " " + user.lastName;
                             })
@@ -235,13 +240,13 @@ const PublicationDetailsPage = () => {
                                 }
                             </Select>
                         </FormControl>
-                        <TextField disabled fullWidth label="Progress status" value ={progressStatus}/>
-                        <TextField disabled fullWidth label="Publication rejection reason" margin = "normal" value={publication.rejectionReason} onChange = {event => setRejectionReason(event.target.value)}/>
-                        <TextField fullWidth label="Publication ISBN" margin = "normal" value={publication.isbn} onChange = {event => setIsbn(event.target.value)}/>
-                        <TextField disabled fullWidth label="Publication page number" margin = "normal" value={publication.pageNumber} onChange = {event => setPageNumber(parseInt(event.target.value))}/>
-                        <FormControl disabled = {disabled} fullWidth margin = "normal">
+                        <TextField disabled fullWidth label="Progress status" value ={publication.progressStatus}/>
+                        <TextField disabled fullWidth label="Publication rejection reason" margin = "normal" value={publication.rejectionReason}/>
+                        <TextField fullWidth label="Publication ISBN" margin = "normal" value={publication.isbn}/>
+                        <TextField disabled fullWidth label="Publication page number" margin = "normal" value={publication.pageNumber}/>
+                        <FormControl fullWidth margin = "normal">
                             <InputLabel>Publication language</InputLabel>
-                            <Select onChange = {handleLanguageChange} value = {language}>
+                            <Select disabled = {disabled} onChange = {handleLanguageChange} value = {language}>
                                 {
                                     languages.map(t => {
                                         return <MenuItem value = {t.language}> {t.language} </MenuItem>
@@ -251,7 +256,7 @@ const PublicationDetailsPage = () => {
                         </FormControl>
                         <FormControl disabled = {disabled} fullWidth margin = "normal">
                             <InputLabel>Publication genre</InputLabel>
-                            <Select onChange = {handleGenreChange} value = {genre}>
+                            <Select disabled = {disabled} onChange = {handleGenreChange} value = {genre}>
                                 {
                                     genres.map(t => {
                                         return <MenuItem value = {t.genre}> {t.genre} </MenuItem>
@@ -259,7 +264,7 @@ const PublicationDetailsPage = () => {
                                 }
                             </Select>
                         </FormControl>
-                        <TextField type="number" disabled fullWidth label="Publication price" margin = "normal" value={publication.price} onChange = {event => setPrice(parseFloat(event.target.value))}/>
+                        <TextField disabled type="number" fullWidth label="Publication price" margin = "normal" value={publication.price}/>
                         <TextField disabled fullWidth label="Publication manager" margin = "normal" value={publication.manager?.firstName + " " + publication.manager?.lastName}/>
                         <Button onClick = {handleSave}>Save</Button>
                         {publication.progressStatus === "Not Submitted" ?

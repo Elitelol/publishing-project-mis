@@ -130,14 +130,18 @@ const TaskPage = () => {
             <Navbar/>
             <SideMenu/>
             <Container>
-                <NavigationGroup id = {id}/>
+                <NavigationGroup id = {id} unallowedToClick={false} unallowedAttach={false}/>
                 <Typography variant = "h2">Publication tasks</Typography>
                 <Button onClick={handleNotCompleted}>Not started tasks</Button>
                 <Button onClick={handleInProgress}>In progress tasks</Button>
                 <Button onClick={handleCompleted}>Completed tasks</Button>
-                <Button onClick={handleUsers}>My tasks</Button>
+                {
+                    context.data?.role === "Worker" && <Button onClick={handleUsers}>My tasks</Button>
+                }
                 <Container>
-                    <Button onClick={handleOpen}>Add task</Button>
+                    {
+                        context.data?.role === "Publication Manager" && <Button onClick={handleOpen}>Add task</Button>
+                    }
                 </Container>
                 <Modal open = {open} onClose = {handleClose}>
                     <Box sx = {style}>

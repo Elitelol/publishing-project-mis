@@ -63,10 +63,6 @@ const AttachmentPage = () => {
         axios.get<Attachment[]>(ApiUrl() + "attachment/" + id + "/cover").then(response => setCovers(response.data))
     }
 
-
-
-
-
     const handleOpen = () => {
         setOpen(true);
     }
@@ -165,7 +161,7 @@ const AttachmentPage = () => {
                 </Box>
             </Modal>
             <Container>
-                <NavigationGroup id = {id}/>
+                <NavigationGroup id = {id} unallowedToClick={false} unallowedAttach={false}/>
                 <Typography variant = "h2">Publication attachments</Typography>
                 <Button onClick={handleManuscript}>Manuscripts</Button>
                 <Button onClick={handleTask}>Tasks</Button>

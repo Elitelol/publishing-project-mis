@@ -1,5 +1,16 @@
 import {useParams} from "react-router-dom";
-import {Button, Card, CardContent, Container, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Container,
+    FormControl,
+    InputLabel, MenuItem, Modal,
+    Select,
+    TextField,
+    Typography
+} from "@mui/material";
 import NavigationGroup from "../components/NavigationGroup";
 import React, {useContext, useEffect, useState} from "react";
 import Contract from "../models/Contract";
@@ -16,6 +27,17 @@ import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {DatePicker} from "@mui/x-date-pickers";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 const ContractPage = () => {
     const {id} = useParams();
@@ -65,6 +87,16 @@ const ContractPage = () => {
     const [commentator, setCommentator] = useState<User>({
         email: "", firstName: "", id: null, lastName: "", role: "", username: ""
     })
+    const [disabled, setDisabled] = useState<boolean>(true);
+    const [open, setOpen] = useState<boolean>(false);
+    const [file, setFile] = useState<File>();
+
+    const handleOpen = () => {
+        setOpen(true);
+    }
+    const handleClose = () => {
+        setOpen(false);
+    }
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         setContract(response.data)
@@ -82,6 +114,7 @@ const ContractPage = () => {
         setLastCoverRate(response.data.lastCoverRate)
         setLastCoverPercent(response.data.lastCoverPercent)
         setComments(response.data.comments)
+        setDisabled(context.data?.role !== "Publication Manager");
     }
 
     const handleSave = () => {
@@ -117,18 +150,46 @@ const ContractPage = () => {
         })
     }
 
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const fileList = event.target.files;
+        if (!fileList) {
+            return
+        }
+        setFile(fileList[0]);
+    }
+
+    const handleUpload = () => {
+        if (file) {
+            const attachmentDto = "{\"publicationId\":" + id + "," + "\"attachmentType\":" + "\"" + "Contract" + "\"" + "}";
+            const formData = new FormData();
+            formData.append("attachmentDTO", attachmentDto);
+            formData.append("file", file, file.name);
+            axios.post(ApiUrl() + "attachment", formData);
+            handleClose()
+        }
+    }
+
 
     return(
         <>
             <Navbar/>
             <SideMenu/>
+            <Modal open = {open} onClose = {handleClose}>
+                <Box sx = {style}>
+                    <Typography variant = "h3">Submit contract</Typography>
+                    <input onChange={event => handleFileChange(event)} type="file" multiple ={false}/>
+                    <Button onClick ={handleUpload}>Upload</Button>
+                </Box>
+            </Modal>
             <Container>
-                <NavigationGroup id = {id}/>
+                <NavigationGroup id = {id} unallowedToClick={false} unallowedAttach={false}/>
                 <Card>
                     <Typography variant = "h2">Contract details</Typography>
                     <CardContent>
+                        <Typography margin = "normal" variant = "h4">Publication release date and price</Typography>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
+                                disabled={disabled}
                                 label="Publish date"
                                 value={publishDate}
                                 onChange={(newValue) => {
@@ -137,26 +198,32 @@ const ContractPage = () => {
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </LocalizationProvider>
-                        <TextField margin = "normal" fullWidth label = "Publication price" value = {publicationPrice} onChange={event => setPublicationPrice(parseFloat(event.target.value))}/>
-                        <TextField margin = "normal" fullWidth label = "Amount on signing contract" value = {amountOnSigningContract} onChange={event => setAmountOnSigningContract(parseFloat(event.target.value))} />
-                        <TextField margin = "normal" fullWidth label = "Amount on completing manuscript" value = {amountOfCompletedManuscript} onChange={event => setAmountOfCompletedManuscript(parseFloat(event.target.value))} />
-                        <TextField margin = "normal" fullWidth label = "Amount on initial publish" value = {amountOnInitialPublish} onChange={event => setAmountOnInitialPublish(parseFloat(event.target.value))} />
-                        <TextField margin = "normal" fullWidth label = "Within months after publish" value = {withinMonthsAfterPublish} onChange={event => setWithinMonthsAfterPublish(parseFloat(event.target.value))}/>
-                        <TextField margin = "normal" fullWidth label = "First cover rate" value = {firstCoverRate} onChange={event => setFirstCoverRate(parseFloat(event.target.value))}/>
-                        <TextField margin = "normal" fullWidth label = "First cover percent" value = {firstCoverPercent} onChange={event => setFirstCoverPercent(parseFloat(event.target.value))} />
-                        <TextField margin = "normal" fullWidth label = "Second cover rate" value = {secondCoverRate} onChange={event => setSecondCoverRate(parseFloat(event.target.value))}/>
-                        <TextField margin = "normal" fullWidth label = "Second cover percent" value = {secondCoverPercent} onChange={event => setSecondCoverPercent(parseFloat(event.target.value))} />
-                        <TextField margin = "normal" fullWidth label = "Last cover rate" value = {lastCoverRate} onChange={event => setLastCoverRate(parseFloat(event.target.value))}/>
-                        <TextField margin = "normal" fullWidth label = "Last cover percent" value={lastCoverPercent} onChange={event => setLastCoverPercent(parseFloat(event.target.value))} />
-                        <Button onClick = {handleSave}>Save contract details</Button>
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Publication price" value = {publicationPrice} onChange={event => setPublicationPrice(parseFloat(event.target.value))}/>
+                        <Typography margin = "normal" variant = "h4">Author compensation</Typography>
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Amount on signing contract" value = {amountOnSigningContract} onChange={event => setAmountOnSigningContract(parseFloat(event.target.value))} />
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Amount on completing manuscript" value = {amountOfCompletedManuscript} onChange={event => setAmountOfCompletedManuscript(parseFloat(event.target.value))} />
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Amount on initial publish" value = {amountOnInitialPublish} onChange={event => setAmountOnInitialPublish(parseFloat(event.target.value))} />
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Paid within months after publish" value = {withinMonthsAfterPublish} onChange={event => setWithinMonthsAfterPublish(parseFloat(event.target.value))}/>
+                        <Typography margin = "normal" variant = "h4">First cover</Typography>
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "First cover rate" value = {firstCoverRate} onChange={event => setFirstCoverRate(parseFloat(event.target.value))}/>
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "First cover percent" value = {firstCoverPercent} onChange={event => setFirstCoverPercent(parseFloat(event.target.value))} />
+                        <Typography margin = "normal" variant = "h4">Second cover</Typography>
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Second cover rate" value = {secondCoverRate} onChange={event => setSecondCoverRate(parseFloat(event.target.value))}/>
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Second cover percent" value = {secondCoverPercent} onChange={event => setSecondCoverPercent(parseFloat(event.target.value))} />
+                        <Typography margin = "normal" variant = "h4">Last cover</Typography>
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Last cover rate" value = {lastCoverRate} onChange={event => setLastCoverRate(parseFloat(event.target.value))}/>
+                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Last cover percent" value={lastCoverPercent} onChange={event => setLastCoverPercent(parseFloat(event.target.value))} />
                         {
-                            contractId !== null ? <Button onClick = {handleGenerateContract}>Generate contract</Button> : ""
+                            context.data?.role === "Publication Manager" && <Button onClick = {handleSave}>Save contract details</Button>
                         }
                         {
-                            contractId !== null ? <Button>Submit signed contract</Button> : ""
+                            context.data?.role === "Publication Manager" && contractId !== null ? <Button onClick = {handleGenerateContract}>Generate contract</Button> : ""
                         }
                         {
-                            contractId !== null ? <Button onClick ={handleContractSigned}>Set contract signed</Button> : ""
+                            context.data?.role === "Author" && contractId !== null ? <Button onClick = {handleOpen}>Submit signed contract</Button> : ""
+                        }
+                        {
+                            context.data?.role === "Publication Manager" && contractId !== null ? <Button onClick ={handleContractSigned}>Set contract signed</Button> : ""
                         }
                     </CardContent>
                 </Card>

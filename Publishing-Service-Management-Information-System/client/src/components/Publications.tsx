@@ -120,7 +120,7 @@ const Publications = ({publications, publicationText}: Props) => {
                             }
                         </Select>
                     </FormControl>
-                    <FormControl fullWidth>
+                    <FormControl fullWidth margin = "normal">
                         <InputLabel>Publication language</InputLabel>
                         <Select onChange = {handleLanguageChange} value = {language}>
                             {
@@ -130,7 +130,7 @@ const Publications = ({publications, publicationText}: Props) => {
                             }
                         </Select>
                     </FormControl>
-                    <FormControl fullWidth>
+                    <FormControl fullWidth margin = "normal">
                         <InputLabel>Publication genre</InputLabel>
                         <Select onChange = {handleGenreChange} value = {genre}>
                             {

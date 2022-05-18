@@ -27,7 +27,6 @@ import SideMenu from "../components/SideMenu";
 import {DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import Role from "../models/Role";
 
 const TaskDetailsPage = () => {
 
@@ -88,20 +87,26 @@ const TaskDetailsPage = () => {
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
     const [role, setRole] = useState<string>("");
+    const [disabled, setDisabled] = useState<boolean>(true);
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
+        const newResponsiblePeople = response.data.responsiblePeople;
         setTask(response.data)
         setComments(response.data.comments)
         setDescription(response.data.description)
         setDueDate(response.data.dueDate)
         setProgress(response.data.progress)
         setPublicationId(response.data.publicationId)
-        setResponsiblePeople(response.data.responsiblePeople)
+        setResponsiblePeople(newResponsiblePeople)
         setStartDate(response.data.startDate)
         setTaskId(response.data.taskId)
         setTaskName(response.data.taskName)
         setTaskType(response.data.taskType)
         setTaskComments(response.data.comments)
+        const userIds = newResponsiblePeople.map((user: { id: any; }) => {
+            return user.id;
+        })
+        setDisabled(!(userIds.includes(context.data?.id) || context.data?.role === "Publication Manager"));
     }
 
     const handleProgressChange = (event: SelectChangeEvent) => {
@@ -174,12 +179,12 @@ const TaskDetailsPage = () => {
             <Navbar/>
             <SideMenu/>
             <Container>
-                <NavigationGroup id = {task.publicationId} />
+                <NavigationGroup id = {task.publicationId} unallowedToClick={false} unallowedAttach={false}/>
                 <Card>
                     <Typography variant = "h2">Task details</Typography>
                     <CardContent>
-                        <TextField fullWidth label="Task name" margin = "normal" value={taskName} onChange = {event => setTaskName(event.target.value)}/>
-                        <TextField fullWidth label="Task description" margin = "normal" value={description} onChange = {event => setDescription(event.target.value)}/>
+                        <TextField disabled={disabled} fullWidth label="Task name" margin = "normal" value={taskName} onChange = {event => setTaskName(event.target.value)}/>
+                        <TextField disabled={disabled} fullWidth label="Task description" margin = "normal" value={description} onChange = {event => setDescription(event.target.value)}/>
                         <Typography variant = "h4">Responsible people</Typography>
                         <List>
                             {
@@ -191,7 +196,7 @@ const TaskDetailsPage = () => {
                                                     {worker.username + " (" + worker.firstName + " " + worker.lastName + ")"}
                                                 </Typography>
                                             }
-                                                secondary={<ListItemButton onClick ={handleRemoveUser}>
+                                                secondary={<ListItemButton disabled={context.data?.role !== "Publication Manager"} onClick ={handleRemoveUser}>
                                                     Remove
                                                 </ListItemButton>}
                                             />
@@ -200,13 +205,14 @@ const TaskDetailsPage = () => {
                                 })
                             }
                         </List>
-                        <TextField fullWidth label = "Add responsible user by username" margin = "normal" value={addUserText} onChange={event => setAddUserText(event.target.value)} />
+                        <TextField disabled={context.data?.role !== "Publication Manager"} fullWidth label = "Add responsible user by username" margin = "normal"
+                                   value={addUserText} onChange={event => setAddUserText(event.target.value)} />
                         {
                             addUserText.length > 0 && <Button onClick = {handleAddUser}>Add</Button>
                         }
                         <FormControl fullWidth margin = "normal">
                             <InputLabel>Task type</InputLabel>
-                            <Select onChange = {handleTypeChange} value = {selectedType}>
+                            <Select disabled={context.data?.role !== "Publication Manager"} onChange = {handleTypeChange} value = {selectedType}>
                                 {
                                     typeSelection.map(t => {
                                         return <MenuItem value = {t.type}> {t.type} </MenuItem>
@@ -216,6 +222,7 @@ const TaskDetailsPage = () => {
                         </FormControl>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
+                                disabled={context.data?.role !== "Publication Manager"}
                                 label="Start date"
                                 value={startDate}
                                 onChange={(newValue) => {
@@ -226,6 +233,7 @@ const TaskDetailsPage = () => {
                         </LocalizationProvider>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
+                                disabled={context.data?.role !== "Publication Manager"}
                                 label="Due date"
                                 value={dueDate}
                                 onChange={(newValue) => {
@@ -236,7 +244,7 @@ const TaskDetailsPage = () => {
                         </LocalizationProvider>
                         <FormControl fullWidth margin = "normal">
                             <InputLabel>Progress status</InputLabel>
-                            <Select onChange = {handleProgressChange} value = {selectedProgress}>
+                            <Select disabled={disabled} onChange = {handleProgressChange} value = {selectedProgress}>
                                 {
                                     progressSelection.map(t => {
                                         return <MenuItem value = {t.status}> {t.status} </MenuItem>
@@ -244,7 +252,9 @@ const TaskDetailsPage = () => {
                                 }
                             </Select>
                         </FormControl>
-                        <Button onClick = {handleSave}>Save</Button>
+                        {
+                            !disabled && <Button onClick = {handleSave}>Save</Button>
+                        }
                     </CardContent>
                 </Card>
                 <Comments comments={taskComments} url ={"task"} entityId={task.taskId} setComments={setTaskComments} commentator={commentator}/>

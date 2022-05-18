@@ -97,4 +97,9 @@ public class PublicationController {
         publicationService.deletePublication(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(value = "/{id}/users")
+    ResponseEntity<List<Long>> getAssociatedUsersWithPublication(@PathVariable Long id) {
+        return ResponseEntity.ok(publicationService.getAssociatedUsers(id));
+    }
 }
