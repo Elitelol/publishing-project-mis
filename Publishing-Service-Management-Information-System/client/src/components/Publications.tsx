@@ -104,7 +104,7 @@ const Publications = ({publications, publicationText}: Props) => {
         <>
             <Typography variant = "h2" >{publicationText}</Typography>
             {
-                context.data?.role === "Author" ? <Button onClick = {handleOpen}>Add new publication</Button> : ""
+                context.data?.role === "Author" && publicationText === "My publication works" ? <Button onClick = {handleOpen}>Add new publication</Button> : ""
             }
             <Modal open = {open} onClose = {handleClose}>
                 <Box sx = {style}>

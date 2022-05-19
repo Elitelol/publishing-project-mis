@@ -3,6 +3,7 @@ package com.aivarasnakvosas.publishingservicemis.services;
 import com.aivarasnakvosas.publishingservicemis.dtos.UserView;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.UserDTO;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.Role;
 import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.UserDTOMapper;
 import com.aivarasnakvosas.publishingservicemis.repositories.UserRepository;
@@ -75,5 +76,12 @@ public class UserService {
     public UserView getUserByUsername(String username) {
         User user = findUserByUsername(username);
         return userDTOMapper.mapToView(user);
+    }
+
+    public List<UserView> getUsersByRole(Role role) {
+        List<User> users = userRepository.findUsersByRole(role);
+        return users.stream()
+                .map(user -> userDTOMapper.mapToView(user))
+                .collect(Collectors.toList());
     }
 }

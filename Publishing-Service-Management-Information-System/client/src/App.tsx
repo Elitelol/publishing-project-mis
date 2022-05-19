@@ -15,6 +15,7 @@ import TaskPage from "./pages/TaskPage";
 import TaskDetailsPage from "./pages/TaskDetailsPage";
 import AttachmentPage from "./pages/AttachmentPage";
 import UnmanagedWorksPage from "./pages/UnmanagedWorksPage";
+import ProjectsPage from "./pages/ProjectsPage";
 
 function App() {
 
@@ -31,6 +32,9 @@ function App() {
                   </Route>
                   <Route path = "/unmanagedWorks" element={<ProtectedRoute/>}>
                       <Route path = "/unmanagedWorks" element={<UnmanagedWorksPage/>}/>
+                  </Route>
+                  <Route path = "/projects" element={<ProtectedRoute/>}>
+                      <Route path = "/projects" element={<ProjectsPage/>}/>
                   </Route>
                   <Route path = "/publication/:id" element={<ProtectedRoute/>}>
                       <Route path = "/publication/:id" element={<PublicationDetailsPage/>}/>

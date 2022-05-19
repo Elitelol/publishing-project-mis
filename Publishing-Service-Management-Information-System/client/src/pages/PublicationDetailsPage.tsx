@@ -124,13 +124,13 @@ const PublicationDetailsPage = () => {
         const authorIds = responseAuthors.map((user: { id: any; }) => {
             return user.id;
         })
-        setDisabled(!(!authorIds.includes(context.data?.id) || context.data?.id !== response.data.manager.id));
+        setDisabled(!authorIds.includes(context.data?.id) && context.data?.id !== response.data.manager.id);
         axios.get(ApiUrl() + "publication/" + id + "/users").then(response => handleUserChange(response, currentStatus))
     }
 
     const handleUserChange = (response: AxiosResponse<any, any>, currentStatus: any) => {
         setAllowedUsers(response.data);
-        setUnallowedToClick( !response.data.includes(context.data?.id as number) ||
+        setUnallowedToClick( !allowedUsers.includes(context.data?.id as number) ||
             (currentStatus === "Not Submitted" || currentStatus === "Rejected" || currentStatus === "Not Started" || currentStatus === "In Review"))
     }
 
@@ -219,7 +219,8 @@ const PublicationDetailsPage = () => {
                         <Button onClick = {handleReject}>Reject</Button>
                     </Box>
                 </Modal>
-                <NavigationGroup id = {id} unallowedToClick={unallowedToClick} unallowedAttach={!allowedUsers.includes(context.data?.id as number)}/>
+                <NavigationGroup id = {id} unallowedToClick={!allowedUsers.includes(context.data?.id as number) ||
+                (publication.progressStatus === "Not Submitted" || publication.progressStatus === "Rejected" || publication.progressStatus === "Not Started" || publication.progressStatus === "In Review")} unallowedAttach={!allowedUsers.includes(context.data?.id as number)}/>
                 <Card>
                     <Typography variant = "h2">Publication details</Typography>
                     <CardContent>
@@ -232,7 +233,7 @@ const PublicationDetailsPage = () => {
                         }/>
                         <FormControl fullWidth margin = "normal">
                             <InputLabel>Publication Type</InputLabel>
-                            <Select onChange = {handleTypeChange} value = {publicationType}>
+                            <Select disabled={disabled} onChange = {handleTypeChange} value = {publicationType}>
                                 {
                                     types.map(t => {
                                         return <MenuItem value = {t.type}> {t.type} </MenuItem>
@@ -266,7 +267,9 @@ const PublicationDetailsPage = () => {
                         </FormControl>
                         <TextField disabled type="number" fullWidth label="Publication price" margin = "normal" value={publication.price}/>
                         <TextField disabled fullWidth label="Publication manager" margin = "normal" value={publication.manager?.firstName + " " + publication.manager?.lastName}/>
-                        <Button onClick = {handleSave}>Save</Button>
+                        {
+                            !disabled && <Button onClick = {handleSave}>Save</Button>
+                        }
                         {publication.progressStatus === "Not Submitted" ?
                             <Button onClick ={handleSubmit}>
                                 Submit

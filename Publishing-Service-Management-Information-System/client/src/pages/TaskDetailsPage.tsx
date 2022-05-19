@@ -103,6 +103,7 @@ const TaskDetailsPage = () => {
         setTaskName(response.data.taskName)
         setTaskType(response.data.taskType)
         setTaskComments(response.data.comments)
+        setSelectedProgress(response.data.progress)
         const userIds = newResponsiblePeople.map((user: { id: any; }) => {
             return user.id;
         })
