@@ -41,7 +41,7 @@ const DashboardPage = () => {
         } else if (role === "Publication Manager") {
             url = "publication/manager/";
         } else {
-            url = "publication/byWorker/";
+            url = "publication/worker/";
         }
         return await axios.get(ApiUrl() + url + userId);
     }

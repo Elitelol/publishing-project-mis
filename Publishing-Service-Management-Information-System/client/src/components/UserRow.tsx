@@ -7,7 +7,7 @@ const UserRow = ({value} : User | any) => {
     const navigate = useNavigate();
 
     const handleNavigate = () => {
-        navigate("/user/" + value.id);
+        navigate("/" + value.role + "/" + value.id);
     }
 
     return(

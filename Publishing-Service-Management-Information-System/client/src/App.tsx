@@ -15,6 +15,8 @@ import UnmanagedWorksPage from "./pages/UnmanagedWorksPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import UsersPage from "./pages/UsersPage";
 import UserDetailsPage from "./pages/UserDetailsPage";
+import AccountDetailsPage from "./pages/AccountDetailsPage";
+import WorksPage from "./pages/WorksPage";
 
 function App() {
 
@@ -27,6 +29,9 @@ function App() {
                   <Route path = "/dashboard" element={<ProtectedRoute/>}>
                       <Route path = "/dashboard" element={<DashboardPage/>}/>
                   </Route>
+                  <Route path = "/account" element={<ProtectedRoute/>}>
+                      <Route path = "/account" element={<AccountDetailsPage/>}/>
+                  </Route>
                   <Route path = "/unmanagedWorks" element={<ProtectedRoute/>}>
                       <Route path = "/unmanagedWorks" element={<UnmanagedWorksPage/>}/>
                   </Route>
@@ -36,8 +41,11 @@ function App() {
                   <Route path = "/users" element={<ProtectedRoute/>}>
                       <Route path = "/users" element={<UsersPage/>}/>
                   </Route>
-                  <Route path = "/user/:id" element={<ProtectedRoute/>}>
-                      <Route path = "/user/:id" element={<UserDetailsPage/>}/>
+                  <Route path = "/:role/:id" element={<ProtectedRoute/>}>
+                      <Route path = "/:role/:id" element={<UserDetailsPage/>}/>
+                  </Route>
+                  <Route path = "/:role/:id/works" element={<ProtectedRoute/>}>
+                      <Route path = "/:role/:id/works" element={<WorksPage/>}/>
                   </Route>
                   <Route path = "/publication/:id" element={<ProtectedRoute/>}>
                       <Route path = "/publication/:id" element={<PublicationDetailsPage/>}/>
