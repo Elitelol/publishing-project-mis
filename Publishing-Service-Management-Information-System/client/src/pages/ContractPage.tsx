@@ -26,6 +26,7 @@ import SideMenu from "../components/SideMenu";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {DatePicker} from "@mui/x-date-pickers";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import NavMenu from "../components/NavMenu";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -172,8 +173,7 @@ const ContractPage = () => {
 
     return(
         <>
-            <Navbar/>
-            <SideMenu/>
+            <NavMenu/>
             <Modal open = {open} onClose = {handleClose}>
                 <Box sx = {style}>
                     <Typography variant = "h3">Submit contract</Typography>

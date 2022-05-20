@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
 import {Container} from "@mui/material";
 import Publications from "../components/Publications";
+import NavMenu from "../components/NavMenu";
 
 const ProjectsPage = () => {
     const [publications, setPublications] = useState<Publication[]>([]);
@@ -18,8 +19,7 @@ const ProjectsPage = () => {
 
     return(
         <>
-            <Navbar/>
-            <SideMenu/>
+            <NavMenu/>
             <Container >
                 <Publications publications = {publications} publicationText={"Publishing House Projects"}/>
             </Container>

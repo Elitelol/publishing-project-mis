@@ -4,25 +4,14 @@ import {UserContext} from "../auth";
 import axios from "axios";
 import ApiUrl from "../config/api.config";
 import {
-    Box, Button,
-    Container, LinearProgress, LinearProgressProps,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Typography
+    Container
 } from "@mui/material";
-import Navbar from "../components/Navbar";
 import Publications from "../components/Publications";
 import {useNavigate} from "react-router-dom";
-import SideMenu from "../components/SideMenu";
+import NavMenu from "../components/NavMenu";
 
 const DashboardPage = () => {
 
-    const navigate = useNavigate();
     const [context, setContext] = useContext(UserContext);
     const [publications, setPublications] = useState<Publication[]>([]);
 
@@ -48,8 +37,7 @@ const DashboardPage = () => {
 
     return (
         <>
-            <Navbar/>
-            <SideMenu/>
+            <NavMenu/>
             <Container >
                 <Publications publications = {publications} publicationText={"My publication works"}/>
             </Container>

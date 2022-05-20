@@ -8,6 +8,7 @@ import Publications from "../components/Publications";
 import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
 import {Container} from "@mui/material";
+import NavMenu from "../components/NavMenu";
 
 const WorksPage = () => {
     const {role, id} = useParams();
@@ -25,8 +26,7 @@ const WorksPage = () => {
 
     return(
         <>
-            <Navbar/>
-            <SideMenu/>
+            <NavMenu/>
             <Container>
                 <UserDetailsNav id ={id} role={role}/>
                 <Publications publications={publications} publicationText={"User works"}/>

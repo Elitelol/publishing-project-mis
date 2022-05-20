@@ -29,6 +29,7 @@ import {UserContext, UserProvider} from "../auth";
 import TaskType from "../models/TaskType";
 import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
+import NavMenu from "../components/NavMenu";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -127,8 +128,7 @@ const TaskPage = () => {
 
     return(
         <>
-            <Navbar/>
-            <SideMenu/>
+            <NavMenu/>
             <Container>
                 <NavigationGroup id = {id} unallowedToClick={false} unallowedAttach={false}/>
                 <Typography variant = "h2">Publication tasks</Typography>

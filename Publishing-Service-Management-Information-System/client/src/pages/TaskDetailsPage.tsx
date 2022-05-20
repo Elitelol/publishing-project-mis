@@ -27,6 +27,7 @@ import SideMenu from "../components/SideMenu";
 import {DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import NavMenu from "../components/NavMenu";
 
 const TaskDetailsPage = () => {
 
@@ -177,8 +178,7 @@ const TaskDetailsPage = () => {
 
     return(
         <>
-            <Navbar/>
-            <SideMenu/>
+            <NavMenu/>
             <Container>
                 <NavigationGroup id = {task.publicationId} unallowedToClick={false} unallowedAttach={false}/>
                 <Card>

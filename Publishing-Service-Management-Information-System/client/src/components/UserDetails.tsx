@@ -8,6 +8,7 @@ import Navbar from "./Navbar";
 import SideMenu from "./SideMenu";
 import {Box, Button, Container, TextField, Typography} from "@mui/material";
 import UserDetailsNav from "./UserDetailsNav";
+import NavMenu from "./NavMenu";
 
 type NavProps = {
     id: any
@@ -81,8 +82,7 @@ const UserDetails = ({id, role}: NavProps) => {
 
     return (
         <>
-            <Navbar/>
-            <SideMenu/>
+            <NavMenu/>
             <Container>
                 <Typography margin = "normal" variant ="h3"> {user.username} </Typography>
                 {

@@ -25,6 +25,7 @@ import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
 import {UserContext} from "../auth";
 import {toast} from "react-toastify";
+import NavMenu from "../components/NavMenu";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -209,8 +210,7 @@ const PublicationDetailsPage = () => {
 
     return (
         <>
-            <Navbar/>
-            <SideMenu/>
+            <NavMenu/>
             <Container>
                 <Modal open = {open} onClose = {handleClose}>
                     <Box sx = {style}>

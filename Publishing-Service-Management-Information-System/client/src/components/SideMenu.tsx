@@ -16,7 +16,7 @@ const SideMenu = () => {
     }
 
     return(
-        <Box sx={{ width: '70%', maxWidth: 200, backgroundColor: 'lightgray' }}>
+        <Box sx={{ width: '100', maxWidth: 200, backgroundColor: 'lightgray'}}>
             <List>
                 <ListItem disablePadding>
                     <ListItemButton onClick = {() => navigate("/account")}>

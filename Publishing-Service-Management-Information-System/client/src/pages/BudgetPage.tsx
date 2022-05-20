@@ -12,6 +12,7 @@ import User from "../models/User";
 import {UserContext} from "../auth";
 import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
+import NavMenu from "../components/NavMenu";
 
 const BudgetPage = () => {
 
@@ -122,8 +123,7 @@ const BudgetPage = () => {
 
    return(
        <>
-           <Navbar/>
-           <SideMenu/>
+           <NavMenu/>
            <Container>
                <NavigationGroup id = {id} unallowedToClick={false} unallowedAttach={false}/>
                <Card>

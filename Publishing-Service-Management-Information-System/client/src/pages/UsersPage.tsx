@@ -16,6 +16,7 @@ import axios from "axios";
 import User from "../models/User";
 import ApiUrl from "../config/api.config";
 import UserRow from "../components/UserRow";
+import NavMenu from "../components/NavMenu";
 
 const UsersPage = () => {
 
@@ -53,8 +54,7 @@ const UsersPage = () => {
 
     return (
         <>
-            <Navbar/>
-            <SideMenu/>
+            <NavMenu/>
             <Container>
                 <Typography variant = "h2">Registered users</Typography>
                 <Button onClick={handleAuthors}>Authors</Button>

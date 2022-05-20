@@ -21,6 +21,7 @@ import ApiUrl from "../config/api.config";
 import Task from "../models/Task";
 import Attachment from "../models/Attachment";
 import AttachmentRow from "../components/AttachmentRow";
+import NavMenu from "../components/NavMenu";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -141,8 +142,7 @@ const AttachmentPage = () => {
 
     return(
         <>
-            <Navbar/>
-            <SideMenu/>
+            <NavMenu/>
             <Modal open = {open} onClose = {handleClose}>
                 <Box sx = {style}>
                     <Typography variant = "h3">New attachment</Typography>
