@@ -53,7 +53,7 @@ const SideMenu = () => {
                     </ListItem>
                 }
                 <ListItem disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={() => navigate("/users")}>
                         <ListItemIcon>
                             <InboxIcon />
                         </ListItemIcon>

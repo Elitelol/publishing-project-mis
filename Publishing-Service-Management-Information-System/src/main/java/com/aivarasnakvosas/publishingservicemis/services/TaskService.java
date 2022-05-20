@@ -131,7 +131,9 @@ public class TaskService {
         if (ProgressStatus.COMPLETED.equals(newTask.getProgressStatus())) {
             completedTasks++;
         }
-        totalTaskSize++;
-        return BigDecimal.valueOf((completedTasks / totalTaskSize) * 100L);
+        if (newTask.getId() == null) {
+            totalTaskSize++;
+        }
+        return BigDecimal.valueOf((double) completedTasks / totalTaskSize * 100);
     }
 }

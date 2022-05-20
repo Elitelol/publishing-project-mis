@@ -5,10 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./route/ProtectedRoute";
 import SignUpPage from "./pages/SignUpPage";
-import Navbar from "./components/Navbar";
 import PublicationDetailsPage from "./pages/PublicationDetailsPage";
-import {UserContext} from "./auth";
-import SideMenu from "./components/SideMenu";
 import ContractPage from "./pages/ContractPage";
 import BudgetPage from "./pages/BudgetPage";
 import TaskPage from "./pages/TaskPage";
@@ -16,10 +13,10 @@ import TaskDetailsPage from "./pages/TaskDetailsPage";
 import AttachmentPage from "./pages/AttachmentPage";
 import UnmanagedWorksPage from "./pages/UnmanagedWorksPage";
 import ProjectsPage from "./pages/ProjectsPage";
+import UsersPage from "./pages/UsersPage";
+import UserDetailsPage from "./pages/UserDetailsPage";
 
 function App() {
-
-    const[context, setContext] = useContext(UserContext);
 
   return (
       <>
@@ -35,6 +32,12 @@ function App() {
                   </Route>
                   <Route path = "/projects" element={<ProtectedRoute/>}>
                       <Route path = "/projects" element={<ProjectsPage/>}/>
+                  </Route>
+                  <Route path = "/users" element={<ProtectedRoute/>}>
+                      <Route path = "/users" element={<UsersPage/>}/>
+                  </Route>
+                  <Route path = "/user/:id" element={<ProtectedRoute/>}>
+                      <Route path = "/user/:id" element={<UserDetailsPage/>}/>
                   </Route>
                   <Route path = "/publication/:id" element={<ProtectedRoute/>}>
                       <Route path = "/publication/:id" element={<PublicationDetailsPage/>}/>
