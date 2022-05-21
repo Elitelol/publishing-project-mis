@@ -63,7 +63,7 @@ public class RESTExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception) {
         HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
-        List<String> errorMessages = Collections.singletonList("Incorrect username.");
+        List<String> errorMessages = Collections.singletonList("Invalid credentials.");
         ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), httpStatus.value(), httpStatus, errorMessages);
         return buildResponse(errorMessage);
     }

@@ -18,6 +18,7 @@ import Genre from "../models/Genre";
 import Language from "../models/Language";
 import PublicationType from "../models/PublicationType";
 import User from "../models/User"
+import {toast} from "react-toastify";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -97,7 +98,9 @@ const Publications = ({publications, publicationText}: Props) => {
             rejectionReason: null
         }).then(response => {
             navigate("/publication/" + response.data.publicationId)
-        })
+        }).catch(error => {
+
+        });
     }
 
     return (

@@ -16,7 +16,7 @@ import ProjectsPage from "./pages/ProjectsPage";
 import UsersPage from "./pages/UsersPage";
 import UserDetailsPage from "./pages/UserDetailsPage";
 import AccountDetailsPage from "./pages/AccountDetailsPage";
-import WorksPage from "./pages/WorksPage";
+import WorksPage from "./pages/WorksPage";;
 
 function App() {
 
