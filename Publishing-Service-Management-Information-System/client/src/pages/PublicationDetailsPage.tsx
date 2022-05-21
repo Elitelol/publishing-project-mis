@@ -41,7 +41,6 @@ const style = {
 const PublicationDetailsPage = () => {
 
     const {id} = useParams();
-    const navigate = useNavigate();
     const [context, setContext] = useContext(UserContext);
     const [allowedUsers, setAllowedUsers] = useState<number[]>([]);
     const[showMessage, setShowMessage] = useState<boolean>(false);
@@ -81,6 +80,7 @@ const PublicationDetailsPage = () => {
             axios.get(ApiUrl() + "publication/" + id).then(response => {
                 handleStateChange(response)
             })
+
         }
         axios.get(ApiUrl() + typeUrl + "publications").then(response => {
             setTypes(response.data)
@@ -106,7 +106,6 @@ const PublicationDetailsPage = () => {
     const [price, setPrice] = useState<number | null>(publication?.price);
     const [manager, setManager] = useState<User | null>(publication?.manager);
     const [rejectionText, setRejectionText] = useState<string>("");
-    const [unallowedToClick, setUnallowedToClick] = useState<boolean>(false);
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         const currentStatus = response.data.progressStatus;
@@ -125,14 +124,10 @@ const PublicationDetailsPage = () => {
         setManager(response.data.manager)
         setProgressStatus(currentStatus)
 
-        setDisabled(context.data?.id !== responseAuthor && context.data?.id !== response.data.manager.id);
-        axios.get(ApiUrl() + "publication/" + id + "/users").then(response => handleUserChange(response, currentStatus))
-    }
-
-    const handleUserChange = (response: AxiosResponse<any, any>, currentStatus: any) => {
-        setAllowedUsers(response.data);
-        setUnallowedToClick( !allowedUsers.includes(context.data?.id as number) ||
-            (currentStatus === "Not Submitted" || currentStatus === "Rejected" || currentStatus === "Not Started" || currentStatus === "In Review"))
+        setDisabled(context.data?.id !== responseAuthor.id && context.data?.id !== response.data.manager.id ||
+            (response.data.progressStatus === "Not Started" || response.data.progressStatus === "In Review" || response.data.progressStatus === "In Progress"
+                || response.data.progressStatus === "Completed" || response.data.progressStatus === "Published" || response.data.progressStatus === "Rejected"));
+        axios.get(ApiUrl() + "publication/" + id + "/users").then(response => setAllowedUsers(response.data))
     }
 
     const handleOpen = () => {
@@ -174,7 +169,7 @@ const PublicationDetailsPage = () => {
     const handleSubmit = async () => {
         await axios.post<Publication>(ApiUrl() + "publication/" + id + "/submit")
             .then(response => {
-                setPublication(response.data)
+                handleStateChange(response)
                 setMessage(["Publication submitted."]);
                 setShowMessage(true);
                 setSeverity("success");
@@ -266,7 +261,9 @@ const PublicationDetailsPage = () => {
                     </Box>
                 </Modal>
                 <NavigationGroup id = {id} unallowedToClick={!allowedUsers.includes(context.data?.id as number) ||
-                (publication.progressStatus === "Not Submitted" || publication.progressStatus === "Rejected" || publication.progressStatus === "Not Started" || publication.progressStatus === "In Review")} unallowedAttach={!allowedUsers.includes(context.data?.id as number)}/>
+                (publication.progressStatus === "Not Submitted" || publication.progressStatus === "Rejected" || publication.progressStatus === "Not Started" || (publication.progressStatus === "In Review"))} unallowedAttach={!allowedUsers.includes(context.data?.id as number) ||
+                (publication.progressStatus === "In Review" && context.data?.id === publication.author?.id)
+                || publication.progressStatus === "Not Started"}/>
                 <Card>
                     <Typography variant = "h2">Publication details</Typography>
                     {
@@ -324,7 +321,7 @@ const PublicationDetailsPage = () => {
                         {
                             !disabled && <Button onClick = {handleSave} variant="contained" color="success">Save</Button>
                         }
-                        {publication.progressStatus === "Not Submitted" ?
+                        {publication.progressStatus === "Not Submitted" && context.data?.id === publication.author?.id ?
                             <Button onClick ={handleSubmit} variant="contained" color="secondary">
                                 Submit
                             </Button>

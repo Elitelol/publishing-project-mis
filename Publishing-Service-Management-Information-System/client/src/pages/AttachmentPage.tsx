@@ -24,6 +24,7 @@ import Attachment from "../models/Attachment";
 import AttachmentRow from "../components/AttachmentRow";
 import NavMenu from "../components/NavMenu";
 import AlertMessage from "../components/AlertMessage";
+import Publication from "../models/Publication";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -42,6 +43,11 @@ const AttachmentPage = () => {
 
     useEffect(() => {
         axios.get<AttachmentType[]>(ApiUrl() + "type/attachments").then(response => setTypeSelection(response.data))
+        //awful
+        axios.get<Publication>(ApiUrl() + "publication/" + id).then(response => {
+            setDisabled(response.data.progressStatus === "Rejected" || response.data.progressStatus === "Not Submitted"
+                || response.data.progressStatus === "Not Started" || response.data.progressStatus === "In Review")
+        })
         fetchManuscript()
         fetchCover()
         fetchContract()
@@ -73,6 +79,7 @@ const AttachmentPage = () => {
         setOpen(false);
     }
 
+    const [disabled, setDisabled] = useState<boolean>(true);
     const [typeSelection, setTypeSelection] = useState<AttachmentType[]>([])
     const [selectedType, setSelectedType] = useState<string>("Manuscript");
     const [file, setFile] = useState<File>();
@@ -174,7 +181,7 @@ const AttachmentPage = () => {
                 </Box>
             </Modal>
             <Container>
-                <NavigationGroup id = {id} unallowedToClick={false} unallowedAttach={false}/>
+                <NavigationGroup id = {id} unallowedToClick={disabled} unallowedAttach={false}/>
                 <Typography variant = "h2">Publication attachments</Typography>
                 {
                     showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
