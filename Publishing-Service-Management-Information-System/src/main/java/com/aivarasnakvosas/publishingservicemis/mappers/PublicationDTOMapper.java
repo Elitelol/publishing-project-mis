@@ -31,7 +31,7 @@ public class PublicationDTOMapper {
     @Autowired
     private UserDTOMapper userDTOMapper;
 
-    public void mapToPublication(Publication publication, PublicationDTO publicationDTO, List<User> authors) {
+    public void mapToPublication(Publication publication, PublicationDTO publicationDTO, User author) {
         if (publication.getId() == null){
             publication.setProgressStatus(ProgressStatus.NOT_SUBMITTED);
         }
@@ -42,15 +42,13 @@ public class PublicationDTOMapper {
         publication.setGenre(Genre.getGenre(publicationDTO.getGenre()));
         publication.setPublishDate(publicationDTO.getPublishDate());
         publication.setPublicationType(PublicationType.getType(publicationDTO.getPublicationType()));
-        authors.forEach(publication::addAuthor);
+        publication.setAuthor(author);
     }
 
     public PublicationDTO mapToDTO(Publication publication) {
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setPublicationId(publication.getId());
-        publicationDTO.setAuthors(publication.getAuthors().stream()
-                .map(author -> userDTOMapper.mapToView(author))
-                .collect(Collectors.toList()));
+        publicationDTO.setAuthor(userDTOMapper.mapToView(publication.getAuthor()));
         publicationDTO.setName(publication.getName());
         publicationDTO.setPublicationType(publication.getPublicationType().getType());
         publicationDTO.setProgressStatus(publication.getProgressStatus().getStatus());

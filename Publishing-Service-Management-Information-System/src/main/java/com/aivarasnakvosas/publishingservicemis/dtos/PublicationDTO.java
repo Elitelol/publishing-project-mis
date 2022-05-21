@@ -19,7 +19,7 @@ import java.util.List;
 public class PublicationDTO {
 
     private Long publicationId;
-    private List<UserView> authors = new ArrayList<>();
+    private UserView author;
 
     @NotBlank(message = "Name can't be empty")
     private String name;

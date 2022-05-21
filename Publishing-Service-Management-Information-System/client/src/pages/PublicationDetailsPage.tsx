@@ -50,7 +50,7 @@ const PublicationDetailsPage = () => {
 
     const [publication, setPublication] = useState<Publication>({
         attachments: [],
-        authors: [],
+        author: null,
         budget: null,
         contract: null,
         genre: "",
@@ -94,7 +94,7 @@ const PublicationDetailsPage = () => {
     }, [])
 
     const [publicationId, setPublicationId] = useState<number | null>(publication?.publicationId);
-    const [authors, setAuthors] = useState<User[]>(publication?.authors)
+    const [author, setAuthor] = useState<User | null>(publication?.author)
     const [name, setName] = useState<string>(publication.name);
     const [publicationType, setPublicationType] = useState<string>(publication?.publicationType);
     const [progressStatus, setProgressStatus] = useState<string>(publication?.progressStatus);
@@ -110,10 +110,10 @@ const PublicationDetailsPage = () => {
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         const currentStatus = response.data.progressStatus;
-        const responseAuthors = response.data.authors;
+        const responseAuthor = response.data.author;
         setPublication(response.data)
         setPublicationId(response.data.publicationId)
-        setAuthors(responseAuthors)
+        setAuthor(responseAuthor)
         setName(response.data.name)
         setPublicationType(response.data.publicationType)
         setRejectionReason(response.data.rejectionReason)
@@ -124,10 +124,8 @@ const PublicationDetailsPage = () => {
         setLanguage(response.data.language)
         setManager(response.data.manager)
         setProgressStatus(currentStatus)
-        const authorIds = responseAuthors.map((user: { id: any; }) => {
-            return user.id;
-        })
-        setDisabled(!authorIds.includes(context.data?.id) && context.data?.id !== response.data.manager.id);
+
+        setDisabled(context.data?.id !== responseAuthor && context.data?.id !== response.data.manager.id);
         axios.get(ApiUrl() + "publication/" + id + "/users").then(response => handleUserChange(response, currentStatus))
     }
 
@@ -150,7 +148,7 @@ const PublicationDetailsPage = () => {
     const handleSave = async () => {
         await axios.post<Publication>(ApiUrl() + "publication", {
             publicationId,
-            authors,
+            author,
             name,
             publicationType,
             progressStatus,
@@ -278,11 +276,7 @@ const PublicationDetailsPage = () => {
                         <TextField disabled fullWidth label="Publication id" margin = "normal" value={publication.publicationId} InputLabelProps={{ shrink: publication.publicationId ? true : false }}/>
                         <Typography margin = "normal" variant = "h4">Publication's author, type, genre and language</Typography>
                         <TextField disabled = {disabled} fullWidth label="Publication name" margin = "normal" value={name} onChange = {event => setName(event.target.value)}/>
-                        <TextField disabled fullWidth label = "Publication authors" margin = "normal" value = {
-                            publication.authors.map(user => {
-                                return user.firstName + " " + user.lastName;
-                            })
-                        }/>
+                        <TextField disabled fullWidth label = "Publication author" margin = "normal" value = {publication.author?.firstName + " " + publication.author?.lastName}/>
                         <FormControl fullWidth margin = "normal">
                             <InputLabel>Publication Type</InputLabel>
                             <Select disabled={disabled} onChange = {handleTypeChange} value = {publicationType}>
@@ -314,7 +308,7 @@ const PublicationDetailsPage = () => {
                             </Select>
                         </FormControl>
                         <Typography margin = "normal" variant = "h4">ISBN, page number, price</Typography>
-                        <TextField fullWidth label="Publication ISBN" margin = "normal" value={publication.isbn}/>
+                        <TextField disabled={disabled} fullWidth label="Publication ISBN" margin = "normal" value={publication.isbn}/>
                         <TextField disabled fullWidth label="Publication page number" margin = "normal" value={publication.pageNumber} InputLabelProps={{ shrink: publication.pageNumber ? true : false }}/>
                         <TextField disabled type="number" fullWidth label="Publication price" margin = "normal" value={publication.price} InputLabelProps={{ shrink: publication.price ? true : false }}/>
                         <Typography margin = "normal" variant = "h4">Progress</Typography>

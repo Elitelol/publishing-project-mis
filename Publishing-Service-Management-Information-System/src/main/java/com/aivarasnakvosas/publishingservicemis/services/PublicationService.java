@@ -57,10 +57,8 @@ public class PublicationService {
     }
 
     public PublicationDTO savePublication(PublicationDTO publicationDTO) {
-        List<Long> authorIds = publicationDTO.getAuthors().stream()
-                .map(UserView::getId)
-                .collect(Collectors.toList());
-        List<User> author = userService.findUsers(authorIds);
+        Long authorId = publicationDTO.getAuthor().getId();
+        User author = userService.findUser(authorId);
         Optional<Publication> existingPublication = publicationRepository.findPublicationById(publicationDTO.getPublicationId());
         Publication publication = existingPublication.orElseGet(Publication::new);
         publicationDTOMapper.mapToPublication(publication, publicationDTO, author);
@@ -88,30 +86,6 @@ public class PublicationService {
     }
 
     private void setPublicationStatus(Publication publication, PublicationAcceptanceDTO publicationAcceptanceDTO) {
-        if (!publication.getManager().getId().equals(publicationAcceptanceDTO.getManagerId())) {
-            throw new BusinessErrorException(String.format("Publication %d assigned manager isn't valid.", publication.getId()));
-        }
-        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.REJECTED.getStatus())) {
-            if (!publication.getProgressStatus().equals(ProgressStatus.IN_REVIEW) || publicationAcceptanceDTO.getRejectionReason() == null) {
-                throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
-            }
-            publication.setRejectionReason(publicationAcceptanceDTO.getRejectionReason());
-        }
-        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.ACCEPTED.getStatus())) {
-            if (!publication.getProgressStatus().equals(ProgressStatus.IN_REVIEW)) {
-                throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
-            }
-        }
-        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.IN_PROGRESS.getStatus())) {
-            if (!publication.getProgressStatus().equals(ProgressStatus.ACCEPTED)) {
-                throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
-            }
-        }
-        if (publicationAcceptanceDTO.getStatus().equals(ProgressStatus.PUBLISHED.getStatus())) {
-            if (!publication.getProgressStatus().equals(ProgressStatus.COMPLETED)) {
-                throw new BusinessErrorException(String.format("Incorrect Publication status change for %s to %s", publication.getProgressStatus().name(), publicationAcceptanceDTO.getStatus()));
-            }
-        }
         publication.setProgressStatus(ProgressStatus.getStatus(publicationAcceptanceDTO.getStatus()));
         publication.setDateModified(new Date());
         publicationRepository.save(publication);
@@ -162,8 +136,8 @@ public class PublicationService {
     }
 
     public List<PublicationDTO> getAuthorPublications(Long authorId) {
-        Set<User> authors = new HashSet<>(Collections.singletonList(userService.findUser(authorId)));
-        List<Publication> publications = publicationRepository.findPublicationsByAuthorsIn(authors);
+        User author = userService.findUser(authorId);
+        List<Publication> publications = publicationRepository.findPublicationsByAuthor(author);
         return getPublicationDTOS(publications);
     }
 
@@ -211,8 +185,9 @@ public class PublicationService {
     //...
     public List<Long> getAssociatedUsers(Long id) {
         Publication publication = findPublication(id);
-        List<Long> ids = publication.getAuthors().stream()
-                .map(AbstractBasicEntity::getId).collect(Collectors.toList());
+        Long authorId = publication.getAuthor().getId();
+        List<Long> ids = new ArrayList<>();
+        ids.add(authorId);
         List<Long> workerIds = new ArrayList<>();
         publication.getTasks().forEach(task -> workerIds.addAll(
                     task.getResponsiblePeople().stream()

@@ -47,8 +47,8 @@ public class User extends AbstractBasicEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany(mappedBy = "authors", cascade = CascadeType.ALL)
-    private Set<Publication> publications = new HashSet<>();
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Publication> publications = new ArrayList<>();
 
     @OneToMany(mappedBy = "manager")
     private List<Publication> managedWorks = new ArrayList<>();

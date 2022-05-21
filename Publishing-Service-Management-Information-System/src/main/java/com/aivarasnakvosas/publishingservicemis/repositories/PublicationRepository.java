@@ -21,7 +21,7 @@ public interface PublicationRepository extends JpaRepository<Publication, Long> 
 
     List<Publication> findPublicationsByManagerIsNullAndProgressStatus(ProgressStatus progressStatus);
 
-    List<Publication> findPublicationsByAuthorsIn(Set<User> authors);
+    List<Publication> findPublicationsByAuthor(User author);
 
     List<Publication> findPublicationsByManagerId(Long managerId);
 

@@ -93,7 +93,7 @@ const Publications = ({publications, publicationText}: Props) => {
             publicationId: null,
             name,
             publicationType,
-            authors: [user],
+            author: user,
             progressStatus:"Not Started",
             progressPercent: 0,
             isbn: null,

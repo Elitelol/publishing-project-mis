@@ -54,12 +54,10 @@ public class Task extends AbstractBasicEntity {
     @Temporal(TemporalType.DATE)
     private Date dueDate;
 
-    private boolean done;
-
     @ManyToMany
     @JoinTable(name = "task_users",
-            joinColumns = @JoinColumn(name ="User_Id"),
-            inverseJoinColumns = @JoinColumn(name = "Task_Id"))
+            joinColumns = @JoinColumn(name ="Task_Id"),
+            inverseJoinColumns = @JoinColumn(name = "User_Id"))
     private List<User> responsiblePeople;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)

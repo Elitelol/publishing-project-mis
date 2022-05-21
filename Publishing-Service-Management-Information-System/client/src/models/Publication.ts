@@ -6,7 +6,7 @@ import User from "./User";
 
 export default interface Publication {
     publicationId: number | null
-    authors: User[]
+    author: User | null
     name: string
     publicationType: string
     progressStatus: string

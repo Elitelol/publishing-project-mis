@@ -74,13 +74,7 @@ public class PublishingBudgetService {
         Map<String, Object> publishingData = new HashMap<>();
         PublishingBudget publishingBudget = findBudget(id);
         Publication publication = publishingBudget.getPublication();
-
-        StringBuilder authorNames = new StringBuilder();
-        publication.getAuthors()
-                .iterator()
-                .forEachRemaining(user -> authorNames.append(user.getFirstName()).append(" ").append(user.getLastName()).append(", "));
-        authorNames.setLength(authorNames.length() - 2);
-        publication.setAuthorsName(authorNames.toString());
+        publication.setAuthorsName(publication.getAuthor().getFirstName() + " " + publication.getAuthor().getLastName());
 
         BigDecimal numberOfPages = BigDecimal.valueOf(publication.getPageNumber());
         BigDecimal numberOfCopies = BigDecimal.valueOf(publishingBudget.getNumberOfCopies());

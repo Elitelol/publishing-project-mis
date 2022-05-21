@@ -71,11 +71,9 @@ public class Publication extends AbstractBasicEntity {
 
     private boolean contractSigned;
 
-    @ManyToMany
-    @JoinTable(name = "publication_authors",
-            joinColumns = @JoinColumn(name ="Publication_Id"),
-            inverseJoinColumns = @JoinColumn(name = "User_Id"))
-    private Set<User> authors = new HashSet<>();
+    @JoinColumn(name = "Author_Id", referencedColumnName = "User_Id")
+    @ManyToOne
+    private User author;
 
     @JoinColumn(name = "Manager_Id", referencedColumnName = "User_Id")
     @ManyToOne
@@ -95,8 +93,4 @@ public class Publication extends AbstractBasicEntity {
 
     @Transient
     private String authorsName;
-
-    public void addAuthor(User author) {
-        authors.add(author);
-    }
 }

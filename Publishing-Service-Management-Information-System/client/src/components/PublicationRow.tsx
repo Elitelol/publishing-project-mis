@@ -33,9 +33,7 @@ const PublicationRow = ({value}: Publication | any) => {
             <TableCell align="right">{value.name}</TableCell>
             <TableCell align="right">{value.publicationType}</TableCell>
             <TableCell align="right">{value.genre}</TableCell>
-            <TableCell align="right">{value.authors.map((author: { firstName: string; lastName: string; }) => {
-                return author.firstName + " " + author.lastName;
-            })}</TableCell>
+            <TableCell align="right">{value.author.firstName + " " + value.author.lastName}</TableCell>
             <TableCell align="right">{value.progressStatus}</TableCell>
             <TableCell align="right">
                 <LinearProgressWithLabel value={value.progressPercent}/>
