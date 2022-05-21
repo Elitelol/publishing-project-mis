@@ -4,7 +4,7 @@ import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import ApiUrl from "../config/api.config";
 import User from "../models/User";
-import Budget from "../models/Budget";
+import {UserContext} from "../auth";
 
 type CommentProp = {
     comment: UserComment
@@ -19,6 +19,7 @@ const Comment = ({comment, comments, url, entityId, setComments, commentator}: C
 
     const [replyText, setText] = useState<string>("");
     const [showReply, setShowReply] = useState<boolean>(false);
+    const [context, setContext] = useContext(UserContext);
 
     const handleReplyShow = () => {
         setShowReply(!showReply);
@@ -43,6 +44,10 @@ const Comment = ({comment, comments, url, entityId, setComments, commentator}: C
         handleReplyShow();
     }
 
+    const handleDelete = (id: any) => {
+        axios.delete(ApiUrl() + url + "/deleteComment?id=" + id).then(() => setComments(comments.filter(comment => comment.commentId !== id)))
+    }
+
     return (
         <>
             <ListItem>
@@ -59,6 +64,9 @@ const Comment = ({comment, comments, url, entityId, setComments, commentator}: C
                             <Typography>
                                 {comment.text}
                                 <ListItemButton onClick ={handleReplyShow}>Reply</ListItemButton>
+                                {
+                                    context.data?.id === comment.user.id && <ListItemButton onClick ={() => handleDelete(comment.commentId)}>Delete</ListItemButton>
+                                }
                             </Typography>
                             {
                                 comment.replies.length > 0 ? comment.replies.map((reply: any) => {

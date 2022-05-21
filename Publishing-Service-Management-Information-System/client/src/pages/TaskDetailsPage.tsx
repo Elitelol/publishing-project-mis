@@ -13,7 +13,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios, {AxiosResponse} from "axios";
 import ApiUrl from "../config/api.config";
 import Progress from "../models/Progress";
@@ -92,6 +92,7 @@ const TaskDetailsPage = () => {
     const[showMessage, setShowMessage] = useState<boolean>(false);
     const [message, setMessage] = useState<string[]>([]);
     const [severity, setSeverity] = useState<AlertColor | undefined>("success");
+    const navigate = useNavigate();
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         const newResponsiblePeople = response.data.responsiblePeople;
@@ -198,8 +199,17 @@ const TaskDetailsPage = () => {
         })
     }
 
-    const handleRemoveUser = () => {
+    const handleRemoveUser = (username: string) => {
+        setResponsiblePeople(responsiblePeople.filter(user => user.username !== username));
+    }
 
+    const handleDelete = async () => {
+        await axios.delete(ApiUrl() + "task/" + id)
+            .then(() => navigate("/" + task.publicationId + "/task")).catch(error => {
+                setMessage(error.response.data.message)
+                setShowMessage(true);
+                setSeverity("error");
+            })
     }
 
     return(
@@ -226,7 +236,7 @@ const TaskDetailsPage = () => {
                                                     {worker.username + " (" + worker.firstName + " " + worker.lastName + ")"}
                                                 </Typography>
                                             }
-                                                secondary={<ListItemButton disabled={context.data?.role !== "Publication Manager"} onClick ={handleRemoveUser}>
+                                                secondary={<ListItemButton disabled={context.data?.role !== "Publication Manager"} onClick ={() => handleRemoveUser(worker.username)}>
                                                     Remove
                                                 </ListItemButton>}
                                             />
@@ -284,6 +294,10 @@ const TaskDetailsPage = () => {
                         </FormControl>
                         {
                             !disabled && <Button onClick = {handleSave} variant="contained" color="success">Save</Button>
+                        }
+                        {
+                            context.data?.role === "Publication Manager" && task.progress !== "Completed"
+                            && <Button onClick = {handleDelete} variant="contained" color="error">Delete</Button>
                         }
                     </CardContent>
                 </Card>

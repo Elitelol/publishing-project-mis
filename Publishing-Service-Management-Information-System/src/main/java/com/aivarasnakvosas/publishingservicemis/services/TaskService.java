@@ -135,7 +135,7 @@ public class TaskService {
         long completedTasks = publicationTasks.stream()
                 .filter(task -> ProgressStatus.COMPLETED.equals(task.getProgressStatus()))
                 .count();
-        if (ProgressStatus.COMPLETED.equals(newTask.getProgressStatus())) {
+        if (ProgressStatus.COMPLETED.equals(newTask.getProgressStatus()) && newTask.getId() == null) {
             completedTasks++;
         }
         if (newTask.getId() == null) {

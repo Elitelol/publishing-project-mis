@@ -42,6 +42,7 @@ const PublicationDetailsPage = () => {
 
     const {id} = useParams();
     const [context, setContext] = useContext(UserContext);
+    const navigate = useNavigate();
     const [allowedUsers, setAllowedUsers] = useState<number[]>([]);
     const[showMessage, setShowMessage] = useState<boolean>(false);
     const [message, setMessage] = useState<string[]>([]);
@@ -137,7 +138,13 @@ const PublicationDetailsPage = () => {
         setOpen(false);
     }
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
+        await axios.delete(ApiUrl() + "publication/?id=" + id)
+            .then(() => navigate("/dashboard")).catch(error => {
+                setMessage(error.response.data.message)
+                setShowMessage(true);
+                setSeverity("error");
+            })
     }
 
     const handleSave = async () => {
@@ -245,6 +252,39 @@ const PublicationDetailsPage = () => {
         })
     }
 
+    const handleComplete = async () => {
+        await axios.post<Publication>(ApiUrl() + "publication/" + id + "/setComplete").then(response => {
+            handleStateChange(response)
+            handleDisabled();
+            setMessage(["Publication has been completed."]);
+            setShowMessage(true);
+            setSeverity("success");
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
+    }
+
+    const handlePublished = async () => {
+        await axios.post<Publication>(ApiUrl() + "publication/changeStatus", {
+            managerId:context.data?.id,
+            publicationId:id,
+            status:"Published",
+            rejectionReason: null
+        }).then(response => {
+            handleStateChange(response)
+            handleDisabled();
+            setMessage(["Publication has been published."]);
+            setShowMessage(true);
+            setSeverity("success");
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
+    }
+
     const handleDisabled = () => {
         setDisabled(true);
     }
@@ -339,6 +379,24 @@ const PublicationDetailsPage = () => {
                             publication.progressStatus === "In Review" && publication.manager !== null
                             && publication.manager.id === context.data?.id &&
                             <Button onClick = {handleOpen} variant="contained" color="error"> Reject </Button>
+                        }
+                        {
+                            publication.progressStatus === "Not Submitted" || publication.progressStatus === "Rejected" && context.data?.id === publication.author?.id
+                            && <Button variant="contained" color="error" onClick = {handleDelete}>
+                                Delete
+                            </Button>
+                        }
+                        {
+                            publication.progressStatus === "In Progress" && publication.manager !== null && publication.manager.id === context.data?.id
+                            && <Button variant="contained" color="success" onClick = {handleComplete}>
+                                Finish publication
+                            </Button>
+                        }
+                        {
+                            publication.progressStatus === "Completed" && publication.manager !== null && publication.manager.id === context.data?.id
+                            && <Button variant="contained" color="success" onClick = {handlePublished}>
+                                Publish publication
+                            </Button>
                         }
                     </CardContent>
                 </Card>
