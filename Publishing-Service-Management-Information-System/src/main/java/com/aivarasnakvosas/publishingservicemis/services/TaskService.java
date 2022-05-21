@@ -8,6 +8,7 @@ import com.aivarasnakvosas.publishingservicemis.entity.TaskComment;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.TaskDTO;
 import com.aivarasnakvosas.publishingservicemis.entity.enums.ProgressStatus;
+import com.aivarasnakvosas.publishingservicemis.entity.enums.Role;
 import com.aivarasnakvosas.publishingservicemis.exceptions.BusinessErrorException;
 import com.aivarasnakvosas.publishingservicemis.exceptions.EntityNotFoundException;
 import com.aivarasnakvosas.publishingservicemis.mappers.CommentDTOMapper;
@@ -53,6 +54,12 @@ public class TaskService {
                 .map(UserView::getId)
                 .collect(Collectors.toList());
         List<User> responsiblePeople = userService.findUsers(responsiblePeopleIds);
+        Optional<User> notAWorker = responsiblePeople.stream()
+                .filter(user -> !user.getRole().equals(Role.WORKER))
+                .findFirst();
+        if (notAWorker.isPresent()) {
+            throw new BusinessErrorException("Added user is not a worker.");
+        }
         Task task = taskDTO.getTaskId() != null ? findTask(taskDTO.getTaskId()) : new Task();
         taskDTOMapper.mapToTask(task, taskDTO, publication, responsiblePeople);
         publication.setProgressPercent(determineProgressPercent(publication, task));

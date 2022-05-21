@@ -163,7 +163,6 @@ const TaskDetailsPage = () => {
                 role: response.data.role
             })
         }).then(() => {
-            console.log(responsiblePeople)
             axios.post<Task>(ApiUrl() + "task", {
                 taskId,
                 taskName,
