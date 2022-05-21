@@ -1,4 +1,4 @@
-import {Button, Card, CardContent, Container, TextField, Typography} from "@mui/material";
+import {AlertColor, Button, Card, CardContent, Container, TextField, Typography} from "@mui/material";
 import NavigationGroup from "../components/NavigationGroup";
 import {useParams} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
@@ -13,6 +13,7 @@ import {UserContext} from "../auth";
 import Navbar from "../components/Navbar";
 import SideMenu from "../components/SideMenu";
 import NavMenu from "../components/NavMenu";
+import AlertMessage from "../components/AlertMessage";
 
 const BudgetPage = () => {
 
@@ -68,6 +69,9 @@ const BudgetPage = () => {
         email: "", firstName: "", id: null, lastName: "", role: "", username: ""
     })
     const [disabled, setDisabled] = useState<boolean>(true);
+    const[showMessage, setShowMessage] = useState<boolean>(false);
+    const [message, setMessage] = useState<string[]>([]);
+    const [severity, setSeverity] = useState<AlertColor | undefined>("success");
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         setBudget(response.data)
@@ -90,8 +94,8 @@ const BudgetPage = () => {
         setDisabled(context.data?.role !== "Publication Manager");
     }
 
-    const handleSave = () => {
-        axios.post<Budget>(ApiUrl() + "budget",{
+    const handleSave = async () => {
+        await axios.post<Budget>(ApiUrl() + "budget",{
             publicationId: id,
             budgetId,
             pageNumber,
@@ -108,7 +112,16 @@ const BudgetPage = () => {
             deliveryToStorageRate,
             advertisingCost,
             copyMailingCost
-        }).then(response => handleStateChange(response))
+        }).then(response => {
+            handleStateChange(response)
+            setMessage(["Budget saved."]);
+            setShowMessage(true);
+            setSeverity("success");
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
     }
 
     const handleGetReport = () => {
@@ -128,6 +141,9 @@ const BudgetPage = () => {
                <NavigationGroup id = {id} unallowedToClick={false} unallowedAttach={false}/>
                <Card>
                    <Typography variant = "h2">Publishing budget details</Typography>
+                   {
+                       showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
+                   }
                    <CardContent>
                        <Typography margin = "normal" variant = "h4">Publication information</Typography>
                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Number of pages" value={pageNumber} onChange={event => setPageNumber(parseInt(event.target.value))}/>

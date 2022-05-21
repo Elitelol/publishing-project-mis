@@ -1,5 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {
+    AlertColor,
     Box,
     Button,
     Container,
@@ -27,9 +28,8 @@ import axios from "axios";
 import ApiUrl from "../config/api.config";
 import {UserContext, UserProvider} from "../auth";
 import TaskType from "../models/TaskType";
-import Navbar from "../components/Navbar";
-import SideMenu from "../components/SideMenu";
 import NavMenu from "../components/NavMenu";
+import AlertMessage from "../components/AlertMessage";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -61,8 +61,9 @@ const TaskPage = () => {
     const [typeSelection, setTypeSelection] = useState<TaskType[]>([])
     const [selectedType, setSelectedType] = useState<string>("Editing");
     const [description, setDescription] = useState("");
-    const [startDate, setStartDate] = useState(null);
-    const [dueDate, setDueDate] = useState(null)
+    const[showMessage, setShowMessage] = useState<boolean>(false);
+    const [message, setMessage] = useState<string[]>([]);
+    const [severity, setSeverity] = useState<AlertColor | undefined>("success");
 
     useEffect(() => {
         axios.get<Task[]>(ApiUrl() + "task/" + id + "/notStartedTasks").then(response => setNotCompletedTask(response.data))
@@ -119,7 +120,11 @@ const TaskPage = () => {
             dueDate: "2021-01-02",
             description,
             comments: []
-        }).then(response => navigate("/task/" + response.data.taskId))
+        }).then(response => navigate("/task/" + response.data.taskId)).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
     }
 
     const handleTypeChange = (event: SelectChangeEvent) => {
@@ -146,6 +151,9 @@ const TaskPage = () => {
                 <Modal open = {open} onClose = {handleClose}>
                     <Box sx = {style}>
                         <Typography variant = "h3">New task</Typography>
+                        {
+                            showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
+                        }
                         <TextField fullWidth label="Task name" margin = "normal" value={taskName} onChange = {event => setTaskName(event.target.value)}/>
                         <TextField fullWidth label="Task description" margin = "normal" value={description} onChange = {event => setDescription(event.target.value)}/>
                         <FormControl fullWidth>

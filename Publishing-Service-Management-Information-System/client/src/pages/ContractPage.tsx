@@ -1,5 +1,6 @@
 import {useParams} from "react-router-dom";
 import {
+    AlertColor,
     Box,
     Button,
     Card,
@@ -27,6 +28,7 @@ import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {DatePicker} from "@mui/x-date-pickers";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import NavMenu from "../components/NavMenu";
+import AlertMessage from "../components/AlertMessage";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -91,6 +93,9 @@ const ContractPage = () => {
     const [disabled, setDisabled] = useState<boolean>(true);
     const [open, setOpen] = useState<boolean>(false);
     const [file, setFile] = useState<File>();
+    const[showMessage, setShowMessage] = useState<boolean>(false);
+    const [message, setMessage] = useState<string[]>([]);
+    const [severity, setSeverity] = useState<AlertColor | undefined>("success");
 
     const handleOpen = () => {
         setOpen(true);
@@ -118,8 +123,8 @@ const ContractPage = () => {
         setDisabled(context.data?.role !== "Publication Manager");
     }
 
-    const handleSave = () => {
-        axios.post<Contract>(ApiUrl() + "contract", {
+    const handleSave = async () => {
+       await axios.post<Contract>(ApiUrl() + "contract", {
             publicationId: id,
             contractId,
             publishDate,
@@ -134,15 +139,32 @@ const ContractPage = () => {
             secondCoverPercent,
             lastCoverRate,
             lastCoverPercent
-        }).then(response => {handleStateChange(response)})
+        }).then(response => {
+            handleStateChange(response)
+            setMessage(["Contract saved."]);
+            setShowMessage(true);
+            setSeverity("success");
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
     }
 
-    const handleContractSigned = () => {
-        axios.post<Publication>(ApiUrl() + "publication/" + id + "/setContract")
+    const handleContractSigned = async () => {
+        await axios.post<Publication>(ApiUrl() + "publication/" + id + "/setContract").then(() => {
+            setMessage(["Contract signed."]);
+            setShowMessage(true);
+            setSeverity("success");
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
     }
 
-    const handleGenerateContract = () => {
-        axios.get(ApiUrl() + "contract/" + id + "/downloadContract", {responseType: "blob"}).then(response => {
+    const handleGenerateContract = async () => {
+        await axios.get(ApiUrl() + "contract/" + id + "/downloadContract", {responseType: "blob"}).then(response => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -159,14 +181,22 @@ const ContractPage = () => {
         setFile(fileList[0]);
     }
 
-    const handleUpload = () => {
+    const handleUpload = async () => {
         if (file) {
             const attachmentDto = "{\"publicationId\":" + id + "," + "\"attachmentType\":" + "\"" + "Contract" + "\"" + "}";
             const formData = new FormData();
             formData.append("attachmentDTO", attachmentDto);
             formData.append("file", file, file.name);
-            axios.post(ApiUrl() + "attachment", formData);
-            handleClose()
+            await axios.post(ApiUrl() + "attachment", formData).then(() => {
+                setMessage(["Contract uploaded."]);
+                setShowMessage(true);
+                setSeverity("success");
+                handleClose()
+            }).catch(error => {
+                setMessage(error.response.data.message)
+                setShowMessage(true);
+                setSeverity("error");
+            })
         }
     }
 
@@ -185,6 +215,9 @@ const ContractPage = () => {
                 <NavigationGroup id = {id} unallowedToClick={false} unallowedAttach={false}/>
                 <Card>
                     <Typography variant = "h2">Contract details</Typography>
+                    {
+                        showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
+                    }
                     <CardContent>
                         <Typography margin = "normal" variant = "h4">Publication release date and price</Typography>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>

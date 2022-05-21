@@ -4,6 +4,7 @@ import Publication from "../models/Publication";
 import axios, {AxiosResponse} from "axios";
 import ApiUrl from "../config/api.config";
 import {
+    AlertColor,
     Box,
     Button,
     Card,
@@ -21,11 +22,9 @@ import Language from "../models/Language";
 import PublicationType from "../models/PublicationType";
 import NavigationGroup from "../components/NavigationGroup";
 import User from "../models/User";
-import Navbar from "../components/Navbar";
-import SideMenu from "../components/SideMenu";
 import {UserContext} from "../auth";
-import {toast} from "react-toastify";
 import NavMenu from "../components/NavMenu";
+import AlertMessage from "../components/AlertMessage";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -45,6 +44,9 @@ const PublicationDetailsPage = () => {
     const navigate = useNavigate();
     const [context, setContext] = useContext(UserContext);
     const [allowedUsers, setAllowedUsers] = useState<number[]>([]);
+    const[showMessage, setShowMessage] = useState<boolean>(false);
+    const [message, setMessage] = useState<string[]>([]);
+    const [severity, setSeverity] = useState<AlertColor | undefined>("success");
 
     const [publication, setPublication] = useState<Publication>({
         attachments: [],
@@ -145,8 +147,8 @@ const PublicationDetailsPage = () => {
     const handleDelete = () => {
     }
 
-    const handleSave = () => {
-        axios.post<Publication>(ApiUrl() + "publication", {
+    const handleSave = async () => {
+        await axios.post<Publication>(ApiUrl() + "publication", {
             publicationId,
             authors,
             name,
@@ -159,11 +161,30 @@ const PublicationDetailsPage = () => {
             genre,
             price,
             manager
-        }).then(response => handleStateChange(response))
+        }).then(response => {
+            handleStateChange(response);
+            setMessage(["Publication saved."]);
+            setShowMessage(true);
+            setSeverity("success");
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
     }
 
-    const handleSubmit = () => {
-        axios.post<Publication>(ApiUrl() + "publication/" + id + "/submit").then(response => setPublication(response.data))
+    const handleSubmit = async () => {
+        await axios.post<Publication>(ApiUrl() + "publication/" + id + "/submit")
+            .then(response => {
+                setPublication(response.data)
+                setMessage(["Publication submitted."]);
+                setShowMessage(true);
+                setSeverity("success");
+            }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
     }
 
     const handleLanguageChange = (event: SelectChangeEvent) => {
@@ -178,30 +199,57 @@ const PublicationDetailsPage = () => {
         setPublicationType(event.target.value as string);
     }
 
-    const handleAssign = () => {
-        axios.post<Publication>(ApiUrl() + "publication/assign/?publicationId=" + id + "&managerId=" + context.data?.id).then(response => handleStateChange(response));
-        handleDisabled();
+    const handleAssign = async () => {
+        await axios.post<Publication>(ApiUrl() + "publication/assign/?publicationId=" + id + "&managerId=" + context.data?.id).then(response => {
+            handleStateChange(response)
+            handleDisabled();
+            setMessage(["You have assigned yourself."]);
+            setShowMessage(true);
+            setSeverity("success");
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
     }
 
-    const handleAccept = () => {
-        axios.post<Publication>(ApiUrl() + "publication/changeStatus", {
+    const handleAccept = async () => {
+        await axios.post<Publication>(ApiUrl() + "publication/changeStatus", {
             managerId:context.data?.id,
             publicationId:id,
             status:"Accepted",
             rejectionReason: null
-        }).then(response => handleStateChange(response));
-        handleDisabled()
+        }).then(response => {
+            handleStateChange(response)
+            handleDisabled();
+            setMessage(["Publication has been accepted."]);
+            setShowMessage(true);
+            setSeverity("success");
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
     }
 
-    const handleReject = () => {
-        axios.post<Publication>(ApiUrl() + "publication/changeStatus", {
+    const handleReject = async () => {
+        await axios.post<Publication>(ApiUrl() + "publication/changeStatus", {
             managerId:context.data?.id,
             publicationId:id,
             status:"Rejected",
             rejectionReason: rejectionText
-        }).then(response => handleStateChange(response))
-        handleClose()
-        handleDisabled()
+        }).then(response => {
+            handleStateChange(response)
+            setMessage(["Publication has been rejected."]);
+            setShowMessage(true);
+            setSeverity("success");
+            handleClose()
+            handleDisabled()
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
     }
 
     const handleDisabled = () => {
@@ -223,6 +271,9 @@ const PublicationDetailsPage = () => {
                 (publication.progressStatus === "Not Submitted" || publication.progressStatus === "Rejected" || publication.progressStatus === "Not Started" || publication.progressStatus === "In Review")} unallowedAttach={!allowedUsers.includes(context.data?.id as number)}/>
                 <Card>
                     <Typography variant = "h2">Publication details</Typography>
+                    {
+                        showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
+                    }
                     <CardContent>
                         <TextField disabled fullWidth label="Publication id" margin = "normal" value={publication.publicationId}/>
                         <TextField disabled = {disabled} fullWidth label="Publication name" margin = "normal" value={name} onChange = {event => setName(event.target.value)}/>

@@ -1,6 +1,7 @@
 import Publication from "../models/Publication";
 import {useNavigate} from "react-router-dom";
 import {
+    AlertColor,
     Box,
     Button, FormControl, InputLabel, MenuItem, Modal,
     Paper, Select, SelectChangeEvent,
@@ -11,7 +12,7 @@ import {
 } from "@mui/material";
 import PublicationRow from "./PublicationRow";
 import {UserContext} from "../auth";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import ApiUrl from "../config/api.config";
 import Genre from "../models/Genre";
@@ -19,6 +20,7 @@ import Language from "../models/Language";
 import PublicationType from "../models/PublicationType";
 import User from "../models/User"
 import {toast} from "react-toastify";
+import AlertMessage from "./AlertMessage";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -49,6 +51,9 @@ const Publications = ({publications, publicationText}: Props) => {
     const [publicationType, setPublicationType] = useState<string>("Book");
     const [name, setName] = useState<string>("");
     const [user, setUser] = useState<User>({email: "", firstName: "", id: 0, lastName: "", role: "", username: ""});
+    const[showMessage, setShowMessage] = useState<boolean>(false);
+    const [message, setMessage] = useState<string[]>([]);
+    const [severity, setSeverity] = useState<AlertColor | undefined>("success");
 
     useEffect(() => {
         const typeUrl = "type/";
@@ -83,8 +88,8 @@ const Publications = ({publications, publicationText}: Props) => {
         setPublicationType(event.target.value as string);
     }
 
-    const handleSave = () => {
-        axios.post<Publication>(ApiUrl() + "publication", {
+    const handleSave = async () => {
+        await axios.post<Publication>(ApiUrl() + "publication", {
             publicationId: null,
             name,
             publicationType,
@@ -99,7 +104,9 @@ const Publications = ({publications, publicationText}: Props) => {
         }).then(response => {
             navigate("/publication/" + response.data.publicationId)
         }).catch(error => {
-
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
         });
     }
 
@@ -112,6 +119,9 @@ const Publications = ({publications, publicationText}: Props) => {
             <Modal open = {open} onClose = {handleClose}>
                 <Box sx = {style}>
                     <Typography variant = "h3">New publication</Typography>
+                    {
+                        showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
+                    }
                     <TextField fullWidth label="Publication name" margin = "normal" value={name} onChange = {event => setName(event.target.value)}/>
                     <FormControl fullWidth>
                         <InputLabel>Publication Type</InputLabel>

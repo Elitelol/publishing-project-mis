@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import Task from "../models/Task";
 import {
+    AlertColor,
     Button,
     Card,
     CardContent,
@@ -22,12 +23,11 @@ import Comments from "../components/Comments";
 import User from "../models/User";
 import {UserContext} from "../auth";
 import UserComment from "../models/UserComment";
-import Navbar from "../components/Navbar";
-import SideMenu from "../components/SideMenu";
 import {DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import NavMenu from "../components/NavMenu";
+import AlertMessage from "../components/AlertMessage";
 
 const TaskDetailsPage = () => {
 
@@ -89,6 +89,9 @@ const TaskDetailsPage = () => {
     const [lastName, setLastName] = useState<string>("");
     const [role, setRole] = useState<string>("");
     const [disabled, setDisabled] = useState<boolean>(true);
+    const[showMessage, setShowMessage] = useState<boolean>(false);
+    const [message, setMessage] = useState<string[]>([]);
+    const [severity, setSeverity] = useState<AlertColor | undefined>("success");
 
     const handleStateChange = (response: AxiosResponse<any, any>) => {
         const newResponsiblePeople = response.data.responsiblePeople;
@@ -119,8 +122,8 @@ const TaskDetailsPage = () => {
         setSelectedType(event.target.value as string);
     }
 
-    const handleSave = () => {
-        axios.post<Task>(ApiUrl() + "task", {
+    const handleSave = async () => {
+        await axios.post<Task>(ApiUrl() + "task", {
             taskId,
             taskName,
             taskType: selectedType,
@@ -131,45 +134,69 @@ const TaskDetailsPage = () => {
             dueDate,
             description,
             comments
-        }).then(response => handleStateChange(response))
+        }).then(response => {
+            handleStateChange(response)
+            setMessage(["Task saved."]);
+            setShowMessage(true);
+            setSeverity("success");
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
+        })
     }
 
-    const handleAddUser = () => {
-        axios.get<User>(ApiUrl() + "user/byUsername/" + addUserText).then(response => {
+    const handleAddUser = async () => {
+        await axios.get<User>(ApiUrl() + "user/byUsername/" + addUserText).then(response => {
             setUserId(response.data.id)
             setUsername(response.data.username)
             setEmail(response.data.email)
             setFirstName(response.data.firstName)
             setLastName(response.data.lastName)
             setRole(response.data.role)
+            responsiblePeople.push({
+                id: response.data.id,
+                username: response.data.username,
+                email: response.data.email,
+                firstName: response.data.firstName,
+                lastName: response.data.lastName,
+                role: response.data.role
+            })
+        }).then(() => {
+            console.log(responsiblePeople)
+            axios.post<Task>(ApiUrl() + "task", {
+                taskId,
+                taskName,
+                taskType: selectedType,
+                startDate,
+                responsiblePeople,
+                publicationId,
+                progress: selectedProgress,
+                dueDate,
+                description,
+                comments
+            }).then(response => {
+                handleStateChange(response)
+                setUserId(null)
+                setUsername("")
+                setEmail("")
+                setFirstName("")
+                setLastName("")
+                setRole("")
+                setAddUserText("");
+                setMessage(["Worker added."]);
+                setShowMessage(true);
+                setSeverity("success");
+            }).catch(error => {
+                setMessage(error.response.data.message)
+                setShowMessage(true);
+                setSeverity("error");
+            })
+        }).catch(error => {
+            setMessage(error.response.data.message)
+            setShowMessage(true);
+            setSeverity("error");
         })
-        responsiblePeople.push({
-            id: userId,
-            username,
-            email,
-            firstName,
-            lastName,
-            role
-        })
-        axios.post<Task>(ApiUrl() + "task", {
-            taskId,
-            taskName,
-            taskType: selectedType,
-            startDate,
-            responsiblePeople,
-            publicationId,
-            progress: selectedProgress,
-            dueDate,
-            description,
-            comments
-        }).then(response => handleStateChange(response))
-        setUserId(null)
-        setUsername("")
-        setEmail("")
-        setFirstName("")
-        setLastName("")
-        setRole("")
-        setAddUserText("");
     }
 
     const handleRemoveUser = () => {
@@ -183,6 +210,9 @@ const TaskDetailsPage = () => {
                 <NavigationGroup id = {task.publicationId} unallowedToClick={false} unallowedAttach={false}/>
                 <Card>
                     <Typography variant = "h2">Task details</Typography>
+                    {
+                        showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
+                    }
                     <CardContent>
                         <TextField disabled={disabled} fullWidth label="Task name" margin = "normal" value={taskName} onChange = {event => setTaskName(event.target.value)}/>
                         <TextField disabled={disabled} fullWidth label="Task description" margin = "normal" value={description} onChange = {event => setDescription(event.target.value)}/>

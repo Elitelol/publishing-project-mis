@@ -1,14 +1,12 @@
-import {useParams} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import {UserContext} from "../auth";
 import User from "../models/User";
 import axios from "axios";
 import ApiUrl from "../config/api.config";
-import Navbar from "./Navbar";
-import SideMenu from "./SideMenu";
-import {Box, Button, Container, TextField, Typography} from "@mui/material";
+import {AlertColor, Box, Button, Container, TextField, Typography} from "@mui/material";
 import UserDetailsNav from "./UserDetailsNav";
 import NavMenu from "./NavMenu";
+import AlertMessage from "./AlertMessage";
 
 type NavProps = {
     id: any
@@ -33,6 +31,9 @@ const UserDetails = ({id, role}: NavProps) => {
     const [passwordRepeated, setRepeatedPassword] = useState<String>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [disabled, setDisabled] = useState<boolean>(false);
+    const[showMessage, setShowMessage] = useState<boolean>(false);
+    const [message, setMessage] = useState<string[]>([]);
+    const [severity, setSeverity] = useState<AlertColor | undefined>("success");
 
     useEffect(() => {
         axios.get<User>(ApiUrl() + "user/" + id).then(response => {
@@ -52,10 +53,10 @@ const UserDetails = ({id, role}: NavProps) => {
         setShowPassword(false);
     }
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (password !== "") {
             if (password === passwordRepeated) {
-                axios.post(ApiUrl() + "user", {
+                await axios.post(ApiUrl() + "user", {
                     id: user.id,
                     username: user.username,
                     email,
@@ -63,19 +64,37 @@ const UserDetails = ({id, role}: NavProps) => {
                     lastName,
                     role: user.role,
                     password
+                }).then(() => {
+                    setMessage(["Account details saved."]);
+                    setShowMessage(true);
+                    setSeverity("success");
+                    handleClick();
+                }).catch(error => {
+                    setMessage(error.response.data.message)
+                    setShowMessage(true);
+                    setSeverity("error");
                 })
-                handleClick();
             } else {
-
+                setMessage(["Passwords don't match."])
+                setShowMessage(true);
+                setSeverity("error");
             }
         } else {
-            axios.post(ApiUrl() + "user", {
+            await axios.post(ApiUrl() + "user", {
                 id: user.id,
                 username: user.username,
                 email,
                 firstName,
                 lastName,
                 role: user.role
+            }).then(() => {
+                setMessage(["Account details saved."]);
+                setShowMessage(true);
+                setSeverity("success");
+            }).catch(error => {
+                setMessage(error.response.data.message)
+                setShowMessage(true);
+                setSeverity("error");
             })
         }
     }
@@ -89,6 +108,9 @@ const UserDetails = ({id, role}: NavProps) => {
                     role !== null && <UserDetailsNav id = {id} role={role}/>
                 }
                 <Typography margin = "normal" variant = "h5" >Details</Typography>
+                {
+                    showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
+                }
                 <TextField margin = "normal" disabled fullWidth label="User Id" value = {user.id}/>
                 <TextField margin = "normal" disabled={disabled} fullWidth label="User First Name" value = {firstName} onChange={event => setFirstName(event.target.value)}/>
                 <TextField margin = "normal" disabled={disabled} fullWidth label="User Last Name" value = {lastName} onChange={event => setLastName(event.target.value)}/>

@@ -1,4 +1,5 @@
 import {
+    AlertColor,
     Box,
     Button,
     Card,
@@ -22,6 +23,7 @@ import Task from "../models/Task";
 import Attachment from "../models/Attachment";
 import AttachmentRow from "../components/AttachmentRow";
 import NavMenu from "../components/NavMenu";
+import AlertMessage from "../components/AlertMessage";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -82,6 +84,9 @@ const AttachmentPage = () => {
     const [tasks, setTasks] = useState<Attachment[]>([]);
     const [contracts, setContracts] = useState<Attachment[]>([]);
     const [covers, setCovers] = useState<Attachment[]>([])
+    const[showMessage, setShowMessage] = useState<boolean>(false);
+    const [message, setMessage] = useState<string[]>([]);
+    const [severity, setSeverity] = useState<AlertColor | undefined>("success");
 
     const handleTypeChange = (event: SelectChangeEvent) => {
         setSelectedType(event.target.value as string);
@@ -106,8 +111,16 @@ const AttachmentPage = () => {
                 fetchCover()
                 fetchContract()
                 fetchTask()
+            }).then(() => {
+                setMessage(["Attachment uploaded."]);
+                setShowMessage(true);
+                setSeverity("success");
+                handleClose()
+            }).catch(error => {
+                setMessage(error.response.data.message)
+                setShowMessage(true);
+                setSeverity("error");
             })
-            handleClose()
         }
     }
 
@@ -163,6 +176,9 @@ const AttachmentPage = () => {
             <Container>
                 <NavigationGroup id = {id} unallowedToClick={false} unallowedAttach={false}/>
                 <Typography variant = "h2">Publication attachments</Typography>
+                {
+                    showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
+                }
                 <Button onClick={handleManuscript}>Manuscripts</Button>
                 <Button onClick={handleTask}>Tasks</Button>
                 <Button onClick={handleContract}>Contract</Button>
