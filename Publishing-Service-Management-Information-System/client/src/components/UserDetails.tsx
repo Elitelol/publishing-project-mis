@@ -111,10 +111,10 @@ const UserDetails = ({id, role}: NavProps) => {
                 {
                     showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
                 }
-                <TextField margin = "normal" disabled fullWidth label="User Id" value = {user.id}/>
-                <TextField margin = "normal" disabled={disabled} fullWidth label="User First Name" value = {firstName} onChange={event => setFirstName(event.target.value)}/>
-                <TextField margin = "normal" disabled={disabled} fullWidth label="User Last Name" value = {lastName} onChange={event => setLastName(event.target.value)}/>
-                <TextField margin = "normal" disabled={disabled} fullWidth label="User email" value ={email} onChange={event => setEmail(event.target.value)}/>
+                <TextField margin = "normal" disabled fullWidth label="User Id" value = {user.id} InputLabelProps={{ shrink: user.id ? true : false }} />
+                <TextField margin = "normal" disabled={disabled} fullWidth label="User First Name" value = {firstName} onChange={event => setFirstName(event.target.value)} InputLabelProps={{ shrink: firstName? true : false }}/>
+                <TextField margin = "normal" disabled={disabled} fullWidth label="User Last Name" value = {lastName} onChange={event => setLastName(event.target.value)} InputLabelProps={{ shrink: lastName ? true : false }}/>
+                <TextField margin = "normal" disabled={disabled} fullWidth label="User email" value ={email} onChange={event => setEmail(event.target.value)} InputLabelProps={{ shrink: email ? true : false }}/>
                 <TextField margin = "normal" disabled fullWidth label="User Role" value = {user.role}/>
                 {
                     !disabled && !showPassword && <Button onClick={() => setShowPassword(!showPassword)}> Change password </Button>

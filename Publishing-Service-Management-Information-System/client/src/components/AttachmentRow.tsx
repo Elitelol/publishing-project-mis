@@ -2,8 +2,12 @@ import Attachment from "../models/Attachment";
 import {Button, TableCell, TableRow} from "@mui/material";
 import axios from "axios";
 import ApiUrl from "../config/api.config";
+import {useNavigate, useParams} from "react-router-dom";
 
 const AttachmentRow = ({value} : Attachment | any) => {
+
+    const {id} = useParams();
+    const navigate = useNavigate();
 
     const handleDownload = () => {
         axios.get(ApiUrl() + "attachment/" + value.attachmentId, {responseType: "blob"}).then(response => {
@@ -16,7 +20,10 @@ const AttachmentRow = ({value} : Attachment | any) => {
     }
 
     const handleDelete = () => {
-        axios.delete(ApiUrl() + "attachment/" + value.attachmentId)
+        //illegal
+        axios.delete(ApiUrl() + "attachment/" + value.attachmentId).then(() => {
+            navigate( "/" + id + "/attachments");
+        })
     }
 
     return(

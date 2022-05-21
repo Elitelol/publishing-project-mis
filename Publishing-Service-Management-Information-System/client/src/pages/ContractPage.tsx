@@ -231,32 +231,32 @@ const ContractPage = () => {
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </LocalizationProvider>
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Publication price" value = {publicationPrice} onChange={event => setPublicationPrice(parseFloat(event.target.value))}/>
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Publication price" value = {publicationPrice} onChange={event => setPublicationPrice(parseFloat(event.target.value))} InputLabelProps={{ shrink: publicationPrice ? true : false }}/>
                         <Typography margin = "normal" variant = "h4">Author compensation</Typography>
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Amount on signing contract" value = {amountOnSigningContract} onChange={event => setAmountOnSigningContract(parseFloat(event.target.value))} />
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Amount on completing manuscript" value = {amountOfCompletedManuscript} onChange={event => setAmountOfCompletedManuscript(parseFloat(event.target.value))} />
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Amount on initial publish" value = {amountOnInitialPublish} onChange={event => setAmountOnInitialPublish(parseFloat(event.target.value))} />
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Paid within months after publish" value = {withinMonthsAfterPublish} onChange={event => setWithinMonthsAfterPublish(parseFloat(event.target.value))}/>
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Amount on signing contract" value = {amountOnSigningContract} onChange={event => setAmountOnSigningContract(parseFloat(event.target.value))} />
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Amount on completing manuscript" value = {amountOfCompletedManuscript} onChange={event => setAmountOfCompletedManuscript(parseFloat(event.target.value))} />
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Amount on initial publish" value = {amountOnInitialPublish} onChange={event => setAmountOnInitialPublish(parseFloat(event.target.value))} />
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Paid within months after publish" value = {withinMonthsAfterPublish} onChange={event => setWithinMonthsAfterPublish(parseFloat(event.target.value))}/>
                         <Typography margin = "normal" variant = "h4">First cover</Typography>
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "First cover rate" value = {firstCoverRate} onChange={event => setFirstCoverRate(parseFloat(event.target.value))}/>
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "First cover percent" value = {firstCoverPercent} onChange={event => setFirstCoverPercent(parseFloat(event.target.value))} />
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "First cover rate" value = {firstCoverRate} onChange={event => setFirstCoverRate(parseFloat(event.target.value))}/>
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "First cover percent" value = {firstCoverPercent} onChange={event => setFirstCoverPercent(parseFloat(event.target.value))} />
                         <Typography margin = "normal" variant = "h4">Second cover</Typography>
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Second cover rate" value = {secondCoverRate} onChange={event => setSecondCoverRate(parseFloat(event.target.value))}/>
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Second cover percent" value = {secondCoverPercent} onChange={event => setSecondCoverPercent(parseFloat(event.target.value))} />
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Second cover rate" value = {secondCoverRate} onChange={event => setSecondCoverRate(parseFloat(event.target.value))}/>
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Second cover percent" value = {secondCoverPercent} onChange={event => setSecondCoverPercent(parseFloat(event.target.value))} />
                         <Typography margin = "normal" variant = "h4">Last cover</Typography>
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Last cover rate" value = {lastCoverRate} onChange={event => setLastCoverRate(parseFloat(event.target.value))}/>
-                        <TextField disabled={disabled} margin = "normal" fullWidth label = "Last cover percent" value={lastCoverPercent} onChange={event => setLastCoverPercent(parseFloat(event.target.value))} />
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Last cover rate" value = {lastCoverRate} onChange={event => setLastCoverRate(parseFloat(event.target.value))}/>
+                        <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Last cover percent" value={lastCoverPercent} onChange={event => setLastCoverPercent(parseFloat(event.target.value))} />
                         {
-                            context.data?.role === "Publication Manager" && <Button onClick = {handleSave}>Save contract details</Button>
+                            context.data?.role === "Publication Manager" && <Button onClick = {handleSave} variant="contained" color="success">Save contract details</Button>
                         }
                         {
-                            context.data?.role === "Publication Manager" && contractId !== null ? <Button onClick = {handleGenerateContract}>Generate contract</Button> : ""
+                            context.data?.role === "Publication Manager" && contractId !== null ? <Button onClick = {handleGenerateContract} variant="contained" color="secondary">Generate contract</Button> : ""
                         }
                         {
-                            context.data?.role === "Author" && contractId !== null ? <Button onClick = {handleOpen}>Submit signed contract</Button> : ""
+                            context.data?.role === "Author" && contractId !== null ? <Button onClick = {handleOpen} variant="contained" color="success">Submit signed contract</Button> : ""
                         }
                         {
-                            context.data?.role === "Publication Manager" && contractId !== null ? <Button onClick ={handleContractSigned}>Set contract signed</Button> : ""
+                            context.data?.role === "Publication Manager" && contractId !== null ? <Button onClick ={handleContractSigned} variant="contained" color="error">Set contract signed</Button> : ""
                         }
                     </CardContent>
                 </Card>

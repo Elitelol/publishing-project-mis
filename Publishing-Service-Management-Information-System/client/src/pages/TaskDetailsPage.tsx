@@ -283,7 +283,7 @@ const TaskDetailsPage = () => {
                             </Select>
                         </FormControl>
                         {
-                            !disabled && <Button onClick = {handleSave}>Save</Button>
+                            !disabled && <Button onClick = {handleSave} variant="contained" color="success">Save</Button>
                         }
                     </CardContent>
                 </Card>

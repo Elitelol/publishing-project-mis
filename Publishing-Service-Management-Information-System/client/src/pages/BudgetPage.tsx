@@ -146,28 +146,28 @@ const BudgetPage = () => {
                    }
                    <CardContent>
                        <Typography margin = "normal" variant = "h4">Publication information</Typography>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Number of pages" value={pageNumber} onChange={event => setPageNumber(parseInt(event.target.value))}/>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Number of copies" value={numberOfCopies} onChange={event => setNumberOfCopies(parseInt(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Number of pages" value={pageNumber} onChange={event => setPageNumber(parseInt(event.target.value))} InputLabelProps={{ shrink: pageNumber ? true : false }}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Number of copies" value={numberOfCopies} onChange={event => setNumberOfCopies(parseInt(event.target.value))}/>
                        <Typography margin = "normal" variant = "h4">Editorial</Typography>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Copy editing rate" value={copyEditingRate} onChange={event => setCopyEditingRate(parseFloat(event.target.value))}/>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Proof reading rate" value={proofReadingRate} onChange={event => setProofReadingRate(parseFloat(event.target.value))}/>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Purchase of photos rate" value={purchaseOfPhotosRate} onChange={event => setPurchaseOfPhotosRate(parseFloat(event.target.value))}/>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Purchase of photos quantity" value={purchaseOfPhotosQuantity} onChange={event => setPurchaseOfPhotosQuantity(parseFloat(event.target.value))}/>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Cover design rate" value={coverDesignRate} onChange={event => setCoverDesignRate(parseFloat(event.target.value))}/>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Cover design quantity" value={coverDesignQuantity} onChange={event => setCoverDesignQuantity(parseFloat(event.target.value))}/>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Interior layout rate" value={interiorLayoutRate} onChange={event => setInteriorLayoutRate(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Copy editing rate" value={copyEditingRate} onChange={event => setCopyEditingRate(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Proof reading rate" value={proofReadingRate} onChange={event => setProofReadingRate(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Purchase of photos rate" value={purchaseOfPhotosRate} onChange={event => setPurchaseOfPhotosRate(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Purchase of photos quantity" value={purchaseOfPhotosQuantity} onChange={event => setPurchaseOfPhotosQuantity(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Cover design rate" value={coverDesignRate} onChange={event => setCoverDesignRate(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Cover design quantity" value={coverDesignQuantity} onChange={event => setCoverDesignQuantity(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Interior layout rate" value={interiorLayoutRate} onChange={event => setInteriorLayoutRate(parseFloat(event.target.value))}/>
                        <Typography margin = "normal" variant = "h4">Printing preparation</Typography>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Printing rate" value={printingRate} onChange={event => setPrintingRate(parseFloat(event.target.value))}/>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Colour printing rate" value={colourPrintingRate} onChange={event => setColourPrintingRate(parseFloat(event.target.value))}/>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Delivery to storage rate" value={deliveryToStorageRate} onChange={event => setDeliveryToStorageRate(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Printing rate" value={printingRate} onChange={event => setPrintingRate(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Colour printing rate" value={colourPrintingRate} onChange={event => setColourPrintingRate(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Delivery to storage rate" value={deliveryToStorageRate} onChange={event => setDeliveryToStorageRate(parseFloat(event.target.value))}/>
                        <Typography margin = "normal" variant = "h4">Communication</Typography>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Advertising cost" value={advertisingCost} onChange={event => setAdvertisingCost(parseFloat(event.target.value))}/>
-                       <TextField disabled={disabled} margin = "normal" fullWidth label = "Copy mailing cost" value={copyMailingCost} onChange={event => setCopyMailingCost(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Advertising cost" value={advertisingCost} onChange={event => setAdvertisingCost(parseFloat(event.target.value))}/>
+                       <TextField type="number" disabled={disabled} margin = "normal" fullWidth label = "Copy mailing cost" value={copyMailingCost} onChange={event => setCopyMailingCost(parseFloat(event.target.value))}/>
                        {
-                           context.data?.role === "Publication Manager" && <Button onClick = {handleSave}>Save details</Button>
+                           context.data?.role === "Publication Manager" && <Button onClick = {handleSave} variant="contained" color="success">Save details</Button>
                        }
                        {
-                           context.data?.role === "Publication Manager" && budgetId !== null ? <Button onClick = {handleGetReport}>Get budget report</Button> : ""
+                           context.data?.role === "Publication Manager" && budgetId !== null ? <Button onClick = {handleGetReport} variant="contained" color="secondary">Get budget report</Button> : ""
                        }
                    </CardContent>
                </Card>

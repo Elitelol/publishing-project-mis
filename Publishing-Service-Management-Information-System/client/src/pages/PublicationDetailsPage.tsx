@@ -275,7 +275,8 @@ const PublicationDetailsPage = () => {
                         showMessage && <AlertMessage severity={severity} message={message} setShowMessage={setShowMessage}/>
                     }
                     <CardContent>
-                        <TextField disabled fullWidth label="Publication id" margin = "normal" value={publication.publicationId}/>
+                        <TextField disabled fullWidth label="Publication id" margin = "normal" value={publication.publicationId} InputLabelProps={{ shrink: publication.publicationId ? true : false }}/>
+                        <Typography margin = "normal" variant = "h4">Publication's author, type, genre and language</Typography>
                         <TextField disabled = {disabled} fullWidth label="Publication name" margin = "normal" value={name} onChange = {event => setName(event.target.value)}/>
                         <TextField disabled fullWidth label = "Publication authors" margin = "normal" value = {
                             publication.authors.map(user => {
@@ -292,20 +293,6 @@ const PublicationDetailsPage = () => {
                                 }
                             </Select>
                         </FormControl>
-                        <TextField disabled fullWidth label="Progress status" value ={publication.progressStatus}/>
-                        <TextField disabled fullWidth label="Publication rejection reason" margin = "normal" value={publication.rejectionReason}/>
-                        <TextField fullWidth label="Publication ISBN" margin = "normal" value={publication.isbn}/>
-                        <TextField disabled fullWidth label="Publication page number" margin = "normal" value={publication.pageNumber}/>
-                        <FormControl fullWidth margin = "normal">
-                            <InputLabel>Publication language</InputLabel>
-                            <Select disabled = {disabled} onChange = {handleLanguageChange} value = {language}>
-                                {
-                                    languages.map(t => {
-                                        return <MenuItem value = {t.language}> {t.language} </MenuItem>
-                                    })
-                                }
-                            </Select>
-                        </FormControl>
                         <FormControl disabled = {disabled} fullWidth margin = "normal">
                             <InputLabel>Publication genre</InputLabel>
                             <Select disabled = {disabled} onChange = {handleGenreChange} value = {genre}>
@@ -316,29 +303,51 @@ const PublicationDetailsPage = () => {
                                 }
                             </Select>
                         </FormControl>
-                        <TextField disabled type="number" fullWidth label="Publication price" margin = "normal" value={publication.price}/>
-                        <TextField disabled fullWidth label="Publication manager" margin = "normal" value={publication.manager?.firstName + " " + publication.manager?.lastName}/>
+                        <FormControl fullWidth margin = "normal">
+                            <InputLabel>Publication language</InputLabel>
+                            <Select disabled = {disabled} onChange = {handleLanguageChange} value = {language}>
+                                {
+                                    languages.map(t => {
+                                        return <MenuItem value = {t.language}> {t.language} </MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                        <Typography margin = "normal" variant = "h4">ISBN, page number, price</Typography>
+                        <TextField fullWidth label="Publication ISBN" margin = "normal" value={publication.isbn}/>
+                        <TextField disabled fullWidth label="Publication page number" margin = "normal" value={publication.pageNumber} InputLabelProps={{ shrink: publication.pageNumber ? true : false }}/>
+                        <TextField disabled type="number" fullWidth label="Publication price" margin = "normal" value={publication.price} InputLabelProps={{ shrink: publication.price ? true : false }}/>
+                        <Typography margin = "normal" variant = "h4">Progress</Typography>
+                        <TextField disabled fullWidth label="Progress status" value ={publication.progressStatus} InputLabelProps={{ shrink: publication.progressStatus ? true : false }} />
+                        <Typography margin = "normal" variant = "h4">Publication Manager</Typography>
                         {
-                            !disabled && <Button onClick = {handleSave}>Save</Button>
+                            publication.manager !== null && <TextField disabled fullWidth label="Publication manager" margin = "normal" value={publication.manager?.firstName + " " + publication.manager?.lastName} InputLabelProps={{ shrink: publication.manager?.firstName ? true : false }}/>
+                        }
+                        {
+                            publication.manager === null && <TextField disabled fullWidth label="Publication manager" margin = "normal" value={""}/>
+                        }
+                        <TextField disabled fullWidth label="Publication rejection reason" margin = "normal" value={publication.rejectionReason}/>
+                        {
+                            !disabled && <Button onClick = {handleSave} variant="contained" color="success">Save</Button>
                         }
                         {publication.progressStatus === "Not Submitted" ?
-                            <Button onClick ={handleSubmit}>
+                            <Button onClick ={handleSubmit} variant="contained" color="secondary">
                                 Submit
                             </Button>
                             : ""
                         }
                         {
-                            publication.manager === null && context.data?.role === "Publication Manager" && <Button onClick = {handleAssign}>Assign yourself</Button>
+                            publication.manager === null && context.data?.role === "Publication Manager" && <Button onClick = {handleAssign} variant="contained" color="success">Assign yourself</Button>
                         }
                         {
                             publication.progressStatus === "In Review" && publication.manager !== null
                             && publication.manager.id === context.data?.id &&
-                            <Button onClick = {handleAccept}> Accept </Button>
+                            <Button onClick = {handleAccept} variant="contained" color="success"> Accept </Button>
                         }
                         {
                             publication.progressStatus === "In Review" && publication.manager !== null
                             && publication.manager.id === context.data?.id &&
-                            <Button onClick = {handleOpen}> Reject </Button>
+                            <Button onClick = {handleOpen} variant="contained" color="error"> Reject </Button>
                         }
                     </CardContent>
                 </Card>
