@@ -167,7 +167,7 @@ const BudgetPage = () => {
                            context.data?.role === "Publication Manager" && <Button onClick = {handleSave} variant="contained" color="success">Save details</Button>
                        }
                        {
-                           context.data?.role === "Publication Manager" && budgetId !== null ? <Button onClick = {handleGetReport} variant="contained" color="secondary">Get budget report</Button> : ""
+                           budgetId !== null ? <Button onClick = {handleGetReport} variant="contained" color="secondary">Get budget report</Button> : ""
                        }
                    </CardContent>
                </Card>

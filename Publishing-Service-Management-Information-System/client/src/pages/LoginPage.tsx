@@ -57,7 +57,8 @@ const LoginPage = () => {
                 </CardContent>
                 <CardActions>
                     <Button size = "large" color = "primary" onClick = {handleClick}> Login</Button>
-                    <Button size = "large" color = "secondary" onClick = {redirectSignUp}> Sign Up</Button>
+                    <Button size = "large" color = "error" onClick = {redirectSignUp}> Sign Up</Button>
+                    <Button size = "large" color = "secondary"> Recover account</Button>
                 </CardActions>
             </Card>
         </Container>

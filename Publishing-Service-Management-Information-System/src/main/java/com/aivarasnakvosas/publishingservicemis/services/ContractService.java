@@ -65,7 +65,8 @@ public class ContractService {
     }
 
     public ContractDTO getContract(Long id) {
-        Contract contract = findContract(id);
+        Publication publication = publicationService.findPublication(id);
+        Contract contract = publication.getContract();
         return contractDTOMapper.mapToDTO(contract);
     }
 

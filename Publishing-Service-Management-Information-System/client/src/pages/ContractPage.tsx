@@ -124,6 +124,7 @@ const ContractPage = () => {
     }
 
     const handleSave = async () => {
+        console.log(contractId);
        await axios.post<Contract>(ApiUrl() + "contract", {
             publicationId: id,
             contractId,
@@ -250,7 +251,7 @@ const ContractPage = () => {
                             context.data?.role === "Publication Manager" && <Button onClick = {handleSave} variant="contained" color="success">Save contract details</Button>
                         }
                         {
-                            context.data?.role === "Publication Manager" && contractId !== null ? <Button onClick = {handleGenerateContract} variant="contained" color="secondary">Generate contract</Button> : ""
+                            context.data?.role === "Author" && contractId !== null ? <Button onClick = {handleGenerateContract} variant="contained" color="secondary">Generate contract</Button> : ""
                         }
                         {
                             context.data?.role === "Author" && contractId !== null ? <Button onClick = {handleOpen} variant="contained" color="success">Submit signed contract</Button> : ""

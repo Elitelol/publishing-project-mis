@@ -47,9 +47,9 @@ public class ContractController {
         return ResponseEntity.ok(contractService.addComment(commentDTO));
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ContractDTO> getContract(@PathVariable Long id) {
-        return ResponseEntity.ok(contractService.getContract(id));
+    @GetMapping(value = "/{publicationId}")
+    public ResponseEntity<ContractDTO> getContract(@PathVariable Long publicationId) {
+        return ResponseEntity.ok(contractService.getContract(publicationId));
     }
 
     @GetMapping(value = "/{id}/downloadContract")

@@ -66,7 +66,8 @@ public class PublishingBudgetService {
     }
 
     public BudgetDTO getPublishingBudget(Long id) {
-        PublishingBudget publishingBudget = findBudget(id);
+        Publication publication = publicationService.findPublication(id);
+        PublishingBudget publishingBudget = publication.getPublishingBudget();
         return budgetDTOMapper.mapToDTO(publishingBudget);
     }
 
