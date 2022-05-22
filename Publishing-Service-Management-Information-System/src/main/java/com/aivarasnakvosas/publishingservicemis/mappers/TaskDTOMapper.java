@@ -34,11 +34,6 @@ public class TaskDTOMapper {
         task.setTaskName(taskDTO.getTaskName());
         task.setTaskType(TaskType.getTask(taskDTO.getTaskType()));
         task.setDescription(taskDTO.getDescription());
-        Date startDate = taskDTO.getStartDate();
-        Date dueDate = taskDTO.getDueDate();
-        if (dueDate.before(startDate)) {
-            throw new BusinessErrorException(String.format("Task due date %s can't be before start date %s", dueDate, startDate));
-        }
         task.setStartDate(taskDTO.getStartDate());
         task.setDueDate(taskDTO.getDueDate());
         task.setProgressStatus(ProgressStatus.getStatus(taskDTO.getProgress()));

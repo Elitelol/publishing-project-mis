@@ -46,6 +46,7 @@ public class TaskService {
     private UserService userService;
 
     public TaskDTO saveTask(TaskDTO taskDTO) {
+        validateDates(taskDTO);
         Publication publication = publicationService.findPublication(taskDTO.getPublicationId());
         if (ProgressStatus.ACCEPTED.equals(publication.getProgressStatus())) {
             publication.setProgressStatus(ProgressStatus.IN_PROGRESS);
@@ -142,5 +143,11 @@ public class TaskService {
             totalTaskSize++;
         }
         return BigDecimal.valueOf((double) completedTasks / totalTaskSize * 100);
+    }
+
+    private void validateDates(TaskDTO taskDTO) {
+        if (taskDTO.getDueDate().before(taskDTO.getStartDate())) {
+            throw new BusinessErrorException(String.format("Task due date %s can't be before start date %s", taskDTO.getDueDate(), taskDTO.getStartDate()));
+        }
     }
 }
