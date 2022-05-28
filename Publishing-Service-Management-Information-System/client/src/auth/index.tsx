@@ -37,7 +37,7 @@ const UserProvider = ({children}: any) => {
                 loading: false,
                 error: null,
             });
-        } else {
+        } else if (response.data && response.data.errors.length){
             setUser({
                 data: null,
                 loading: false,
