@@ -35,14 +35,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    /*
-    @GetMapping
-    ResponseEntity<List<UserDTO>> getUsersByIds(@RequestParam List<Long> ids) {
-        return ResponseEntity.ok(userService.getUsers(ids));
-    }
-
-     */
-
     @GetMapping(value = "/{id}")
     ResponseEntity<UserView> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUser(id));
