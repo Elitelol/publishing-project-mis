@@ -26,4 +26,4 @@ server:
 application:
   security:
     jwt-token-secret: suchsecretmuchwow
-    jwt-expiration-time: 72000000000000000
+    jwt-expiration-time: 3600000

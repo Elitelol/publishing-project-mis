@@ -3,8 +3,15 @@ import {Button, TableCell, TableRow} from "@mui/material";
 import axios from "axios";
 import ApiUrl from "../config/api.config";
 import {useNavigate, useParams} from "react-router-dom";
+import React from "react";
 
-const AttachmentRow = ({value} : Attachment | any) => {
+type Props = {
+   value: Attachment | any
+   attachments: Attachment[]
+    setAttachments: React.Dispatch<React.SetStateAction<Attachment[]>>
+}
+
+const AttachmentRow = ({value, attachments, setAttachments}: Props) => {
 
     const {id} = useParams();
     const navigate = useNavigate();
@@ -22,7 +29,7 @@ const AttachmentRow = ({value} : Attachment | any) => {
     const handleDelete = () => {
         //illegal
         axios.delete(ApiUrl() + "attachment/" + value.attachmentId).then(() => {
-            navigate( "/" + id + "/attachments");
+            setAttachments(attachments.filter(attachment => attachment.attachmentId !== value.attachmentId))
         })
     }
 

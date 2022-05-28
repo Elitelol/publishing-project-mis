@@ -11,15 +11,12 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import Navbar from "../components/Navbar";
-import SideMenu from "../components/SideMenu";
 import React, {useEffect, useState} from "react";
 import NavigationGroup from "../components/NavigationGroup";
 import {useParams} from "react-router-dom";
 import AttachmentType from "../models/AttachmentType";
 import axios from "axios";
 import ApiUrl from "../config/api.config";
-import Task from "../models/Task";
 import Attachment from "../models/Attachment";
 import AttachmentRow from "../components/AttachmentRow";
 import NavMenu from "../components/NavMenu";
@@ -207,22 +204,22 @@ const AttachmentPage = () => {
                         <TableBody>
                             {
                                 showManuscript && manuscripts.map(manuscript => {
-                                    return <AttachmentRow value = {manuscript}/>
+                                    return <AttachmentRow value = {manuscript} attachments = {manuscripts} setAttachments = {setManuscripts}/>
                                 })
                             }
                             {
                                 showTask && tasks.map(task => {
-                                    return <AttachmentRow value = {task}/>
+                                    return <AttachmentRow value = {task} attachments = {tasks} setAttachments = {setTasks}/>
                                 })
                             }
                             {
                                 showContract && contracts.map(contract => {
-                                    return <AttachmentRow value = {contract}/>
+                                    return <AttachmentRow value = {contract} attachments = {contracts} setAttachments = {setContracts}/>
                                 })
                             }
                             {
                                 showCover && covers.map(cover => {
-                                    return <AttachmentRow value = {cover}/>
+                                    return <AttachmentRow value = {cover} attachments = {covers} setAttachments = {setCovers}/>
                                 })
                             }
                         </TableBody>
