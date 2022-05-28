@@ -13,9 +13,6 @@ type Props = {
 
 const AttachmentRow = ({value, attachments, setAttachments}: Props) => {
 
-    const {id} = useParams();
-    const navigate = useNavigate();
-
     const handleDownload = () => {
         axios.get(ApiUrl() + "attachment/" + value.attachmentId, {responseType: "blob"}).then(response => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -27,7 +24,6 @@ const AttachmentRow = ({value, attachments, setAttachments}: Props) => {
     }
 
     const handleDelete = () => {
-        //illegal
         axios.delete(ApiUrl() + "attachment/" + value.attachmentId).then(() => {
             setAttachments(attachments.filter(attachment => attachment.attachmentId !== value.attachmentId))
         })
