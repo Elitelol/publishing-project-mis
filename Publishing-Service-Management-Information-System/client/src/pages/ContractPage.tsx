@@ -165,7 +165,7 @@ const ContractPage = () => {
     }
 
     const handleGenerateContract = async () => {
-        await axios.get(ApiUrl() + "contract/" + id + "/downloadContract", {responseType: "blob"}).then(response => {
+        await axios.get(ApiUrl() + "contract/" + contractId + "/downloadContract", {responseType: "blob"}).then(response => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;

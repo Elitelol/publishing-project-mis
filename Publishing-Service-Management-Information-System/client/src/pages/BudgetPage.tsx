@@ -125,7 +125,7 @@ const BudgetPage = () => {
     }
 
     const handleGetReport = () => {
-        axios.get(ApiUrl() + "budget/" + id + "/downloadBudget", {responseType: "blob"}).then(response => {
+        axios.get(ApiUrl() + "budget/" + budgetId + "/downloadBudget", {responseType: "blob"}).then(response => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;

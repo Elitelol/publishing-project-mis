@@ -46,7 +46,10 @@ public class PublishingBudgetService {
         if (ProgressStatus.ACCEPTED.equals(publication.getProgressStatus())) {
             publication.setProgressStatus(ProgressStatus.IN_PROGRESS);
         }
-        PublishingBudget publishingBudget = budgetDTO.getBudgetId() != null ? findBudget(budgetDTO.getBudgetId()) : new PublishingBudget();
+        PublishingBudget publishingBudget = publication.getPublishingBudget();
+        if (publishingBudget == null) {
+            publishingBudget = new PublishingBudget();
+        }
         budgetDTOMapper.mapToPublishingBudget(publishingBudget, budgetDTO, publication);
         budgetRepository.save(publishingBudget);
         return budgetDTOMapper.mapToDTO(publishingBudget);

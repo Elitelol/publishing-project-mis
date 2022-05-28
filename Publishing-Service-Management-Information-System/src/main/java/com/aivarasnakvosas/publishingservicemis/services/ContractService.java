@@ -45,7 +45,10 @@ public class ContractService {
         if (ProgressStatus.ACCEPTED.equals(publication.getProgressStatus())) {
             publication.setProgressStatus(ProgressStatus.IN_PROGRESS);
         }
-        Contract contract = contractDTO.getContractId() != null ? findContract(contractDTO.getContractId()) : new Contract();
+        Contract contract = publication.getContract();
+        if (contract == null) {
+            contract = new Contract();
+        }
         contractDTOMapper.mapToContract(contract, contractDTO, publication);
         contractRepository.save(contract);
         return contractDTOMapper.mapToDTO(contract);
@@ -71,7 +74,7 @@ public class ContractService {
     }
 
     private Contract findContract(Long id) {
-        Optional<Contract> contract = contractRepository.findContractByPublicationId(id);
+        Optional<Contract> contract = contractRepository.findById(id);
         if (contract.isEmpty()) {
             throw new EntityNotFoundException(Contract.class);
         }
