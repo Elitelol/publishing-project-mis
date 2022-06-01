@@ -3,6 +3,7 @@ package com.aivarasnakvosas.publishingservicemis.services;
 import com.aivarasnakvosas.publishingservicemis.dtos.UserView;
 import com.aivarasnakvosas.publishingservicemis.entity.AbstractBasicEntity;
 import com.aivarasnakvosas.publishingservicemis.entity.Publication;
+import com.aivarasnakvosas.publishingservicemis.entity.PublishingBudget;
 import com.aivarasnakvosas.publishingservicemis.entity.Task;
 import com.aivarasnakvosas.publishingservicemis.entity.User;
 import com.aivarasnakvosas.publishingservicemis.dtos.PublicationAcceptanceDTO;
@@ -87,6 +88,9 @@ public class PublicationService {
 
     private void setPublicationStatus(Publication publication, PublicationAcceptanceDTO publicationAcceptanceDTO) {
         publication.setProgressStatus(ProgressStatus.getStatus(publicationAcceptanceDTO.getStatus()));
+        if (ProgressStatus.REJECTED.equals(ProgressStatus.getStatus(publicationAcceptanceDTO.getStatus()))) {
+            publication.setRejectionReason(publicationAcceptanceDTO.getRejectionReason());
+        }
         publication.setDateModified(new Date());
         publicationRepository.save(publication);
     }

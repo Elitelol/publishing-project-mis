@@ -21,12 +21,10 @@ const BudgetPage = () => {
     const [context, setContext] = useContext(UserContext);
 
     useEffect(() => {
-        try{
-            axios.get<User>(ApiUrl() + "user/" + context.data?.id).then(response => setCommentator(response.data))
-            axios.get<Contract>(ApiUrl() + "budget/" + id).then(response => handleStateChange(response));
-        } catch (error) {
-
-        }
+        axios.get<User>(ApiUrl() + "user/" + context.data?.id).then(response => setCommentator(response.data))
+        axios.get<Contract>(ApiUrl() + "budget/" + id).then(response => handleStateChange(response)).catch(error => {
+            setDisabled(context.data?.role !== "Publication Manager");
+        })
     },[])
 
     const [budget, setBudget] = useState<Budget>({

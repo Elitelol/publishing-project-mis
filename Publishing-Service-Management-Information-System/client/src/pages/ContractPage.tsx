@@ -47,12 +47,10 @@ const ContractPage = () => {
     const [context, setContext] = useContext(UserContext);
 
     useEffect( () => {
-        try{
-            axios.get<User>(ApiUrl() + "user/" + context.data?.id).then(response => setCommentator(response.data))
-            axios.get<Contract>(ApiUrl() + "contract/" + id).then(response => handleStateChange(response));
-        } catch (error) {
-
-        }
+        axios.get<User>(ApiUrl() + "user/" + context.data?.id).then(response => setCommentator(response.data))
+        axios.get<Contract>(ApiUrl() + "contract/" + id).then(response => handleStateChange(response)).catch(error => {
+            setDisabled(context.data?.role !== "Publication Manager");
+        })
     }, [])
 
     const [contract, setContract] = useState<Contract>({
