@@ -42,6 +42,7 @@ public class ContractDTOMapper {
         contractDTO.setContractId(contract.getId());
         contractDTO.setPublicationId(contract.getPublication().getId());
         contractDTO.setPublishDate(contract.getPublishDate());
+        contractDTO.setPublicationPrice(contract.getPublicationPrice());
         contractDTO.setAmountOnSigningContract(contract.getAmountOnSigningContract());
         contractDTO.setAmountOfCompletedManuscript(contract.getAmountOfCompletedManuscript());
         contractDTO.setAmountOnInitialPublish(contract.getAmountOnInitialPublish());

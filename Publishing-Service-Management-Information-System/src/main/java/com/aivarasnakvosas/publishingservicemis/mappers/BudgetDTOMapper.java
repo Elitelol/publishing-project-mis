@@ -42,6 +42,7 @@ public class BudgetDTOMapper {
         BudgetDTO budgetDTO = new BudgetDTO();
         budgetDTO.setPublicationId(publishingBudget.getPublication().getId());
         budgetDTO.setBudgetId(publishingBudget.getId());
+        budgetDTO.setPageNumber(publishingBudget.getPageNumber());
         budgetDTO.setNumberOfCopies(publishingBudget.getNumberOfCopies());
         budgetDTO.setCopyEditingRate(publishingBudget.getCopyEditingRate());
         budgetDTO.setProofReadingRate(publishingBudget.getProofReadingRate());
