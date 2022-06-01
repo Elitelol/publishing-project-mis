@@ -381,7 +381,7 @@ const PublicationDetailsPage = () => {
                             <Button onClick = {handleOpen} variant="contained" color="error"> Reject </Button>
                         }
                         {
-                            publication.progressStatus === "Not Submitted" || publication.progressStatus === "Rejected" && context.data?.id === publication.author?.id
+                            (publication.progressStatus === "Not Submitted" || publication.progressStatus === "Rejected") && context.data?.id === publication.author?.id
                             && <Button variant="contained" color="error" onClick = {handleDelete}>
                                 Delete
                             </Button>
